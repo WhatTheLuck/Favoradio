@@ -4,7 +4,7 @@
 
 磁流体使用 WhatTheLuck/SpaceVenom 的原始 WebGL 2 raymarch 着色器、Starfield、参数映射与 16 个磁流体预设。来源提交：`49bda2bf5779125977b47aad8225610072e61ae0`，初始磁流体 `Venom`，星空 `Star`。预设包括 Blood、Bubble、Water、Venom 多色版及随机变色版。
 
-源码保存在 `public/vendor/source-visuals`。两套引擎在同源 iframe 中隔离运行，保留原始 Three.js/着色器版本，不依赖 CDN。原项目独立页面的录音、文件选择和预设 HTTP 服务由 Mineradio 音频桥和桌面 IPC 替换。丝带保留 30 Hz / 64×2 频谱输入；磁流体使用原始 RMS、分频加权和独立星空低频采样。分析器的 FFT 和平滑与 Mineradio 主视觉解耦。退出视觉时销毁 iframe，停止其动画循环。
+源码保存在 `public/vendor/source-visuals`。两套引擎在同源 iframe 中隔离运行，保留原始 Three.js/着色器版本，不依赖 CDN。原项目独立页面的录音、文件选择和预设 HTTP 服务由 Faveradio 音频桥和桌面 IPC 替换。丝带保留 30 Hz / 64×2 频谱输入；磁流体使用原始 RMS、分频加权和独立星空低频采样。分析器的 FFT 和平滑与 Faveradio 主视觉解耦。退出视觉时销毁 iframe，停止其动画循环。
 
 控制台 → 动效 → 赛博丝带与星际磁流体：两栏分别提供原始预设、参数编辑、保存和加载。点击栏标题可预览对应效果。桌面宽屏并排，窄窗口改为纵向排列。
 

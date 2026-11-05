@@ -180,15 +180,15 @@ class SmartFavoritesStore {
 
   readCredential() {
     const raw = safeJsonRead(this.credentialFile, {});
-    let apiKey = text(process.env.MINERADIO_LLM_API_KEY, 4096);
+    let apiKey = text(process.env.FAVERADIO_LLM_API_KEY, 4096);
     if (!apiKey && raw.encryptedKey && this.safeStorage && this.safeStorage.isEncryptionAvailable()) {
       try { apiKey = this.safeStorage.decryptString(Buffer.from(raw.encryptedKey, 'base64')); } catch (_) { apiKey = ''; }
     }
     return {
       apiKey,
-      baseUrl: text(process.env.MINERADIO_LLM_BASE_URL || raw.baseUrl, 1200),
-      model: text(process.env.MINERADIO_LLM_MODEL || raw.model, 200),
-      source: process.env.MINERADIO_LLM_API_KEY ? 'environment' : (apiKey ? 'secure-store' : 'none'),
+      baseUrl: text(process.env.FAVERADIO_LLM_BASE_URL || raw.baseUrl, 1200),
+      model: text(process.env.FAVERADIO_LLM_MODEL || raw.model, 200),
+      source: process.env.FAVERADIO_LLM_API_KEY ? 'environment' : (apiKey ? 'secure-store' : 'none'),
     };
   }
 

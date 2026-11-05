@@ -124,7 +124,7 @@ function updateMemoryControls() {
     el.classList.remove('dev-locked');
     el.setAttribute('aria-disabled', 'false');
     el.title = systemAvailable
-      ? 'Mem Reduct will run only after Mineradio is hidden/minimized and threshold/interval allow it.'
+      ? 'Mem Reduct will run only after Faveradio is hidden/minimized and threshold/interval allow it.'
       : 'System-level Mem Reduct is not confirmed by the desktop process yet; app trim remains active.';
   });
   document.querySelectorAll('#memory-mask-seg [data-memory-mask]').forEach(function (btn) {
@@ -138,13 +138,13 @@ function updateMemoryControls() {
       btn.disabled = !systemAvailable;
       btn.classList.toggle('dev-locked', !systemAvailable);
       btn.title = systemAvailable
-        ? 'Manual system memory release. Mineradio skips it while the main window is visible to avoid CPU spikes.'
+        ? 'Manual system memory release. Faveradio skips it while the main window is visible to avoid CPU spikes.'
         : 'System-level purge is unavailable; background app trim remains active.';
     } else if (index > 1) {
       btn.disabled = !systemAvailable;
       btn.classList.toggle('dev-locked', !systemAvailable);
       btn.title = systemAvailable
-        ? 'Manual elevated release. Minimize or hide Mineradio first; the foreground window is skipped to avoid CPU spikes.'
+        ? 'Manual elevated release. Minimize or hide Faveradio first; the foreground window is skipped to avoid CPU spikes.'
         : 'System-level purge is unavailable; background app trim remains active.';
     }
   });
@@ -219,8 +219,8 @@ function runSystemMemoryPurge(autoElevate) {
 
 function bindSystemMemoryControls() {
   document.querySelectorAll('#memory-mask-seg [data-memory-mask]').forEach(function (btn) {
-    if (btn._mineradioMemoryBound) return;
-    btn._mineradioMemoryBound = true;
+    if (btn._faveradioMemoryBound) return;
+    btn._faveradioMemoryBound = true;
     btn.addEventListener('click', function () {
       toggleMemoryMaskPart(btn.getAttribute('data-memory-mask'));
     });
@@ -230,8 +230,8 @@ function bindSystemMemoryControls() {
     ['fx-memory-threshold', 'memorySystemThresholdPercent', 50, 98]
   ].forEach(function (item) {
     var input = document.getElementById(item[0]);
-    if (!input || input._mineradioMemoryBound) return;
-    input._mineradioMemoryBound = true;
+    if (!input || input._faveradioMemoryBound) return;
+    input._faveradioMemoryBound = true;
     input.addEventListener('input', function () {
       fx[item[1]] = clampRange(Math.round(Number(input.value) || fxDefaults[item[1]]), item[2], item[3]);
       setRange(item[0], fx[item[1]]);

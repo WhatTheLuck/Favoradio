@@ -9,7 +9,7 @@ const path = require('path');
 const outputArgument = process.argv.find((value) => /^--output=/.test(value));
 const outputDirectory = path.resolve(outputArgument
   ? outputArgument.slice('--output='.length)
-  : path.join(os.tmpdir(), `mineradio-we-pointer-target-${Date.now()}`));
+  : path.join(os.tmpdir(), `faveradio-we-pointer-target-${Date.now()}`));
 const titleArgument = process.argv.find((value) => /^--source-title=/.test(value));
 const sourceTitle = titleArgument
   ? titleArgument.slice('--source-title='.length)
@@ -29,10 +29,10 @@ function encodedPowerShell(source) {
 function pointerTargetProbeScript() {
   return String.raw`
 $ErrorActionPreference = 'Stop'
-$expectedTitle = [Environment]::GetEnvironmentVariable('MINERADIO_WE_DIAG_SOURCE_TITLE', 'Process')
-$targetMode = [Environment]::GetEnvironmentVariable('MINERADIO_WE_DIAG_TARGET', 'Process')
-$xUnit = [int][Environment]::GetEnvironmentVariable('MINERADIO_WE_DIAG_X', 'Process')
-$yUnit = [int][Environment]::GetEnvironmentVariable('MINERADIO_WE_DIAG_Y', 'Process')
+$expectedTitle = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_DIAG_SOURCE_TITLE', 'Process')
+$targetMode = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_DIAG_TARGET', 'Process')
+$xUnit = [int][Environment]::GetEnvironmentVariable('FAVERADIO_WE_DIAG_X', 'Process')
+$yUnit = [int][Environment]::GetEnvironmentVariable('FAVERADIO_WE_DIAG_Y', 'Process')
 $source = @'
 using System;
 using System.Collections.Generic;
@@ -41,7 +41,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
-public static class MineradioWePointerTargetProbe {
+public static class FaveradioWePointerTargetProbe {
   const uint WM_MOUSEMOVE = 0x0200;
   public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
   [StructLayout(LayoutKind.Sequential)] struct RECT { public int Left, Top, Right, Bottom; }
@@ -137,7 +137,7 @@ public static class MineradioWePointerTargetProbe {
 }
 '@
 Add-Type -TypeDefinition $source -Language CSharp
-[MineradioWePointerTargetProbe]::Run($expectedTitle, $targetMode, $xUnit, $yUnit) | ConvertTo-Json -Compress
+[FaveradioWePointerTargetProbe]::Run($expectedTitle, $targetMode, $xUnit, $yUnit) | ConvertTo-Json -Compress
 `.trim();
 }
 
@@ -153,24 +153,24 @@ function postPointer(target, xUnit, yUnit) {
     windowsHide: true,
     env: {
       ...process.env,
-      MINERADIO_WE_DIAG_SOURCE_TITLE: sourceTitle,
-      MINERADIO_WE_DIAG_TARGET: target,
-      MINERADIO_WE_DIAG_X: String(xUnit),
-      MINERADIO_WE_DIAG_Y: String(yUnit),
+      FAVERADIO_WE_DIAG_SOURCE_TITLE: sourceTitle,
+      FAVERADIO_WE_DIAG_TARGET: target,
+      FAVERADIO_WE_DIAG_X: String(xUnit),
+      FAVERADIO_WE_DIAG_Y: String(yUnit),
     },
   });
   return JSON.parse(String(stdout || '').trim());
 }
 
-async function captureMineradio(label) {
+async function captureFaveradio(label) {
   const sources = await desktopCapturer.getSources({
     types: ['window'],
     thumbnailSize: { width: 1440, height: 810 },
     fetchWindowIcons: false,
   });
-  const matches = sources.filter((source) => source.name === 'Mineradio');
+  const matches = sources.filter((source) => source.name === 'Faveradio');
   if (matches.length !== 1) {
-    throw new Error(`Expected one Mineradio window capture source, found ${matches.length}`);
+    throw new Error(`Expected one Faveradio window capture source, found ${matches.length}`);
   }
   const image = matches[0].thumbnail;
   const size = image.getSize();
@@ -201,14 +201,14 @@ function meanAbsoluteRgb(first, second) {
 async function captureAfter(target, side, xUnit) {
   const posted = postPointer(target, xUnit, 32768);
   await wait(settleMs);
-  const capture = await captureMineradio(`${target}-${side}`);
+  const capture = await captureFaveradio(`${target}-${side}`);
   return { posted, capture };
 }
 
 async function run() {
-  if (!sourceTitle) throw new Error('Pass --source-title with the exact Mineradio Wallpaper session title');
+  if (!sourceTitle) throw new Error('Pass --source-title with the exact Faveradio Wallpaper session title');
   fs.mkdirSync(outputDirectory, { recursive: true });
-  const baseline = await captureMineradio('baseline');
+  const baseline = await captureFaveradio('baseline');
   const parentLeft = await captureAfter('parent', 'left', 4096);
   const parentRight = await captureAfter('parent', 'right', 61439);
   const childLeft = await captureAfter('child', 'left', 4096);

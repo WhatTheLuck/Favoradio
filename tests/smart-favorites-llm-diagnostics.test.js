@@ -14,7 +14,7 @@ const fakeSafeStorage = {
 };
 
 test('standalone LLM response test reports DNS, first response, and total timing', async () => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mineradio-llm-test-'));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-llm-test-'));
   try {
     const store = new SmartFavoritesStore({
       userDataPath: root,
@@ -53,7 +53,7 @@ test('LLM configuration accepts public HTTPS APIs and rejects local proxies', ()
 });
 
 test('a missing model catalog does not block a working chat endpoint', async t => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mineradio-llm-no-catalog-'));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-llm-no-catalog-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const visited = [];
   const store = new SmartFavoritesStore({
@@ -80,7 +80,7 @@ test('track analysis uses a bounded output budget and longer inference deadline'
 });
 
 test('partial LLM batches are reported instead of being treated as complete', async t => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mineradio-llm-partial-'));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-llm-partial-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const store = new SmartFavoritesStore({
     userDataPath: root,

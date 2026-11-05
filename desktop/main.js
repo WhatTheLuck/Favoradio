@@ -104,9 +104,9 @@ const APP_PACKAGE_INFO = (() => {
     return {};
   }
 })();
-const APP_METADATA = APP_PACKAGE_INFO.mineradio || {};
-const APP_NAME = process.env.MINERADIO_RUNTIME_NAME || APP_METADATA.runtimeName || APP_PACKAGE_INFO.productName || 'Mineradio';
-const APP_USER_MODEL_ID = process.env.MINERADIO_APP_USER_MODEL_ID || APP_METADATA.appUserModelId || (APP_PACKAGE_INFO.build && APP_PACKAGE_INFO.build.appId) || 'com.mineradio.desktop';
+const APP_METADATA = APP_PACKAGE_INFO.faveradio || {};
+const APP_NAME = process.env.FAVERADIO_RUNTIME_NAME || APP_METADATA.runtimeName || APP_PACKAGE_INFO.productName || 'Faveradio';
+const APP_USER_MODEL_ID = process.env.FAVERADIO_APP_USER_MODEL_ID || APP_METADATA.appUserModelId || (APP_PACKAGE_INFO.build && APP_PACKAGE_INFO.build.appId) || 'com.faveradio.desktop';
 const APP_ICON_ICO = path.join(__dirname, '..', 'build', 'icon.ico');
 const CURRENT_FX_AUTOSAVE_FILE = 'current-fx-autosave.json';
 const CURRENT_FX_AUTOSAVE_MAX_BYTES = 12 * 1024 * 1024;
@@ -129,15 +129,15 @@ const CACHE_SETTINGS_FILE = 'cache-settings.json';
 const LYRIC_CACHE_VERSION = 1;
 const LYRIC_CACHE_MAX_BYTES = 96 * 1024 * 1024;
 const LYRIC_CACHE_ENTRY_MAX_BYTES = 1024 * 1024;
-const NETEASE_LOGIN_PARTITION = 'persist:mineradio-netease-login';
+const NETEASE_LOGIN_PARTITION = 'persist:faveradio-netease-login';
 const NETEASE_LOGIN_URL = 'https://music.163.com/#/login';
-const QQ_LOGIN_PARTITION = 'persist:mineradio-qqmusic-login';
+const QQ_LOGIN_PARTITION = 'persist:faveradio-qqmusic-login';
 const QQ_LOGIN_URL = 'https://y.qq.com/n/ryqq/profile';
 const QQ_LOGIN_FALLBACK_URL = 'https://y.qq.com/';
-const KUGOU_LOGIN_PARTITION = 'persist:mineradio-kugou-login';
+const KUGOU_LOGIN_PARTITION = 'persist:faveradio-kugou-login';
 const KUGOU_LOGIN_URL = 'https://www.kugou.com/';
 const KUGOU_LOGIN_WARMUP_URL = 'https://www.kugou.com/newuc/user/uc/type=edit';
-const SPOTIFY_LOGIN_PARTITION = 'persist:mineradio-spotify-login';
+const SPOTIFY_LOGIN_PARTITION = 'persist:faveradio-spotify-login';
 const SPOTIFY_OAUTH_TIMEOUT_MS = 3 * 60 * 1000;
 
 // Keep app-owned settings and provider credentials independent from the
@@ -145,8 +145,8 @@ const SPOTIFY_OAUTH_TIMEOUT_MS = 3 * 60 * 1000;
 // derived path lookup or Electron can recompute userData below the cache root.
 app.setName(APP_NAME);
 const STARTUP_QA_USER_DATA_PATH = (() => {
-  const value = String(process.env.MINERADIO_STARTUP_QA_USER_DATA || '').trim();
-  if (process.env.MINERADIO_STARTUP_QA_HIDDEN !== '1' || !value || !path.isAbsolute(value)) return '';
+  const value = String(process.env.FAVERADIO_STARTUP_QA_USER_DATA || '').trim();
+  if (process.env.FAVERADIO_STARTUP_QA_HIDDEN !== '1' || !value || !path.isAbsolute(value)) return '';
   return path.resolve(value);
 })();
 const STABLE_USER_DATA_PATH = STARTUP_QA_USER_DATA_PATH || path.join(app.getPath('appData'), APP_NAME);
@@ -176,7 +176,7 @@ const loginEasterEggGate = new LoginEasterEggGate({
 });
 const NATIVE_HELPER_TEMP_PATH = INITIAL_CACHE_SETTINGS.nativePath;
 fs.mkdirSync(NATIVE_HELPER_TEMP_PATH, { recursive: true });
-process.env.MINERADIO_NATIVE_TEMP_DIR = NATIVE_HELPER_TEMP_PATH;
+process.env.FAVERADIO_NATIVE_TEMP_DIR = NATIVE_HELPER_TEMP_PATH;
 systemMemory.setNativeTempPath(NATIVE_HELPER_TEMP_PATH);
 const localMusicLibrary = new LocalMusicLibrary({ userDataPath: STABLE_USER_DATA_PATH });
 const builtInPlaylistLibrary = new BuiltInPlaylistLibrary({ userDataPath: STABLE_USER_DATA_PATH });
@@ -225,7 +225,7 @@ const WALLPAPER_ENGINE_CAPTURE_RETRY_DELAY_MS = 720;
 const WALLPAPER_ENGINE_MAX_CAPTURE_FPS = 240;
 const WALLPAPER_ENGINE_HOST_RESUME_TIMEOUT_MS = 30000;
 const GESTURE_CAMERA_PERMISSION_GRANT_MS = 45000;
-const MAIN_WINDOW_BACKGROUND_THROTTLING = process.env.MINERADIO_KEEP_BACKGROUND_RENDERING === '1' ? false : true;
+const MAIN_WINDOW_BACKGROUND_THROTTLING = process.env.FAVERADIO_KEEP_BACKGROUND_RENDERING === '1' ? false : true;
 
 function wallpaperEngineTargetFps(display, requestedFps) {
   const displayFrequency = Math.max(24, Math.min(
@@ -302,7 +302,7 @@ function cacheSettingsConfigPath() {
 function defaultCacheRootPath() {
   const dDrive = 'D:\\';
   return fs.existsSync(dDrive)
-    ? path.join(dDrive, 'MineradioCache')
+    ? path.join(dDrive, 'FaveradioCache')
     : path.join(app.getPath('userData'), 'cache');
 }
 
@@ -409,7 +409,7 @@ async function cacheSettingsSnapshot() {
   const settings = normalizeCacheSettings(cacheSettings);
   const currentChromiumPath = app.getPath('sessionData');
   const desiredChromiumPath = chromiumSessionDataPath(settings);
-  const activeBeatmapsPath = process.env.MINERADIO_BEAT_CACHE_DIR || settings.beatmapsPath;
+  const activeBeatmapsPath = process.env.FAVERADIO_BEAT_CACHE_DIR || settings.beatmapsPath;
   const activeNativePath = NATIVE_HELPER_TEMP_PATH;
   const wallpaperEnginePath = path.join(settings.nativePath, 'wallpaper-engine-muted-package-cache');
   const activeWallpaperEnginePath = path.join(activeNativePath, 'wallpaper-engine-muted-package-cache');
@@ -502,11 +502,11 @@ const CHROMIUM_SAFE_PERFORMANCE_SWITCHES = [
   ['use-angle', 'd3d11'],
 ];
 const CHROMIUM_OPT_IN_PERFORMANCE_SWITCHES = [
-  ['ignore-gpu-blocklist', null, 'MINERADIO_IGNORE_GPU_BLOCKLIST'],
-  ['force_high_performance_gpu', null, 'MINERADIO_FORCE_HIGH_PERFORMANCE_GPU'],
-  ['disable-background-timer-throttling', null, 'MINERADIO_KEEP_BACKGROUND_RENDERING'],
-  ['disable-renderer-backgrounding', null, 'MINERADIO_KEEP_BACKGROUND_RENDERING'],
-  ['disable-backgrounding-occluded-windows', null, 'MINERADIO_KEEP_BACKGROUND_RENDERING'],
+  ['ignore-gpu-blocklist', null, 'FAVERADIO_IGNORE_GPU_BLOCKLIST'],
+  ['force_high_performance_gpu', null, 'FAVERADIO_FORCE_HIGH_PERFORMANCE_GPU'],
+  ['disable-background-timer-throttling', null, 'FAVERADIO_KEEP_BACKGROUND_RENDERING'],
+  ['disable-renderer-backgrounding', null, 'FAVERADIO_KEEP_BACKGROUND_RENDERING'],
+  ['disable-backgrounding-occluded-windows', null, 'FAVERADIO_KEEP_BACKGROUND_RENDERING'],
 ];
 function appendChromiumSwitch(name, value) {
   if (value == null) app.commandLine.appendSwitch(name);
@@ -599,7 +599,7 @@ function withStartupTimeout(promise, timeoutMs, label, onTimeout) {
       settled = true;
       try { if (typeof onTimeout === 'function') onTimeout(); } catch (_) {}
       const error = new Error(`${label || 'startup operation'} timed out after ${timeoutMs}ms`);
-      error.code = 'MINERADIO_STARTUP_TIMEOUT';
+      error.code = 'FAVERADIO_STARTUP_TIMEOUT';
       reject(error);
     }, Math.max(1000, Number(timeoutMs) || 1000));
     Promise.resolve(promise).then((value) => {
@@ -637,7 +637,7 @@ function waitForServer(server, timeoutMs = STARTUP_SERVER_TIMEOUT_MS) {
     const onError = (error) => finish(error);
     const timer = setTimeout(() => {
       const error = new Error(`waitForServer timed out after ${timeoutMs}ms`);
-      error.code = 'MINERADIO_SERVER_TIMEOUT';
+      error.code = 'FAVERADIO_SERVER_TIMEOUT';
       finish(error);
     }, Math.max(1000, Number(timeoutMs) || STARTUP_SERVER_TIMEOUT_MS));
     server.once('listening', onListening);
@@ -664,7 +664,7 @@ function waitForLocalHttpReady(port, timeoutMs = STARTUP_HTTP_TIMEOUT_MS) {
       if (settled) return;
       if (Date.now() >= deadline) {
         const error = new Error(`local HTTP server did not become ready within ${timeoutMs}ms`);
-        error.code = 'MINERADIO_HTTP_TIMEOUT';
+        error.code = 'FAVERADIO_HTTP_TIMEOUT';
         finish(error);
         return;
       }
@@ -830,7 +830,7 @@ function isTrustedWallpaperEngineIpc(event) {
 
 function broadcastDesktopWallpaperStatus(status) {
   if (!mainWindow || mainWindow.isDestroyed() || !mainWindow.webContents || mainWindow.webContents.isDestroyed()) return;
-  mainWindow.webContents.send('mineradio-wallpaper-runtime-state', {
+  mainWindow.webContents.send('faveradio-wallpaper-runtime-state', {
     ...(status || fullDesktopModeRuntime.getStatus('broadcast')),
     recoveryTrayAvailable: !!tray,
     escapeShortcutRegistered: fullDesktopEscapeRegistered === true,
@@ -941,7 +941,7 @@ async function prepareWallpaperEngineRendererCapture(sessionId, fps) {
   const safeSourceId = /^window:\d+:\d+$/.test(String(grant.sourceId || '')) ? String(grant.sourceId) : '';
   if (!safeSourceId) return { ok: false, error: 'WALLPAPER_CAPTURE_SOURCE_INVALID' };
   const script = `(() => {
-    const prepare = window.__mineradioPrepareWallpaperEngineCapture;
+    const prepare = window.__faveradioPrepareWallpaperEngineCapture;
     if (typeof prepare !== 'function') return { ok: false, error: 'WALLPAPER_CAPTURE_PREPARE_HANDLER_MISSING' };
     return Promise.resolve(prepare(${JSON.stringify(safeSessionId)}, ${safeFps}, ${JSON.stringify(safeSourceId)}))
       .then((value) => value && typeof value === 'object' ? value : { ok: false, error: 'WALLPAPER_CAPTURE_PREPARE_RESULT_INVALID' })
@@ -980,7 +980,7 @@ async function prepareWallpaperEngineRendererGlassCapture(sessionId, fps, source
     return { ok: false, error: 'WALLPAPER_GLASS_CAPTURE_GRANT_MISSING' };
   }
   const script = `(() => {
-    const prepare = window.__mineradioPrepareWallpaperEngineGlassCapture;
+    const prepare = window.__faveradioPrepareWallpaperEngineGlassCapture;
     if (typeof prepare !== 'function') return { ok: false, error: 'WALLPAPER_GLASS_CAPTURE_PREPARE_HANDLER_MISSING' };
     return Promise.resolve(prepare(${JSON.stringify(safeSessionId)}, ${safeFps}, ${JSON.stringify(safeSourceId)}))
       .then((value) => value && typeof value === 'object' ? value : { ok: false, error: 'WALLPAPER_GLASS_CAPTURE_PREPARE_RESULT_INVALID' })
@@ -1013,7 +1013,7 @@ async function prepareWallpaperEngineRendererHostBoundsFrame(sessionId, reason =
   const safeSessionId = String(sessionId);
   const safeReason = String(reason || 'bounds-changed').slice(0, 80);
   const script = `(() => {
-    const prepare = window.__mineradioPrepareWallpaperEngineHostBoundsChange;
+    const prepare = window.__faveradioPrepareWallpaperEngineHostBoundsChange;
     if (typeof prepare !== 'function') return { ok: false, frozen: false, error: 'WALLPAPER_BOUNDS_FREEZE_HANDLER_MISSING' };
     try {
       const value = prepare(${JSON.stringify(safeSessionId)}, ${JSON.stringify(safeReason)});
@@ -1047,7 +1047,7 @@ async function prepareWallpaperEngineRendererDesktopPreview(sessionId, reason = 
     return { ok: false, preview: false, error: 'WALLPAPER_DESKTOP_PREVIEW_RENDERER_UNAVAILABLE' };
   }
   const script = `(() => {
-    const prepare = window.__mineradioPrepareWallpaperEngineDesktopPreview;
+    const prepare = window.__faveradioPrepareWallpaperEngineDesktopPreview;
     if (typeof prepare !== 'function') {
       return { ok: false, preview: false, error: 'WALLPAPER_DESKTOP_PREVIEW_HANDLER_MISSING' };
     }
@@ -1252,7 +1252,7 @@ function suspendWallpaperEngineForHiddenHost(win, reason = 'hidden') {
   finishWallpaperEngineVisibleHostResume(win);
   cancelWallpaperEngineHostBoundsRestart();
   try {
-    win.webContents.send('mineradio-wallpaper-engine-host-bounds-changed', {
+    win.webContents.send('faveradio-wallpaper-engine-host-bounds-changed', {
       phase: 'prepare',
       reason: String(reason || 'hidden'),
     });
@@ -1275,7 +1275,7 @@ function resumeWallpaperEngineForVisibleHost(win, reason = 'visible') {
     const notifyResident = () => {
       if (!win || win.isDestroyed() || !win.isVisible() || win.isMinimized()) return;
       try {
-        win.webContents.send('mineradio-wallpaper-engine-host-bounds-changed', {
+        win.webContents.send('faveradio-wallpaper-engine-host-bounds-changed', {
           phase: 'resident',
           reason: String(reason || 'visible'),
           sessionId: String(residentStatus.sessionId || ''),
@@ -1308,7 +1308,7 @@ function resumeWallpaperEngineForVisibleHost(win, reason = 'visible') {
       || !win.isVisible()
       || win.isMinimized()) return;
     try {
-      win.webContents.send('mineradio-wallpaper-engine-host-bounds-changed', {
+      win.webContents.send('faveradio-wallpaper-engine-host-bounds-changed', {
         phase: 'restart',
         reason: String(reason || 'visible'),
         forceVisibleHost,
@@ -1653,7 +1653,7 @@ function scheduleWallpaperEngineHostBoundsRestart(win, reason = 'bounds-changed'
         if (!recoveryOnly && (wallpaperEngineHostBoundsOperation !== job.boundsOperation
           || wallpaperEngineCaptureOperation !== job.captureOperation)) return;
         try {
-          win.webContents.send('mineradio-wallpaper-engine-host-bounds-changed', {
+          win.webContents.send('faveradio-wallpaper-engine-host-bounds-changed', {
             phase: 'restart',
             reason: recoveryOnly ? 'bounds-stale-recovery' : job.reason,
             forceVisibleHost: true,
@@ -1671,8 +1671,8 @@ function scheduleWallpaperEngineHostBoundsRestart(win, reason = 'bounds-changed'
 
 function configureLocalAppPermissions() {
   const ses = session.defaultSession;
-  if (!ses || ses._mineradioPermissionsConfigured) return;
-  ses._mineradioPermissionsConfigured = true;
+  if (!ses || ses._faveradioPermissionsConfigured) return;
+  ses._faveradioPermissionsConfigured = true;
   ses.setPermissionCheckHandler((webContents, permission, requestingOrigin, details) => {
     const origin = requestingOrigin || (details && details.requestingUrl) || (webContents && webContents.getURL && webContents.getURL()) || '';
     if (permission === 'display-capture') return isTrustedWallpaperEngineDisplayCapturePermission(webContents, origin, details);
@@ -1726,7 +1726,7 @@ function configureLocalAppPermissions() {
           || current.dwmGlassSurfaceActive !== true
           || !sourceMatch
           || Number(sourceMatch[1]) !== Number(current.dwmGlassSurfaceWindowId)
-          || String(source && source.name || '') !== 'Mineradio WE DWM Surface') {
+          || String(source && source.name || '') !== 'Faveradio WE DWM Surface') {
           reply({});
           return;
         }
@@ -1787,18 +1787,18 @@ function sendWindowState(win) {
 
 function sendGlobalHotkeyAction(action) {
   if (!mainWindow || mainWindow.isDestroyed() || !action) return;
-  mainWindow.webContents.send('mineradio-global-hotkey', { action });
+  mainWindow.webContents.send('faveradio-global-hotkey', { action });
 }
 
-function unregisterMineradioGlobalHotkeys() {
+function unregisterFaveradioGlobalHotkeys() {
   for (const accelerator of registeredGlobalHotkeys.keys()) {
     try { globalShortcut.unregister(accelerator); } catch (e) {}
   }
   registeredGlobalHotkeys.clear();
 }
 
-function configureMineradioGlobalHotkeys(bindings = []) {
-  unregisterMineradioGlobalHotkeys();
+function configureFaveradioGlobalHotkeys(bindings = []) {
+  unregisterFaveradioGlobalHotkeys();
   const results = [];
   const seen = new Set();
   for (const item of Array.isArray(bindings) ? bindings : []) {
@@ -1949,9 +1949,9 @@ async function getGpuDiagnostics() {
     basicInfo,
     switches: {
       safeGpuRasterization: true,
-      ignoreGpuBlocklist: process.env.MINERADIO_IGNORE_GPU_BLOCKLIST === '1',
-      forceHighPerformanceGpu: process.env.MINERADIO_FORCE_HIGH_PERFORMANCE_GPU === '1',
-      keepBackgroundRendering: process.env.MINERADIO_KEEP_BACKGROUND_RENDERING === '1',
+      ignoreGpuBlocklist: process.env.FAVERADIO_IGNORE_GPU_BLOCKLIST === '1',
+      forceHighPerformanceGpu: process.env.FAVERADIO_FORCE_HIGH_PERFORMANCE_GPU === '1',
+      keepBackgroundRendering: process.env.FAVERADIO_KEEP_BACKGROUND_RENDERING === '1',
       angle: 'd3d11',
     },
   };
@@ -2107,7 +2107,7 @@ function isZoomShortcutInput(input) {
 
 function focusMainWindow() {
   if (!mainWindow || mainWindow.isDestroyed()) return false;
-  mainWindow.__mineradioIntentionalHide = false;
+  mainWindow.__faveradioIntentionalHide = false;
   markMainWindowExpectedVisible(mainWindow, true, 'focus-main-window');
   const desktopMode = fullDesktopModeRuntime.getStatus('focus-main-window');
   if (desktopMode.enabled === true) {
@@ -2301,8 +2301,8 @@ function reportWindowCreationFailure(context, error) {
     startupErrorReported = true;
     try {
       // Keep this literal visible for startup dialog regression checks:
-      // dialog.showErrorBox('Mineradio 启动失败'
-      dialog.showErrorBox(`Mineradio 启动失败 (${code})`, buildStartupErrorMessage(context, code, logInfo, error));
+      // dialog.showErrorBox('Faveradio 启动失败'
+      dialog.showErrorBox(`Faveradio 启动失败 (${code})`, buildStartupErrorMessage(context, code, logInfo, error));
     } catch (_) {}
   }
   if (!startupCompleted) {
@@ -2338,8 +2338,8 @@ bindStartupFailureHandlers();
 
 function shouldEnsureDesktopShortcut() {
   if (process.platform !== 'win32') return false;
-  if (process.env.MINERADIO_NO_DESKTOP_SHORTCUT === '1') return false;
-  return app.isPackaged || process.env.MINERADIO_CREATE_DESKTOP_SHORTCUT === '1';
+  if (process.env.FAVERADIO_NO_DESKTOP_SHORTCUT === '1') return false;
+  return app.isPackaged || process.env.FAVERADIO_CREATE_DESKTOP_SHORTCUT === '1';
 }
 
 function ensureDesktopShortcut() {
@@ -3103,7 +3103,7 @@ function startSpotifyOAuthCallbackServer(redirectUri, onCallback) {
         const result = await onCallback(current);
         const ok = !!(result && result.ok);
         res.writeHead(ok ? 200 : 500, { 'Content-Type': 'text/html; charset=utf-8' });
-        res.end(spotifyOAuthResultHtml(ok, (result && (result.message || result.error)) || (ok ? '可以回到 Mineradio。' : '请回到 Mineradio 重新尝试。')));
+        res.end(spotifyOAuthResultHtml(ok, (result && (result.message || result.error)) || (ok ? '可以回到 Faveradio。' : '请回到 Faveradio 重新尝试。')));
       } catch (e) {
         res.writeHead(500, { 'Content-Type': 'text/html; charset=utf-8' });
         res.end(spotifyOAuthResultHtml(false, e && e.message || 'SPOTIFY_OAUTH_CALLBACK_FAILED'));
@@ -3660,13 +3660,13 @@ $ErrorActionPreference = "SilentlyContinue"
 Add-Type @"
 using System;
 using System.Runtime.InteropServices;
-public class MineradioMousePoll {
+public class FaveradioMousePoll {
   [DllImport("user32.dll")] public static extern short GetAsyncKeyState(int vKey);
 }
 "@
 $prev = $false
 while ($true) {
-  $down = (([MineradioMousePoll]::GetAsyncKeyState(4) -band 0x8000) -ne 0)
+  $down = (([FaveradioMousePoll]::GetAsyncKeyState(4) -band 0x8000) -ne 0)
   if ($down -and -not $prev) {
     [Console]::Out.WriteLine("MMB")
     [Console]::Out.Flush()
@@ -3714,14 +3714,14 @@ function stopDesktopLyricsMousePoller() {
 function broadcastDesktopLyricsLockState() {
   const locked = desktopLyricsState.clickThrough !== false;
   if (mainWindow && !mainWindow.isDestroyed()) {
-    mainWindow.webContents.send('mineradio-desktop-lyrics-lock-state', { locked });
+    mainWindow.webContents.send('faveradio-desktop-lyrics-lock-state', { locked });
   }
   sendDesktopLyricsState();
 }
 
 function broadcastDesktopLyricsEnabledState(enabled) {
   if (mainWindow && !mainWindow.isDestroyed()) {
-    mainWindow.webContents.send('mineradio-desktop-lyrics-enabled-state', { enabled: !!enabled });
+    mainWindow.webContents.send('faveradio-desktop-lyrics-enabled-state', { enabled: !!enabled });
   }
 }
 
@@ -3736,7 +3736,7 @@ function positionDesktopLyricsWindow(payload = desktopLyricsState, options = {})
 
 function sendDesktopLyricsState() {
   if (!desktopLyricsWindow || desktopLyricsWindow.isDestroyed()) return;
-  desktopLyricsWindow.webContents.send('mineradio-desktop-lyrics-state', desktopLyricsState);
+  desktopLyricsWindow.webContents.send('faveradio-desktop-lyrics-state', desktopLyricsState);
 }
 
 function createDesktopLyricsWindow(payload = {}) {
@@ -3772,7 +3772,7 @@ function createDesktopLyricsWindow(payload = {}) {
     focusable: false,
     skipTaskbar: true,
     show: false,
-    title: 'Mineradio Desktop Lyrics',
+    title: 'Faveradio Desktop Lyrics',
     webPreferences: {
       preload: path.join(__dirname, 'overlay-preload.js'),
       contextIsolation: true,
@@ -3827,25 +3827,25 @@ function nativeWindowHandleDecimal(win) {
 
 function hookExplorerRestartForFullDesktop(win) {
   if (process.platform !== 'win32' || !win || win.isDestroyed() || typeof win.hookWindowMessage !== 'function') return;
-  if (win.__mineradioTaskbarCreatedHookPending || win.__mineradioTaskbarCreatedMessageId) return;
-  win.__mineradioTaskbarCreatedHookPending = true;
+  if (win.__faveradioTaskbarCreatedHookPending || win.__faveradioTaskbarCreatedMessageId) return;
+  win.__faveradioTaskbarCreatedHookPending = true;
   const script = `
 Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;
-public static class MineradioShellMessage {
+public static class FaveradioShellMessage {
   [DllImport("user32.dll", CharSet=CharSet.Unicode)]
   public static extern uint RegisterWindowMessage(string messageName);
 }
 "@
-[MineradioShellMessage]::RegisterWindowMessage("TaskbarCreated")
+[FaveradioShellMessage]::RegisterWindowMessage("TaskbarCreated")
 `;
   execFile('powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', script], {
     windowsHide: true,
     timeout: 5000,
     env: { ...process.env, TEMP: NATIVE_HELPER_TEMP_PATH, TMP: NATIVE_HELPER_TEMP_PATH },
   }, (error, stdout) => {
-    win.__mineradioTaskbarCreatedHookPending = false;
+    win.__faveradioTaskbarCreatedHookPending = false;
     if (error || win.isDestroyed()) return;
     const messageId = Number.parseInt(String(stdout || '').trim(), 10);
     if (!Number.isInteger(messageId) || messageId <= 0) return;
@@ -3857,7 +3857,7 @@ public static class MineradioShellMessage {
           });
         }, 650);
       });
-      win.__mineradioTaskbarCreatedMessageId = messageId;
+      win.__faveradioTaskbarCreatedMessageId = messageId;
     } catch (hookError) {
       console.warn('[FullDesktopMode] Explorer restart hook failed:', hookError && hookError.message || hookError);
     }
@@ -3872,38 +3872,38 @@ function windowMessageUnsignedValue(value) {
 
 function armMainWindowMinimizeIntent(win, reason) {
   if (!win || win.isDestroyed()) return;
-  win.__mineradioMinimizeIntentUntil = Date.now() + MAIN_WINDOW_MINIMIZE_INTENT_TTL_MS;
-  win.__mineradioMinimizeIntentReason = String(reason || 'user');
+  win.__faveradioMinimizeIntentUntil = Date.now() + MAIN_WINDOW_MINIMIZE_INTENT_TTL_MS;
+  win.__faveradioMinimizeIntentReason = String(reason || 'user');
 }
 
 function consumeMainWindowMinimizeIntent(win) {
   if (!win || win.isDestroyed()) return { intentional: false, reason: '' };
-  const intentional = Number(win.__mineradioMinimizeIntentUntil || 0) >= Date.now();
-  const reason = intentional ? String(win.__mineradioMinimizeIntentReason || 'user') : '';
-  win.__mineradioMinimizeIntentUntil = 0;
-  win.__mineradioMinimizeIntentReason = '';
-  win.__mineradioIntentionalMinimize = intentional;
-  win.__mineradioIntentionalMinimizeReason = reason;
+  const intentional = Number(win.__faveradioMinimizeIntentUntil || 0) >= Date.now();
+  const reason = intentional ? String(win.__faveradioMinimizeIntentReason || 'user') : '';
+  win.__faveradioMinimizeIntentUntil = 0;
+  win.__faveradioMinimizeIntentReason = '';
+  win.__faveradioIntentionalMinimize = intentional;
+  win.__faveradioIntentionalMinimizeReason = reason;
   return { intentional, reason };
 }
 
 function clearMainWindowMinimizeIntent(win) {
   if (!win || win.isDestroyed()) return;
-  win.__mineradioMinimizeIntentUntil = 0;
-  win.__mineradioMinimizeIntentReason = '';
-  win.__mineradioIntentionalMinimize = false;
-  win.__mineradioIntentionalMinimizeReason = '';
+  win.__faveradioMinimizeIntentUntil = 0;
+  win.__faveradioMinimizeIntentReason = '';
+  win.__faveradioIntentionalMinimize = false;
+  win.__faveradioIntentionalMinimizeReason = '';
 }
 
 function hookMainWindowMinimizeIntent(win) {
   if (process.platform !== 'win32' || !win || win.isDestroyed() || typeof win.hookWindowMessage !== 'function') return;
-  if (win.__mineradioSystemCommandIntentHooked) return;
+  if (win.__faveradioSystemCommandIntentHooked) return;
   try {
     win.hookWindowMessage(WINDOWS_WM_SYSCOMMAND, (wParam) => {
       const command = windowMessageUnsignedValue(wParam) & 0xFFF0;
       if (command === WINDOWS_SC_MINIMIZE) armMainWindowMinimizeIntent(win, 'native-system-command');
     });
-    win.__mineradioSystemCommandIntentHooked = true;
+    win.__faveradioSystemCommandIntentHooked = true;
   } catch (error) {
     console.warn('[WindowMinimize] native intent hook unavailable:', error && error.message || error);
   }
@@ -4000,7 +4000,7 @@ ipcMain.handle('desktop-window-get-state', (event) => {
   return getWindowState(getSenderWindow(event));
 });
 
-ipcMain.on('mineradio-full-desktop-icon-shields', (event, payload = {}) => {
+ipcMain.on('faveradio-full-desktop-icon-shields', (event, payload = {}) => {
   if (!isTrustedMainWindowIpc(event)) return;
   const rects = payload && payload.enabled === true && payload.interactive === true
     ? payload.rects
@@ -4011,19 +4011,19 @@ ipcMain.on('mineradio-full-desktop-icon-shields', (event, payload = {}) => {
   );
 });
 
-ipcMain.handle('mineradio-full-desktop-set-icons-visible', async (event, visible) => {
+ipcMain.handle('faveradio-full-desktop-set-icons-visible', async (event, visible) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'DESKTOP_MODE_UNTRUSTED_SENDER' };
   return fullDesktopModeRuntime.setDesktopIconsVisible(visible !== false, 'renderer-icons-visible');
 });
 
-ipcMain.handle('mineradio-full-desktop-set-software-lock', async (event, locked) => {
+ipcMain.handle('faveradio-full-desktop-set-software-lock', async (event, locked) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'DESKTOP_MODE_UNTRUSTED_SENDER' };
   return fullDesktopModeRuntime.setSoftwareInteractionLocked(locked === true, 'renderer-software-lock');
 });
 
 const ordinaryWindowImeFocusRepairs = new WeakMap();
 
-ipcMain.handle('mineradio-full-desktop-request-keyboard-focus', async (event, reason) => {
+ipcMain.handle('faveradio-full-desktop-request-keyboard-focus', async (event, reason) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_KEYBOARD_FOCUS_REQUEST' };
   const focusResult = fullDesktopModeRuntime.requestKeyboardFocus(
     `renderer-${String(reason || 'pointerdown').replace(/[^a-z0-9_-]+/gi, '-').slice(0, 64)}`
@@ -4067,7 +4067,7 @@ ipcMain.handle('mineradio-full-desktop-request-keyboard-focus', async (event, re
   }
 });
 
-ipcMain.on('mineradio-full-desktop-pointer-route', (event, payload = {}) => {
+ipcMain.on('faveradio-full-desktop-pointer-route', (event, payload = {}) => {
   if (!isTrustedMainWindowIpc(event)) return;
   fullDesktopModeRuntime.updatePointerRoute({
     overSoftwareUi: payload && payload.overSoftwareUi === true,
@@ -4075,11 +4075,11 @@ ipcMain.on('mineradio-full-desktop-pointer-route', (event, payload = {}) => {
   }, 'renderer-pointer-route');
 });
 
-ipcMain.handle('mineradio-get-gpu-diagnostics', () => {
+ipcMain.handle('faveradio-get-gpu-diagnostics', () => {
   return getGpuDiagnostics();
 });
 
-ipcMain.handle('mineradio-memory-get-snapshot', async () => {
+ipcMain.handle('faveradio-memory-get-snapshot', async () => {
   try {
     return {
       ok: true,
@@ -4097,7 +4097,7 @@ ipcMain.handle('mineradio-memory-get-snapshot', async () => {
   }
 });
 
-ipcMain.handle('mineradio-memory-configure-auto', async (_event, payload = {}) => {
+ipcMain.handle('faveradio-memory-configure-auto', async (_event, payload = {}) => {
   memoryAutoState = normalizeMemoryAutoState(payload);
   syncMemoryAutoTimer();
   if (memoryAutoState.enabled && payload.runNow === true && !isMainWindowForegroundVisible()) {
@@ -4111,18 +4111,18 @@ ipcMain.handle('mineradio-memory-configure-auto', async (_event, payload = {}) =
   };
 });
 
-ipcMain.handle('mineradio-memory-trim-app', async (_event, payload = {}) => {
+ipcMain.handle('faveradio-memory-trim-app', async (_event, payload = {}) => {
   return trimAppMemoryNow(payload.reason || 'renderer');
 });
 
-ipcMain.handle('mineradio-memory-purge-system', async (_event, payload = {}) => {
+ipcMain.handle('faveradio-memory-purge-system', async (_event, payload = {}) => {
   const mask = systemMemory.normalizeMask(payload && payload.mask);
   const autoElevate = payload && payload.autoElevate === true;
   try {
     if (isMainWindowForegroundVisible()) {
       return {
         ok: true,
-        result: { ok: false, skipped: true, reason: 'foreground-visible', message: 'System memory purge is skipped while Mineradio is visible.' },
+        result: { ok: false, skipped: true, reason: 'foreground-visible', message: 'System memory purge is skipped while Faveradio is visible.' },
         snapshot: systemMemory.getMemorySnapshot(),
         elevated: false,
         systemPurgeAvailable: systemMemory.SYSTEM_PURGE_AVAILABLE === true,
@@ -4151,7 +4151,7 @@ ipcMain.handle('mineradio-memory-purge-system', async (_event, payload = {}) => 
   }
 });
 
-ipcMain.handle('mineradio-cache-get-settings', async () => {
+ipcMain.handle('faveradio-cache-get-settings', async () => {
   try {
     return await cacheSettingsSnapshot();
   } catch (error) {
@@ -4159,9 +4159,9 @@ ipcMain.handle('mineradio-cache-get-settings', async () => {
   }
 });
 
-ipcMain.handle('mineradio-cache-choose-directory', async () => {
+ipcMain.handle('faveradio-cache-choose-directory', async () => {
   const result = await dialog.showOpenDialog({
-    title: '选择 Mineradio 缓存目录',
+    title: '选择 Faveradio 缓存目录',
     defaultPath: cacheSettings.rootPath,
     properties: ['openDirectory', 'createDirectory'],
   });
@@ -4169,7 +4169,7 @@ ipcMain.handle('mineradio-cache-choose-directory', async () => {
   return { ok: true, canceled: false, rootPath: normalizeCacheRootPath(result.filePaths[0]) };
 });
 
-ipcMain.handle('mineradio-cache-set-settings', async (_event, payload = {}) => {
+ipcMain.handle('faveradio-cache-set-settings', async (_event, payload = {}) => {
   try {
     const nextRoot = normalizeCacheRootPath(payload.rootPath);
     fs.mkdirSync(nextRoot, { recursive: true });
@@ -4183,7 +4183,7 @@ ipcMain.handle('mineradio-cache-set-settings', async (_event, payload = {}) => {
   }
 });
 
-ipcMain.handle('mineradio-wallpaper-engine-list', async (event, payload = {}) => {
+ipcMain.handle('faveradio-wallpaper-engine-list', async (event, payload = {}) => {
   try {
     if (!isTrustedWallpaperEngineIpc(event)) return { ok: false, projects: [], count: 0, error: 'WALLPAPER_ENGINE_UNTRUSTED_CALLER' };
     const snapshot = await wallpaperEngineLibrary.list({ force: payload && payload.force === true });
@@ -4194,7 +4194,7 @@ ipcMain.handle('mineradio-wallpaper-engine-list', async (event, payload = {}) =>
   }
 });
 
-ipcMain.handle('mineradio-wallpaper-engine-project-details', async (event, id) => {
+ipcMain.handle('faveradio-wallpaper-engine-project-details', async (event, id) => {
   try {
     if (!isTrustedWallpaperEngineIpc(event)) return { ok: false, error: 'WALLPAPER_ENGINE_UNTRUSTED_CALLER' };
     return await wallpaperEngineLibrary.getProjectDetails(String(id || ''));
@@ -4203,7 +4203,7 @@ ipcMain.handle('mineradio-wallpaper-engine-project-details', async (event, id) =
   }
 });
 
-ipcMain.handle('mineradio-wallpaper-engine-open-project-details', async (event, payload = {}) => {
+ipcMain.handle('faveradio-wallpaper-engine-open-project-details', async (event, payload = {}) => {
   try {
     if (!isTrustedWallpaperEngineIpc(event)) return { ok: false, error: 'WALLPAPER_ENGINE_UNTRUSTED_CALLER' };
     const details = await wallpaperEngineLibrary.getProjectDetails(String(payload && payload.id || ''));
@@ -4235,7 +4235,7 @@ ipcMain.handle('mineradio-wallpaper-engine-open-project-details', async (event, 
   }
 });
 
-ipcMain.handle('mineradio-wallpaper-engine-choose-directory', async (event) => {
+ipcMain.handle('faveradio-wallpaper-engine-choose-directory', async (event) => {
   try {
     if (!isTrustedWallpaperEngineIpc(event)) return { ok: false, canceled: false, projects: [], count: 0, error: 'WALLPAPER_ENGINE_UNTRUSTED_CALLER' };
     const options = {
@@ -4255,7 +4255,7 @@ ipcMain.handle('mineradio-wallpaper-engine-choose-directory', async (event) => {
   }
 });
 
-ipcMain.handle('mineradio-wallpaper-engine-choose-project-file', async (event) => {
+ipcMain.handle('faveradio-wallpaper-engine-choose-project-file', async (event) => {
   try {
     if (!isTrustedWallpaperEngineIpc(event)) return { ok: false, canceled: false, projects: [], count: 0, error: 'WALLPAPER_ENGINE_UNTRUSTED_CALLER' };
     const options = {
@@ -4279,7 +4279,7 @@ ipcMain.handle('mineradio-wallpaper-engine-choose-project-file', async (event) =
   }
 });
 
-ipcMain.handle('mineradio-wallpaper-engine-remove-directory', async (event, rootId) => {
+ipcMain.handle('faveradio-wallpaper-engine-remove-directory', async (event, rootId) => {
   try {
     if (!isTrustedWallpaperEngineIpc(event)) return { ok: false, projects: [], count: 0, error: 'WALLPAPER_ENGINE_UNTRUSTED_CALLER' };
     const snapshot = await wallpaperEngineLibrary.removeManualRoot(rootId);
@@ -4290,7 +4290,7 @@ ipcMain.handle('mineradio-wallpaper-engine-remove-directory', async (event, root
   }
 });
 
-ipcMain.handle('mineradio-wallpaper-engine-runtime-status', async (event, payload = {}) => {
+ipcMain.handle('faveradio-wallpaper-engine-runtime-status', async (event, payload = {}) => {
   try {
     if (!isTrustedWallpaperEngineIpc(event)) return { ok: false, available: false, error: 'WALLPAPER_ENGINE_UNTRUSTED_CALLER' };
     const probe = await wallpaperEngineRuntime.probe(payload && payload.force === true);
@@ -4300,7 +4300,7 @@ ipcMain.handle('mineradio-wallpaper-engine-runtime-status', async (event, payloa
   }
 });
 
-ipcMain.handle('mineradio-wallpaper-engine-start-scene', async (event, payload = {}) => {
+ipcMain.handle('faveradio-wallpaper-engine-start-scene', async (event, payload = {}) => {
   let operation = 0;
   let startedSessionId = '';
   try {
@@ -4390,7 +4390,7 @@ ipcMain.handle('mineradio-wallpaper-engine-start-scene', async (event, payload =
   }
 });
 
-ipcMain.handle('mineradio-wallpaper-engine-capture-result', async (event, payload = {}) => {
+ipcMain.handle('faveradio-wallpaper-engine-capture-result', async (event, payload = {}) => {
   if (!isTrustedWallpaperEngineIpc(event)) return { ok: false, error: 'WALLPAPER_ENGINE_UNTRUSTED_CALLER' };
   const sessionId = String(payload && payload.sessionId || '');
   if (!/^[a-f0-9]{24}$/i.test(sessionId)) return { ok: false, error: 'WALLPAPER_ENGINE_SESSION_INVALID' };
@@ -4425,7 +4425,7 @@ ipcMain.handle('mineradio-wallpaper-engine-capture-result', async (event, payloa
   };
 });
 
-ipcMain.handle('mineradio-wallpaper-engine-prepare-glass-capture', async (event, payload = {}) => {
+ipcMain.handle('faveradio-wallpaper-engine-prepare-glass-capture', async (event, payload = {}) => {
   if (!isTrustedWallpaperEngineIpc(event)) return { ok: false, error: 'WALLPAPER_ENGINE_UNTRUSTED_CALLER' };
   const sessionId = String(payload && payload.sessionId || '');
   if (!/^[a-f0-9]{24}$/i.test(sessionId)) return { ok: false, error: 'WALLPAPER_ENGINE_SESSION_INVALID' };
@@ -4486,7 +4486,7 @@ ipcMain.handle('mineradio-wallpaper-engine-prepare-glass-capture', async (event,
   }
 });
 
-ipcMain.handle('mineradio-wallpaper-engine-activate-dwm-surface', async (event, payload = {}) => {
+ipcMain.handle('faveradio-wallpaper-engine-activate-dwm-surface', async (event, payload = {}) => {
   if (!isTrustedWallpaperEngineIpc(event)) return { ok: false, error: 'WALLPAPER_ENGINE_UNTRUSTED_CALLER' };
   const sessionId = String(payload && payload.sessionId || '');
   if (!/^[a-f0-9]{24}$/i.test(sessionId)) return { ok: false, error: 'WALLPAPER_ENGINE_SESSION_INVALID' };
@@ -4503,7 +4503,7 @@ ipcMain.handle('mineradio-wallpaper-engine-activate-dwm-surface', async (event, 
   }
 });
 
-ipcMain.on('mineradio-wallpaper-engine-glass-surface', (event, payload = {}) => {
+ipcMain.on('faveradio-wallpaper-engine-glass-surface', (event, payload = {}) => {
   if (!isTrustedWallpaperEngineIpc(event) || typeof wallpaperEngineRuntime.updateGlassSurface !== 'function') return;
   const sessionId = String(payload && payload.sessionId || '');
   if (!/^[a-f0-9]{24}$/i.test(sessionId)) return;
@@ -4515,7 +4515,7 @@ ipcMain.on('mineradio-wallpaper-engine-glass-surface', (event, payload = {}) => 
   try { wallpaperEngineRuntime.updateGlassSurface(sessionId, payload); } catch (_) { }
 });
 
-ipcMain.on('mineradio-wallpaper-engine-visual-settings', (event, payload = {}) => {
+ipcMain.on('faveradio-wallpaper-engine-visual-settings', (event, payload = {}) => {
   if (!isTrustedWallpaperEngineIpc(event) || typeof wallpaperEngineRuntime.updateDwmVisualSettings !== 'function') return;
   const sessionId = String(payload && payload.sessionId || '');
   if (!/^[a-f0-9]{24}$/i.test(sessionId)) return;
@@ -4527,7 +4527,7 @@ ipcMain.on('mineradio-wallpaper-engine-visual-settings', (event, payload = {}) =
   wallpaperEngineRuntime.updateDwmVisualSettings(sessionId, { opacity, positionX, positionY, scale });
 });
 
-ipcMain.on('mineradio-wallpaper-engine-pointer-activity', (event, payload = {}) => {
+ipcMain.on('faveradio-wallpaper-engine-pointer-activity', (event, payload = {}) => {
   if (!isTrustedWallpaperEngineIpc(event)
     || !mainWindow
     || mainWindow.isDestroyed()
@@ -4554,7 +4554,7 @@ ipcMain.on('mineradio-wallpaper-engine-pointer-activity', (event, payload = {}) 
   } catch (_) { }
 });
 
-ipcMain.handle('mineradio-wallpaper-engine-stop-scene', async (event, payload = {}) => {
+ipcMain.handle('faveradio-wallpaper-engine-stop-scene', async (event, payload = {}) => {
   try {
     if (!isTrustedWallpaperEngineIpc(event)) return { ok: false, error: 'WALLPAPER_ENGINE_UNTRUSTED_CALLER' };
     const sessionId = String(payload.sessionId || '');
@@ -4578,7 +4578,7 @@ ipcMain.handle('mineradio-wallpaper-engine-stop-scene', async (event, payload = 
   }
 });
 
-ipcMain.handle('mineradio-local-library-list', async (event) => {
+ipcMain.handle('faveradio-local-library-list', async (event) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, count: 0, tracks: [], error: 'UNTRUSTED_SENDER' };
   try {
     return await localMusicLibrary.listTracks();
@@ -4587,13 +4587,13 @@ ipcMain.handle('mineradio-local-library-list', async (event) => {
   }
 });
 
-ipcMain.handle('mineradio-built-in-playlists-list', async (event) => {
+ipcMain.handle('faveradio-built-in-playlists-list', async (event) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, count: 0, playlists: [], error: 'UNTRUSTED_SENDER' };
   return builtInPlaylistLibrary.listSync();
 });
 
 const visualPresetStore = new VisualPresetStore(app.isPackaged ? path.dirname(process.execPath) : app.getAppPath());
-ipcMain.handle('mineradio-visual-presets', async (event, action, kind, name, value) => {
+ipcMain.handle('faveradio-visual-presets', async (event, action, kind, name, value) => {
   if (!isTrustedMainWindowIpc(event)) return {ok:false,error:'UNTRUSTED_SENDER'};
   try { if(action==='list') return {ok:true,items:visualPresetStore.list(kind)};
     if(action==='read') return {ok:true,value:visualPresetStore.read(kind,name)};
@@ -4601,75 +4601,75 @@ ipcMain.handle('mineradio-visual-presets', async (event, action, kind, name, val
     return {ok:false,error:'INVALID_ACTION'};
   } catch(error){return {ok:false,error:error.message};}
 });
-ipcMain.handle('mineradio-merge-playlists', async(event,name,tracks)=>{
+ipcMain.handle('faveradio-merge-playlists', async(event,name,tracks)=>{
   if(!isTrustedMainWindowIpc(event))return {ok:false,error:'UNTRUSTED_SENDER'};
   try{return await builtInPlaylistLibrary.createMerged(name,tracks);}catch(error){return builtInPlaylistMutationError(error);}
 });
-ipcMain.handle('mineradio-smart-favorites-read', async (event) => {
+ipcMain.handle('faveradio-smart-favorites-read', async (event) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, state: null, error: 'UNTRUSTED_SENDER' };
   return smartFavoritesStore.publicState();
 });
 
-ipcMain.handle('mineradio-smart-favorites-save', async (event, state) => {
+ipcMain.handle('faveradio-smart-favorites-save', async (event, state) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER' };
   return smartFavoritesStore.saveState(state);
 });
 
-ipcMain.handle('mineradio-smart-favorites-llm-status', async (event) => {
+ipcMain.handle('faveradio-smart-favorites-llm-status', async (event) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, configured: false, error: 'UNTRUSTED_SENDER' };
   return smartFavoritesStore.configStatus();
 });
 
-ipcMain.handle('mineradio-smart-favorites-llm-configure', async (event, payload) => {
+ipcMain.handle('faveradio-smart-favorites-llm-configure', async (event, payload) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, configured: false, error: 'UNTRUSTED_SENDER' };
   return smartFavoritesStore.configureLlm(payload || {});
 });
 
-ipcMain.handle('mineradio-smart-favorites-llm-clear', async (event) => {
+ipcMain.handle('faveradio-smart-favorites-llm-clear', async (event) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, configured: false, error: 'UNTRUSTED_SENDER' };
   return smartFavoritesStore.clearLlmCredential();
 });
 
-ipcMain.handle('mineradio-smart-favorites-llm-test', async (event) => {
+ipcMain.handle('faveradio-smart-favorites-llm-test', async (event) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, configured: false, stage: 'security', error: 'UNTRUSTED_SENDER' };
   return smartFavoritesStore.testLlmConnection();
 });
 
-ipcMain.handle('mineradio-smart-favorites-analyze', async (event, tracks, tags) => {
+ipcMain.handle('faveradio-smart-favorites-analyze', async (event, tracks, tags) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, available: false, results: [], error: 'UNTRUSTED_SENDER' };
   return smartFavoritesStore.analyzeTracks(tracks, tags);
 });
 
-ipcMain.handle('mineradio-muq-status', async event => {
+ipcMain.handle('faveradio-muq-status', async event => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER' };
   return muqRecommendation.status();
 });
-ipcMain.handle('mineradio-muq-audio-cache', async (event, keys) => {
+ipcMain.handle('faveradio-muq-audio-cache', async (event, keys) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER' };
   return { ok: true, entries: muqRecommendation.audioCache(Array.isArray(keys) ? keys.map(String) : []) };
 });
-ipcMain.handle('mineradio-muq-embed-audio', async (event, key, fingerprint, pcm) => {
+ipcMain.handle('faveradio-muq-embed-audio', async (event, key, fingerprint, pcm) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER' };
   try { return { ok: true, vector: await muqRecommendation.audio(String(key || ''), String(fingerprint || ''), pcm) }; }
   catch (error) { return { ok: false, error: error.message }; }
 });
-ipcMain.handle('mineradio-muq-embed-texts', async (event, tags) => {
+ipcMain.handle('faveradio-muq-embed-texts', async (event, tags) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER' };
   try { return { ok: true, vectors: await muqRecommendation.texts(Array.isArray(tags) ? tags : []) }; }
   catch (error) { return { ok: false, error: error.message }; }
 });
 
-ipcMain.handle('mineradio-emomusic-vlm-status', async (event) => {
+ipcMain.handle('faveradio-emomusic-vlm-status', async (event) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, configured: false, error: 'UNTRUSTED_SENDER' };
   return emomusicVlmClient.status();
 });
 
-ipcMain.handle('mineradio-emomusic-vlm-analyze', async (event, imageDataUrl) => {
+ipcMain.handle('faveradio-emomusic-vlm-analyze', async (event, imageDataUrl) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER' };
   return emomusicVlmClient.analyzeFrame(imageDataUrl);
 });
 
-ipcMain.handle('mineradio-built-in-playlist-page', async (event, id, options = {}) => {
+ipcMain.handle('faveradio-built-in-playlist-page', async (event, id, options = {}) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, playlist: null, tracks: [], error: 'UNTRUSTED_SENDER' };
   return builtInPlaylistLibrary.page(id, options);
 });
@@ -4678,37 +4678,47 @@ function builtInPlaylistMutationError(error) {
   return { ok: false, error: error && (error.code || error.message) || 'BUILT_IN_PLAYLIST_MUTATION_FAILED' };
 }
 
-ipcMain.handle('mineradio-built-in-playlist-create', async (event, name) => {
+ipcMain.handle('faveradio-built-in-playlist-create', async (event, name) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER' };
   try { return await builtInPlaylistLibrary.create(name); } catch (error) { return builtInPlaylistMutationError(error); }
 });
 
-ipcMain.handle('mineradio-built-in-playlist-rename', async (event, id, name) => {
+ipcMain.handle('faveradio-built-in-playlist-rename', async (event, id, name) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER' };
   try { return await builtInPlaylistLibrary.rename(id, name); } catch (error) { return builtInPlaylistMutationError(error); }
 });
 
-ipcMain.handle('mineradio-built-in-playlist-delete', async (event, id) => {
+ipcMain.handle('faveradio-built-in-playlist-delete', async (event, id) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER' };
   try { return await builtInPlaylistLibrary.delete(id); } catch (error) { return builtInPlaylistMutationError(error); }
 });
 
-ipcMain.handle('mineradio-built-in-playlist-add-track', async (event, id, track) => {
+ipcMain.handle('faveradio-built-in-playlist-add-track', async (event, id, track) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER' };
   try { return await builtInPlaylistLibrary.addTrack(id, track); } catch (error) { return builtInPlaylistMutationError(error); }
 });
 
-ipcMain.handle('mineradio-built-in-playlist-remove-track', async (event, id, index) => {
+ipcMain.handle('faveradio-built-in-playlist-remove-track', async (event, id, index) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER' };
   try { return await builtInPlaylistLibrary.removeTrack(id, index); } catch (error) { return builtInPlaylistMutationError(error); }
 });
 
-ipcMain.handle('mineradio-built-in-playlist-reorder-track', async (event, id, fromIndex, toIndex) => {
+ipcMain.handle('faveradio-built-in-playlist-add-tracks', async (event, id, tracks) => {
+  if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER' };
+  try { return await builtInPlaylistLibrary.addTracks(id, tracks); } catch (error) { return builtInPlaylistMutationError(error); }
+});
+
+ipcMain.handle('faveradio-built-in-playlist-remove-tracks', async (event, id, tracks) => {
+  if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER' };
+  try { return await builtInPlaylistLibrary.removeTracks(id, tracks); } catch (error) { return builtInPlaylistMutationError(error); }
+});
+
+ipcMain.handle('faveradio-built-in-playlist-reorder-track', async (event, id, fromIndex, toIndex) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER' };
   try { return await builtInPlaylistLibrary.reorderTrack(id, fromIndex, toIndex); } catch (error) { return builtInPlaylistMutationError(error); }
 });
 
-ipcMain.handle('mineradio-local-library-lyric', async (event, localFileId) => {
+ipcMain.handle('faveradio-local-library-lyric', async (event, localFileId) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, lyric: '', lyricSource: '', error: 'UNTRUSTED_SENDER' };
   try {
     return localMusicLibrary.lyricForTrack(localFileId);
@@ -4729,7 +4739,7 @@ function pruneLocalMusicImportCapabilities() {
   }
 }
 
-ipcMain.handle('mineradio-local-library-authorize', async (event, payload = {}) => {
+ipcMain.handle('faveradio-local-library-authorize', async (event, payload = {}) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, count: 0, error: 'UNTRUSTED_SENDER' };
   const files = [];
   const seen = new Set();
@@ -4763,7 +4773,7 @@ ipcMain.handle('mineradio-local-library-authorize', async (event, payload = {}) 
   return { ok: true, count: files.length, token };
 });
 
-ipcMain.handle('mineradio-local-library-import', async (event, payload = {}) => {
+ipcMain.handle('faveradio-local-library-import', async (event, payload = {}) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, count: 0, tracks: [], error: 'UNTRUSTED_SENDER' };
   pruneLocalMusicImportCapabilities();
   const token = String(payload && payload.token || '').trim().toLowerCase();
@@ -4779,7 +4789,7 @@ ipcMain.handle('mineradio-local-library-import', async (event, payload = {}) => 
   }
 });
 
-ipcMain.handle('mineradio-cache-read-lyric', async (_event, key) => {
+ipcMain.handle('faveradio-cache-read-lyric', async (_event, key) => {
   try {
     const file = lyricCacheFilePath(key);
     if (!fs.existsSync(file)) return { ok: true, hit: false };
@@ -4794,7 +4804,7 @@ ipcMain.handle('mineradio-cache-read-lyric', async (_event, key) => {
   }
 });
 
-ipcMain.handle('mineradio-cache-write-lyric', async (_event, key, payload) => {
+ipcMain.handle('faveradio-cache-write-lyric', async (_event, key, payload) => {
   try {
     if (!key || !payload || typeof payload !== 'object' || Array.isArray(payload)) return { ok: false, error: 'INVALID_LYRIC_CACHE_PAYLOAD' };
     const record = { version: LYRIC_CACHE_VERSION, cachedAt: Date.now(), payload };
@@ -4831,8 +4841,8 @@ ipcMain.handle('desktop-window-set-close-behavior', (_event, behavior) => {
   return { ok: true, behavior: closeBehavior };
 });
 
-ipcMain.handle('mineradio-hotkeys-configure-global', (_event, bindings) => {
-  return configureMineradioGlobalHotkeys(bindings);
+ipcMain.handle('faveradio-hotkeys-configure-global', (_event, bindings) => {
+  return configureFaveradioGlobalHotkeys(bindings);
 });
 
 function loginCookieExportMeta(provider) {
@@ -4848,7 +4858,7 @@ function loginCookieExportMeta(provider) {
   return entries[key] || null;
 }
 
-ipcMain.handle('mineradio-export-login-cookie', async (_event, provider) => {
+ipcMain.handle('faveradio-export-login-cookie', async (_event, provider) => {
   try {
     const meta = loginCookieExportMeta(provider);
     if (!meta) return { ok: false, error: 'UNKNOWN_PROVIDER', message: '未知平台，无法导出登录 cookie' };
@@ -4866,12 +4876,12 @@ ipcMain.handle('mineradio-export-login-cookie', async (_event, provider) => {
   }
 });
 
-ipcMain.handle('mineradio-export-json-file', async (event, payload = {}) => {
+ipcMain.handle('faveradio-export-json-file', async (event, payload = {}) => {
   try {
     const owner = getSenderWindow(event);
-    const defaultName = String(payload.defaultName || 'mineradio-export.json').replace(/[\\/:*?"<>|]+/g, '-');
+    const defaultName = String(payload.defaultName || 'faveradio-export.json').replace(/[\\/:*?"<>|]+/g, '-');
     const result = await dialog.showSaveDialog(owner, {
-      title: '导出 Mineradio 存档',
+      title: '导出 Faveradio 存档',
       defaultPath: defaultName.toLowerCase().endsWith('.json') ? defaultName : `${defaultName}.json`,
       filters: [{ name: 'JSON', extensions: ['json'] }],
     });
@@ -4884,11 +4894,11 @@ ipcMain.handle('mineradio-export-json-file', async (event, payload = {}) => {
   }
 });
 
-ipcMain.handle('mineradio-import-json-file', async (event) => {
+ipcMain.handle('faveradio-import-json-file', async (event) => {
   try {
     const owner = getSenderWindow(event);
     const result = await dialog.showOpenDialog(owner, {
-      title: '导入 Mineradio 存档',
+      title: '导入 Faveradio 存档',
       properties: ['openFile'],
       filters: [{ name: 'JSON', extensions: ['json'] }],
     });
@@ -4901,29 +4911,29 @@ ipcMain.handle('mineradio-import-json-file', async (event) => {
   }
 });
 
-ipcMain.on('mineradio-current-fx-autosave-read-sync', (event) => {
+ipcMain.on('faveradio-current-fx-autosave-read-sync', (event) => {
   event.returnValue = { ok: true, payload: readCurrentFxAutosaveFile() };
 });
 
-ipcMain.on('mineradio-current-fx-autosave-save-sync', (event, payload) => {
+ipcMain.on('faveradio-current-fx-autosave-save-sync', (event, payload) => {
   event.returnValue = writeCurrentFxAutosaveFile(payload || {});
 });
 
-ipcMain.handle('mineradio-current-fx-autosave-save', async (_event, payload = {}) => {
+ipcMain.handle('faveradio-current-fx-autosave-save', async (_event, payload = {}) => {
   return writeCurrentFxAutosaveFile(payload || {});
 });
 
-ipcMain.handle('mineradio-login-easter-egg-status', async (event) => {
+ipcMain.handle('faveradio-login-easter-egg-status', async (event) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER', unlocked: false };
   return loginEasterEggGate.publicStatus();
 });
 
-ipcMain.handle('mineradio-login-easter-egg-unlock', async (event, value) => {
+ipcMain.handle('faveradio-login-easter-egg-unlock', async (event, value) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER', unlocked: false };
   return loginEasterEggGate.unlock(value);
 });
 
-ipcMain.handle('mineradio-login-easter-egg-reset', async (event) => {
+ipcMain.handle('faveradio-login-easter-egg-reset', async (event) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER', unlocked: false };
   return loginEasterEggGate.resetForReplay(() => clearAllProviderLoginState('renderer-replay-reset'));
 });
@@ -4959,7 +4969,7 @@ ipcMain.handle('qishui-music-clear-login', async () => {
   return clearQishuiMusicLoginSession();
 });
 
-ipcMain.handle('mineradio-open-update-page', async (event, value) => {
+ipcMain.handle('faveradio-open-update-page', async (event, value) => {
   try {
     if (!isTrustedMainWindowIpc(event)) return { ok: false, error: 'UNTRUSTED_SENDER' };
     const target = String(value || '').trim();
@@ -4973,7 +4983,7 @@ ipcMain.handle('mineradio-open-update-page', async (event, value) => {
   }
 });
 
-ipcMain.handle('mineradio-restart-app', async () => {
+ipcMain.handle('faveradio-restart-app', async () => {
   try {
     app.relaunch();
     app.exit(0);
@@ -4983,7 +4993,7 @@ ipcMain.handle('mineradio-restart-app', async () => {
   }
 });
 
-ipcMain.handle('mineradio-desktop-lyrics-set-enabled', async (_event, enabled, payload) => {
+ipcMain.handle('faveradio-desktop-lyrics-set-enabled', async (_event, enabled, payload) => {
   try {
     if (enabled) {
       createDesktopLyricsWindow(payload || {});
@@ -4997,7 +5007,7 @@ ipcMain.handle('mineradio-desktop-lyrics-set-enabled', async (_event, enabled, p
   }
 });
 
-ipcMain.handle('mineradio-desktop-lyrics-update', async (_event, payload) => {
+ipcMain.handle('faveradio-desktop-lyrics-update', async (_event, payload) => {
   try {
     const nextState = { ...desktopLyricsState, ...(payload || {}) };
     if (nextState.enabled) {
@@ -5014,11 +5024,11 @@ ipcMain.handle('mineradio-desktop-lyrics-update', async (_event, payload) => {
   }
 });
 
-ipcMain.handle('mineradio-desktop-lyrics-set-dragging', async () => {
+ipcMain.handle('faveradio-desktop-lyrics-set-dragging', async () => {
   return { ok: true };
 });
 
-ipcMain.handle('mineradio-desktop-lyrics-set-pointer-capture', async (_event, active) => {
+ipcMain.handle('faveradio-desktop-lyrics-set-pointer-capture', async (_event, active) => {
   try {
     desktopLyricsPointerCapture = !!active;
     applyDesktopLyricsMouseBehavior();
@@ -5028,7 +5038,7 @@ ipcMain.handle('mineradio-desktop-lyrics-set-pointer-capture', async (_event, ac
   }
 });
 
-ipcMain.handle('mineradio-desktop-lyrics-set-hot-bounds', async (_event, bounds) => {
+ipcMain.handle('faveradio-desktop-lyrics-set-hot-bounds', async (_event, bounds) => {
   try {
     const left = clampNumber(bounds && bounds.left, -2000, 4000, 0);
     const top = clampNumber(bounds && bounds.top, -2000, 4000, 0);
@@ -5041,7 +5051,7 @@ ipcMain.handle('mineradio-desktop-lyrics-set-hot-bounds', async (_event, bounds)
   }
 });
 
-ipcMain.handle('mineradio-desktop-lyrics-set-lock-state', async (_event, locked) => {
+ipcMain.handle('faveradio-desktop-lyrics-set-lock-state', async (_event, locked) => {
   try {
     desktopLyricsState = { ...desktopLyricsState, clickThrough: !!locked };
     if (desktopLyricsState.clickThrough !== false) desktopLyricsPointerCapture = false;
@@ -5053,7 +5063,7 @@ ipcMain.handle('mineradio-desktop-lyrics-set-lock-state', async (_event, locked)
   }
 });
 
-ipcMain.handle('mineradio-desktop-lyrics-move-by', async (_event, dx, dy) => {
+ipcMain.handle('faveradio-desktop-lyrics-move-by', async (_event, dx, dy) => {
   try {
     if (!desktopLyricsWindow || desktopLyricsWindow.isDestroyed()) return { ok: false, error: 'NO_DESKTOP_LYRICS_WINDOW' };
     if (desktopLyricsState.clickThrough !== false) return { ok: false, error: 'DESKTOP_LYRICS_LOCKED' };
@@ -5071,7 +5081,7 @@ ipcMain.handle('mineradio-desktop-lyrics-move-by', async (_event, dx, dy) => {
   }
 });
 
-ipcMain.handle('mineradio-wallpaper-set-enabled', async (event, enabled, payload) => {
+ipcMain.handle('faveradio-wallpaper-set-enabled', async (event, enabled, payload) => {
   try {
     if (!isTrustedMainWindowIpc(event)) return { ok: false, enabled: false, error: 'WALLPAPER_UNTRUSTED_SENDER' };
     if (enabled) return await createWallpaperWindow(payload || {});
@@ -5081,13 +5091,13 @@ ipcMain.handle('mineradio-wallpaper-set-enabled', async (event, enabled, payload
   }
 });
 
-ipcMain.handle('mineradio-gesture-camera-request-permission', async (event) => {
+ipcMain.handle('faveradio-gesture-camera-request-permission', async (event) => {
   const grant = createGestureCameraPermissionGrant(event);
   if (!grant) return { ok: false, error: 'GESTURE_CAMERA_UNTRUSTED_SENDER' };
   return { ok: true, expiresAt: grant.expiresAt };
 });
 
-ipcMain.handle('mineradio-wallpaper-update', async (event) => {
+ipcMain.handle('faveradio-wallpaper-update', async (event) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, enabled: false, error: 'WALLPAPER_UNTRUSTED_SENDER' };
   const status = {
     ...fullDesktopModeRuntime.getStatus('renderer-update'),
@@ -5097,7 +5107,7 @@ ipcMain.handle('mineradio-wallpaper-update', async (event) => {
   return { ok: true, enabled: status.enabled === true, interactive: status.interactive === true, status };
 });
 
-ipcMain.handle('mineradio-wallpaper-get-status', async (event) => {
+ipcMain.handle('faveradio-wallpaper-get-status', async (event) => {
   if (!isTrustedMainWindowIpc(event)) return { ok: false, enabled: false, error: 'WALLPAPER_UNTRUSTED_SENDER' };
   return {
     ok: true,
@@ -5112,7 +5122,7 @@ ipcMain.handle('mineradio-wallpaper-get-status', async (event) => {
 function configureLocalServerEnvironment(port) {
   process.env.HOST = '127.0.0.1';
   process.env.PORT = String(port);
-  process.env.MINERADIO_BEAT_CACHE_DIR = cacheSettings.beatmapsPath;
+  process.env.FAVERADIO_BEAT_CACHE_DIR = cacheSettings.beatmapsPath;
   process.env.CUEFIELD_FEEDBACK_FILE = path.join(STABLE_USER_DATA_PATH, 'cuefield-feedback.jsonl');
   process.env.COOKIE_FILE = path.join(STABLE_USER_DATA_PATH, '.cookie');
   process.env.QQ_COOKIE_FILE = path.join(STABLE_USER_DATA_PATH, '.qq-cookie');
@@ -5120,14 +5130,14 @@ function configureLocalServerEnvironment(port) {
   process.env.QISHUI_COOKIE_FILE = path.join(STABLE_USER_DATA_PATH, '.qishui-cookie');
   process.env.QISHUI_TOKEN_FILE = path.join(STABLE_USER_DATA_PATH, '.qishui-token');
   process.env.QISHUI_QR_CONFIG_FILE = path.join(STABLE_USER_DATA_PATH, '.qishui-qr-login.json');
-  process.env.MINERADIO_LISTEN_SYNC_FILE = path.join(STABLE_USER_DATA_PATH, 'listen-sync-journal.json');
-  process.env.MINERADIO_LOGIN_EASTER_EGG_GATE_FILE = path.join(STABLE_USER_DATA_PATH, LOGIN_EASTER_EGG_STATE_FILE);
-  process.env.MINERADIO_LOGIN_EASTER_EGG_GATE_VERSION = LOGIN_EASTER_EGG_GATE_VERSION;
+  process.env.FAVERADIO_LISTEN_SYNC_FILE = path.join(STABLE_USER_DATA_PATH, 'listen-sync-journal.json');
+  process.env.FAVERADIO_LOGIN_EASTER_EGG_GATE_FILE = path.join(STABLE_USER_DATA_PATH, LOGIN_EASTER_EGG_STATE_FILE);
+  process.env.FAVERADIO_LOGIN_EASTER_EGG_GATE_VERSION = LOGIN_EASTER_EGG_GATE_VERSION;
   if (!process.env.QISHUI_OAUTH_CONFIG_FILE) {
     process.env.QISHUI_OAUTH_CONFIG_FILE = path.join(STABLE_USER_DATA_PATH, '.qishui-oauth.json');
   }
   process.env.SPOTIFY_TOKEN_FILE = path.join(STABLE_USER_DATA_PATH, '.spotify-token.json');
-  if (!process.env.SPOTIFY_CONFIG_FILE && !process.env.MINERADIO_SPOTIFY_CONFIG_FILE) {
+  if (!process.env.SPOTIFY_CONFIG_FILE && !process.env.FAVERADIO_SPOTIFY_CONFIG_FILE) {
     process.env.SPOTIFY_CONFIG_FILE = path.join(STABLE_USER_DATA_PATH, '.spotify-credentials.json');
   }
 }
@@ -5332,7 +5342,7 @@ async function ensureLocalServerStarted() {
   if (localServer && localServer.listening) return localServer;
   if (localServerStartPromise) return localServerStartPromise;
   localServerStartPromise = (async () => {
-    const injectedDelay = Math.max(0, Math.min(15000, Number(process.env.MINERADIO_STARTUP_TEST_SERVER_DELAY_MS) || 0));
+    const injectedDelay = Math.max(0, Math.min(15000, Number(process.env.FAVERADIO_STARTUP_TEST_SERVER_DELAY_MS) || 0));
     if (injectedDelay) await startupDelay(injectedDelay);
     const port = await withStartupTimeout(findOpenPort(3000), 5000, 'findOpenPort');
     mainServerPort = port;
@@ -5363,14 +5373,14 @@ async function ensureLocalServerStarted() {
 
 function showMainWindowSafely(win, reason) {
   if (!win || win.isDestroyed()) return false;
-  // A renderer may be reloaded while the user intentionally keeps Mineradio
+  // A renderer may be reloaded while the user intentionally keeps Faveradio
   // in the tray. Runtime recovery must never turn that reload into a surprise
   // foreground window.
-  if (startupCompleted && win.__mineradioIntentionalHide === true) return false;
+  if (startupCompleted && win.__faveradioIntentionalHide === true) return false;
   markMainWindowExpectedVisible(win, true, reason || 'show-safe');
-  if (win.__mineradioStartupShowTimer) {
-    clearTimeout(win.__mineradioStartupShowTimer);
-    win.__mineradioStartupShowTimer = null;
+  if (win.__faveradioStartupShowTimer) {
+    clearTimeout(win.__faveradioStartupShowTimer);
+    win.__faveradioStartupShowTimer = null;
   }
   ensureMainWindowInsideDisplay(win);
   if (win.isMinimized()) win.restore();
@@ -5386,8 +5396,8 @@ function showMainWindowSafely(win, reason) {
 
 function markMainWindowExpectedVisible(win, expected, reason) {
   if (!win || win.isDestroyed()) return;
-  win.__mineradioExpectedVisible = expected === true;
-  win.__mineradioExpectedVisibleReason = String(reason || '');
+  win.__faveradioExpectedVisible = expected === true;
+  win.__faveradioExpectedVisibleReason = String(reason || '');
 }
 
 function clearMainWindowVisibilityGuard() {
@@ -5404,7 +5414,7 @@ function clearMainWindowFullscreenVisibilityGuard() {
 
 function shouldRestoreUnexpectedMainWindowVisibility(win) {
   if (!win || win.isDestroyed() || appQuitting || !startupCompleted) return false;
-  if (win.__mineradioIntentionalHide === true || win.__mineradioExpectedVisible === false) return false;
+  if (win.__faveradioIntentionalHide === true || win.__faveradioExpectedVisible === false) return false;
   if (fullDesktopModeHostVisibilityTransitionDepth > 0 || fullDesktopModeRuntime.getStatus('main-window-visibility-guard').enabled === true) return false;
   if (win.isMinimized() || win.isVisible()) return false;
   return true;
@@ -5412,14 +5422,14 @@ function shouldRestoreUnexpectedMainWindowVisibility(win) {
 
 function shouldRestoreUnexpectedMainWindowMinimize(win) {
   if (!win || win.isDestroyed() || appQuitting || !startupCompleted) return false;
-  if (win.__mineradioIntentionalHide === true || win.__mineradioExpectedVisible === false) return false;
-  if (win.__mineradioIntentionalMinimize === true) return false;
+  if (win.__faveradioIntentionalHide === true || win.__faveradioExpectedVisible === false) return false;
+  if (win.__faveradioIntentionalMinimize === true) return false;
   if (fullDesktopModeHostVisibilityTransitionDepth > 0 || fullDesktopModeRuntime.getStatus('main-window-minimize-guard').enabled === true) return false;
   return win.isMinimized();
 }
 
 function shouldRestoreUnexpectedFullscreenVisibility(win) {
-  if (!win || win.isDestroyed() || appQuitting || win.__mineradioIntentionalHide === true) return false;
+  if (!win || win.isDestroyed() || appQuitting || win.__faveradioIntentionalHide === true) return false;
   if (fullDesktopModeHostVisibilityTransitionDepth > 0 || fullDesktopModeRuntime.getStatus('fullscreen-visibility-guard').enabled === true) return false;
   if (!win.isFullScreen() || win.isMinimized() || win.isVisible()) return false;
   return true;
@@ -5428,7 +5438,7 @@ function shouldRestoreUnexpectedFullscreenVisibility(win) {
 function restoreHiddenMainWindow(win, reason, scope) {
   console.warn(`[WindowRecovery] restoring unexpectedly hidden ${scope} window:`, reason);
   markMainWindowExpectedVisible(win, true, `visibility-recovered-${reason}`);
-  win.__mineradioIntentionalHide = false;
+  win.__faveradioIntentionalHide = false;
   ensureMainWindowInsideDisplay(win);
   try { win.showInactive(); } catch (_) { try { win.show(); } catch (_) { } }
   resetMainWindowZoom(win);
@@ -5444,7 +5454,7 @@ function restoreUnexpectedMainWindowMinimize(win, reason = 'minimize-visibility-
   console.warn('[WindowRecovery] restoring unexpectedly minimized main window:', reason);
   clearMainWindowMinimizeIntent(win);
   markMainWindowExpectedVisible(win, true, `minimize-recovered-${reason}`);
-  win.__mineradioIntentionalHide = false;
+  win.__faveradioIntentionalHide = false;
   writeStartupState('window-minimize-recovered', {
     minimizeRecoveryAt: Date.now(),
     minimizeRecoveryReason: String(reason || ''),
@@ -5534,7 +5544,7 @@ function createTrustedMainDocumentReadySignal(win, expectedUrl) {
     readyUrl = candidateUrl;
     readyPhase = String(phase || 'trusted-main-document');
     if (win && !win.isDestroyed()) {
-      win.__mineradioTrustedMainDocumentReady = {
+      win.__faveradioTrustedMainDocumentReady = {
         url: readyUrl,
         phase: readyPhase,
         at: Date.now(),
@@ -5570,11 +5580,11 @@ function recoverMainWindowAfterRendererGone(win, details = {}, cleanupPromise = 
   if (!attempt) {
     const error = new Error('renderer recovery limit reached');
     const log = writeStartupErrorLog('Runtime renderer recovery', 'MR-RUNTIME-RENDERER-LOOP', error);
-    dialog.showErrorBox('Mineradio 显示恢复失败', `前台界面连续异常退出，已停止自动重载。\n日志：${log.file}`);
+    dialog.showErrorBox('Faveradio 显示恢复失败', `前台界面连续异常退出，已停止自动重载。\n日志：${log.file}`);
     return Promise.resolve(false);
   }
   const keepFullscreen = win.isFullScreen() || windowFullscreenActive;
-  const keepIntentionallyHidden = win.__mineradioIntentionalHide === true;
+  const keepIntentionallyHidden = win.__faveradioIntentionalHide === true;
   mainWindowRendererRecoveryPromise = (async () => {
     // Do not navigate synchronously from render-process-gone. Chromium may
     // still be finalizing the dead renderer during the event callback.
@@ -5589,7 +5599,7 @@ function recoverMainWindowAfterRendererGone(win, details = {}, cleanupPromise = 
       setMainWindowFullscreenResizeGuard(win, true);
       win.setFullScreen(true);
     }
-    win.__mineradioIntentionalHide = keepIntentionallyHidden;
+    win.__faveradioIntentionalHide = keepIntentionallyHidden;
     if (!keepIntentionallyHidden) showMainWindowSafely(win, `renderer-recovered-${attempt}`);
     else sendWindowState(win);
     writeStartupState('renderer-recovered', {
@@ -5606,7 +5616,7 @@ function recoverMainWindowAfterRendererGone(win, details = {}, cleanupPromise = 
         try { win.show(); } catch (_) { }
       }
       if (attempt >= RENDERER_RECOVERY_MAX_ATTEMPTS) {
-        dialog.showErrorBox('Mineradio 显示恢复失败', `前台界面无法重新加载。\n日志：${log.file}`);
+        dialog.showErrorBox('Faveradio 显示恢复失败', `前台界面无法重新加载。\n日志：${log.file}`);
       }
     }
     return false;
@@ -5626,14 +5636,14 @@ async function loadMainWindowWithRetry(win) {
     const readySignal = createTrustedMainDocumentReadySignal(win, targetUrl);
     try {
       writeStartupState('navigation-attempt', { navigationAttempt: attempt, navigationAt: Date.now(), targetUrl });
-      if (attempt === 1 && process.env.MINERADIO_STARTUP_TEST_FAIL_FIRST_NAV === '1') {
+      if (attempt === 1 && process.env.FAVERADIO_STARTUP_TEST_FAIL_FIRST_NAV === '1') {
         const injected = new Error('Injected first navigation failure for startup QA');
-        injected.code = 'MINERADIO_STARTUP_QA_INJECTED';
+        injected.code = 'FAVERADIO_STARTUP_QA_INJECTED';
         throw injected;
       }
-      if (!win.isDestroyed()) win.__mineradioTrustedMainDocumentReady = null;
+      if (!win.isDestroyed()) win.__faveradioTrustedMainDocumentReady = null;
       const loadPromise = win.loadURL(targetUrl);
-      const stallObservedLoadPromise = process.env.MINERADIO_STARTUP_TEST_STALL_LOAD_PROMISE === '1';
+      const stallObservedLoadPromise = process.env.FAVERADIO_STARTUP_TEST_STALL_LOAD_PROMISE === '1';
       if (stallObservedLoadPromise) loadPromise.catch(() => {});
       const observedLoadPromise = stallObservedLoadPromise ? new Promise(() => {}) : loadPromise;
       await withStartupTimeout(
@@ -5653,7 +5663,7 @@ async function loadMainWindowWithRetry(win) {
       });
       return targetUrl;
     } catch (error) {
-      if (error && error.code === 'MINERADIO_STARTUP_TIMEOUT' && readySignal.isReady()) {
+      if (error && error.code === 'FAVERADIO_STARTUP_TIMEOUT' && readySignal.isReady()) {
         const recoveredUrl = readySignal.url() || targetUrl;
         writeStartupState('navigation-ready-recovered', {
           navigationAttempt: attempt,
@@ -5673,7 +5683,7 @@ async function loadMainWindowWithRetry(win) {
     }
   }
   const error = new Error(`loadURL failed after retry: ${startupErrorText(lastError)}`);
-  error.code = (lastError && lastError.code) || 'MINERADIO_NAVIGATION_FAILED';
+  error.code = (lastError && lastError.code) || 'FAVERADIO_NAVIGATION_FAILED';
   throw error;
 }
 
@@ -5700,7 +5710,7 @@ async function createWindowOnce() {
     fullscreen: false,
     resizable: true,
     transparent: true,
-    opacity: process.env.MINERADIO_STARTUP_QA_HIDDEN === '1' ? 0 : 1,
+    opacity: process.env.FAVERADIO_STARTUP_QA_HIDDEN === '1' ? 0 : 1,
     backgroundColor: '#00000000',
     hasShadow: true,
     autoHideMenuBar: true,
@@ -5719,7 +5729,7 @@ async function createWindowOnce() {
   hookMainWindowMinimizeIntent(win);
   writeStartupState('window-created', { windowCreatedAt: Date.now() });
 
-  win.__mineradioStartupShowTimer = setTimeout(() => {
+  win.__faveradioStartupShowTimer = setTimeout(() => {
     showMainWindowSafely(win, 'watchdog');
   }, STARTUP_SHOW_WATCHDOG_MS);
 
@@ -5734,7 +5744,7 @@ async function createWindowOnce() {
   });
   win.webContents.on('did-start-navigation', (_event, url, isInPlace, isMainFrame) => {
     if (!isMainFrame || isInPlace || !isTrustedMainDocumentUrl(url)) return;
-    win.__mineradioTrustedMainDocumentReady = null;
+    win.__faveradioTrustedMainDocumentReady = null;
     stopWallpaperEngineRuntimeForRenderer('main-frame-navigation');
     closeWallpaperWindow('main-frame-navigation').catch(() => {});
   });
@@ -5817,13 +5827,13 @@ async function createWindowOnce() {
     if (mainWindowMinimizeRecoveryTimer) clearTimeout(mainWindowMinimizeRecoveryTimer);
     mainWindowMinimizeRecoveryTimer = null;
     clearMainWindowMinimizeIntent(win);
-    win.__mineradioIntentionalHide = false;
+    win.__faveradioIntentionalHide = false;
     markMainWindowExpectedVisible(win, true, 'restore');
     sendWindowState(win);
     if (fullDesktopModeHostVisibilityTransitionDepth <= 0) resumeWallpaperEngineForVisibleHost(win, 'restore');
   });
   win.on('show', () => {
-    win.__mineradioIntentionalHide = false;
+    win.__faveradioIntentionalHide = false;
     markMainWindowExpectedVisible(win, true, 'show');
     if (fullDesktopModeHostVisibilityTransitionDepth > 0) return;
     sendWindowState(win);
@@ -5833,7 +5843,7 @@ async function createWindowOnce() {
     if (fullDesktopModeHostVisibilityTransitionDepth > 0) return;
     sendWindowState(win);
     suspendWallpaperEngineForHiddenHost(win, 'hide');
-    if (win.__mineradioIntentionalHide !== true && win.__mineradioExpectedVisible !== false && !win.isMinimized()) {
+    if (win.__faveradioIntentionalHide !== true && win.__faveradioExpectedVisible !== false && !win.isMinimized()) {
       setTimeout(() => restoreUnexpectedMainWindowVisibility(win, 'hide-event'), MAIN_WINDOW_HIDE_RECOVERY_DELAY_MS);
     }
     scheduleAppMemoryTrim('hide', 2200);
@@ -5854,14 +5864,14 @@ async function createWindowOnce() {
     const desktopMode = fullDesktopModeRuntime.getStatus('main-window-close');
     if (desktopMode.enabled === true) {
       event.preventDefault();
-      if (win.__mineradioDesktopModeCloseArmed) return;
-      win.__mineradioDesktopModeCloseArmed = true;
+      if (win.__faveradioDesktopModeCloseArmed) return;
+      win.__faveradioDesktopModeCloseArmed = true;
       disableFullDesktopMode('main-window-close').then((result) => {
         if (result && result.ok === true) {
           if (!win.isDestroyed()) win.close();
           return;
         }
-        win.__mineradioDesktopModeCloseArmed = false;
+        win.__faveradioDesktopModeCloseArmed = false;
         console.warn(
           '[FullDesktopMode] close detach incomplete; keeping main window open:',
           result && (result.error || result.status && result.status.lastError) || 'unknown'
@@ -5871,7 +5881,7 @@ async function createWindowOnce() {
           sendWindowState(win);
         }
       }).catch((error) => {
-        win.__mineradioDesktopModeCloseArmed = false;
+        win.__faveradioDesktopModeCloseArmed = false;
         console.warn('[FullDesktopMode] close detach failed; keeping main window open:', error && error.message || error);
         if (!win.isDestroyed()) {
           if (!win.isVisible()) win.show();
@@ -5882,9 +5892,9 @@ async function createWindowOnce() {
     }
     if (!appQuitting && closeBehavior === 'tray') {
       event.preventDefault();
-      win.__mineradioDesktopModeCloseArmed = false;
+      win.__faveradioDesktopModeCloseArmed = false;
       createOrUpdateTray();
-      win.__mineradioIntentionalHide = true;
+      win.__faveradioIntentionalHide = true;
       markMainWindowExpectedVisible(win, false, 'tray-hide');
       flushMainWindowFxAutosave('tray-hide').finally(() => {
         if (win.isDestroyed()) return;
@@ -5909,10 +5919,10 @@ async function createWindowOnce() {
     clearMainWindowFullscreenVisibilityGuard();
     mainWindowRendererRecoveryPromise = null;
     mainWindowRendererRecoveryAttempts = [];
-    win.__mineradioDesktopModeCloseArmed = false;
-    if (win.__mineradioStartupShowTimer) {
-      clearTimeout(win.__mineradioStartupShowTimer);
-      win.__mineradioStartupShowTimer = null;
+    win.__faveradioDesktopModeCloseArmed = false;
+    if (win.__faveradioStartupShowTimer) {
+      clearTimeout(win.__faveradioStartupShowTimer);
+      win.__faveradioStartupShowTimer = null;
     }
     if (mainWindowStateTimer) {
       clearTimeout(mainWindowStateTimer);
@@ -5984,7 +5994,7 @@ async function createWindowOnce() {
   startMainWindowVisibilityGuard(win);
   showMainWindowSafely(win, 'navigation-complete');
   writeStartupState('ready', { readyAt: Date.now(), port: mainServerPort || Number(process.env.PORT) || 3000 });
-  const qaExitMs = Math.max(0, Math.min(10000, Number(process.env.MINERADIO_STARTUP_QA_EXIT_MS) || 0));
+  const qaExitMs = Math.max(0, Math.min(10000, Number(process.env.FAVERADIO_STARTUP_QA_EXIT_MS) || 0));
   if (qaExitMs) {
     setTimeout(() => {
       appQuitting = true;
@@ -6086,7 +6096,7 @@ if (!gotSingleInstanceLock) {
     wallpaperEngineLibrary.dispose();
     stopMemoryAutoTimer();
     unregisterFullDesktopEscapeShortcut();
-    unregisterMineradioGlobalHotkeys();
+    unregisterFaveradioGlobalHotkeys();
     closeDesktopLyricsWindow();
     if (localServer && localServer.close) localServer.close();
     if (tray) {

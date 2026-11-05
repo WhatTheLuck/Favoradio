@@ -8,7 +8,7 @@ const port = Number(process.argv[2] || 9231);
 async function main() {
   const targets = await fetch(`http://127.0.0.1:${port}/json/list`).then((response) => response.json());
   const target = targets.find((item) => item.type === 'page' && /127\.0\.0\.1/.test(item.url || ''));
-  assert(target && target.webSocketDebuggerUrl, 'Mineradio CDP page target was not found');
+  assert(target && target.webSocketDebuggerUrl, 'Faveradio CDP page target was not found');
 
   const socket = new WebSocket(target.webSocketDebuggerUrl);
   await new Promise((resolve, reject) => {
@@ -232,7 +232,7 @@ async function main() {
   assert.strictEqual(result.applied.selectionActive, true);
   assert.strictEqual(result.applied.bodyActive, true, result.applied.runtimeError || 'Wallpaper Engine layer did not become ready');
   assert.strictEqual(result.applied.originalLayerPresent, true);
-  assert(/^mineradio-wallpaper:\/\//.test(result.applied.imageSrc || result.applied.videoSrc));
+  assert(/^faveradio-wallpaper:\/\//.test(result.applied.imageSrc || result.applied.videoSrc));
   assert(/[?&]token=[a-f0-9]{48}/.test(result.applied.imageSrc || result.applied.videoSrc));
   assert.strictEqual(result.hiddenOriginalGuard.playCalls, 0);
   assert.strictEqual(result.hiddenOriginalGuard.sourceUnchanged, true);
@@ -241,7 +241,7 @@ async function main() {
   assert.strictEqual(result.previewApplied.kind, 'preview');
   assert.strictEqual(result.previewApplied.mediaType, 'image');
   assert.strictEqual(result.previewApplied.bodyActive, true, result.previewApplied.runtimeError || 'Preview-only layer did not become ready');
-  assert(/^mineradio-wallpaper:\/\/preview\//.test(result.previewApplied.imageSrc));
+  assert(/^faveradio-wallpaper:\/\/preview\//.test(result.previewApplied.imageSrc));
   assert(/[?&]token=[a-f0-9]{48}/.test(result.previewApplied.imageSrc));
   assert.strictEqual(result.previewApplied.videoSrc, '');
   assert.strictEqual(result.largeLibrary.total, 960);

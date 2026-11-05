@@ -1,4 +1,4 @@
-(function installMineradioPerformanceProbe() {
+(function installFaveradioPerformanceProbe() {
   var PERF_PROBE_VERSION = 'foreground-cpu-phase-a';
   var MAX_SAMPLES_PER_METRIC = 90;
   var MAX_TOP_METRICS = 24;
@@ -219,5 +219,5 @@
     registerRenderState: registerRenderState
   };
 
-  window.__mineradioPerf = api;
+  window.__faveradioPerf = api;
 })();

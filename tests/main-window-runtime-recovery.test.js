@@ -35,7 +35,7 @@ function testWallpaperEngineElevationBroker() {
   assert.doesNotMatch(
     mainText,
     /WALLPAPER_ENGINE_HOST_ELEVATED/,
-    'main process must not block Wallpaper Engine only because Mineradio is elevated'
+    'main process must not block Wallpaper Engine only because Faveradio is elevated'
   );
   [
     /function controlBrokerScript/,
@@ -70,10 +70,10 @@ function testRendererGoneDelayedRecovery() {
     /if \(cleanupPromise\) await Promise\.resolve\(cleanupPromise\)[\s\S]{0,260}await loadMainWindowWithRetry\(win\)/,
     'renderer reload must wait for WE and desktop cleanup'
   );
-  assert.match(recoveryBlock, /const keepIntentionallyHidden = win\.__mineradioIntentionalHide === true/, 'recovery must snapshot tray hide state');
+  assert.match(recoveryBlock, /const keepIntentionallyHidden = win\.__faveradioIntentionalHide === true/, 'recovery must snapshot tray hide state');
   assert.match(
     recoveryBlock,
-    /win\.__mineradioIntentionalHide = keepIntentionallyHidden;\s*if \(!keepIntentionallyHidden\) showMainWindowSafely\(win, `renderer-recovered-\$\{attempt\}`\);\s*else sendWindowState\(win\)/,
+    /win\.__faveradioIntentionalHide = keepIntentionallyHidden;\s*if \(!keepIntentionallyHidden\) showMainWindowSafely\(win, `renderer-recovered-\$\{attempt\}`\);\s*else sendWindowState\(win\)/,
     'renderer recovery must not foreground the tray-hidden window'
   );
 
@@ -95,12 +95,12 @@ function testWindowVisibilityAndSystemWakeGuards() {
     'function reserveMainWindowRendererRecoveryAttempt()'
   );
   assert.match(visibilityBlock, /startupCompleted/, 'runtime visibility guard must wait for startup completion');
-  assert.match(visibilityBlock, /win\.__mineradioIntentionalHide === true/, 'tray intentional hide must be skipped');
-  assert.match(visibilityBlock, /win\.__mineradioExpectedVisible === false/, 'explicitly hidden windows must not be restored');
+  assert.match(visibilityBlock, /win\.__faveradioIntentionalHide === true/, 'tray intentional hide must be skipped');
+  assert.match(visibilityBlock, /win\.__faveradioExpectedVisible === false/, 'explicitly hidden windows must not be restored');
   assert.match(visibilityBlock, /fullDesktopModeHostVisibilityTransitionDepth > 0/, 'desktop embedding transitions must be skipped');
   assert.match(visibilityBlock, /fullDesktopModeRuntime\.getStatus\('main-window-visibility-guard'\)\.enabled === true/, 'desktop mode must not be pulled back above Explorer');
   assert.match(visibilityBlock, /function shouldRestoreUnexpectedMainWindowMinimize\(win\)/, 'unexpected minimize must have a dedicated guard');
-  assert.match(visibilityBlock, /win\.__mineradioIntentionalMinimize === true/, 'explicit user minimize must remain minimized');
+  assert.match(visibilityBlock, /win\.__faveradioIntentionalMinimize === true/, 'explicit user minimize must remain minimized');
   assert.match(visibilityBlock, /fullDesktopModeRuntime\.getStatus\('main-window-minimize-guard'\)\.enabled === true/, 'desktop embedding must not be disturbed by minimize recovery');
   assert.match(visibilityBlock, /return win\.isMinimized\(\)/, 'only an actually minimized window may enter minimize recovery');
   assert.match(visibilityBlock, /restoreUnexpectedMainWindowMinimize\(win, reason\)/, 'the visibility watchdog must recover unexplained minimize state');
@@ -110,8 +110,8 @@ function testWindowVisibilityAndSystemWakeGuards() {
   assert.match(visibilityBlock, /!win\.isFullScreen\(\)/, 'fullscreen-specific guard must only restore fullscreen windows');
   assert.match(visibilityBlock, /restoreUnexpectedFullscreenVisibility\(win, reason\)/, 'main guard must reuse fullscreen recovery when applicable');
 
-  assert.match(mainText, /win\.__mineradioIntentionalHide = true;[\s\S]{0,140}markMainWindowExpectedVisible\(win, false, 'tray-hide'\)[\s\S]{0,180}win\.hide\(\)/, 'tray hide must be marked intentional and not expected visible before hide');
-  assert.match(mainText, /win\.on\('show'[\s\S]{0,180}win\.__mineradioIntentionalHide = false[\s\S]{0,140}markMainWindowExpectedVisible\(win, true, 'show'\)/, 'show must clear intentional hide and restore expected visibility');
+  assert.match(mainText, /win\.__faveradioIntentionalHide = true;[\s\S]{0,140}markMainWindowExpectedVisible\(win, false, 'tray-hide'\)[\s\S]{0,180}win\.hide\(\)/, 'tray hide must be marked intentional and not expected visible before hide');
+  assert.match(mainText, /win\.on\('show'[\s\S]{0,180}win\.__faveradioIntentionalHide = false[\s\S]{0,140}markMainWindowExpectedVisible\(win, true, 'show'\)/, 'show must clear intentional hide and restore expected visibility');
   assert.match(mainText, /win\.on\('hide'[\s\S]{0,320}restoreUnexpectedMainWindowVisibility\(win, 'hide-event'\)/, 'unexpected hide must schedule a short delayed restore');
   assert.match(mainText, /ipcMain\.handle\('desktop-window-minimize'[\s\S]{0,320}armMainWindowMinimizeIntent\(win, 'renderer-window-control'\)[\s\S]{0,100}win\?\.minimize\(\)/, 'the visible minimize control must arm explicit user intent before minimizing');
   assert.match(mainText, /hookWindowMessage\(WINDOWS_WM_SYSCOMMAND[\s\S]{0,220}WINDOWS_SC_MINIMIZE[\s\S]{0,140}native-system-command/, 'native taskbar and system-menu minimize commands must be treated as intentional');

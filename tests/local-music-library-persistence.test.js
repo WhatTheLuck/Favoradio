@@ -25,7 +25,7 @@ function blockHeader(type, length, last) {
 }
 
 function vorbisCommentBlock(comments) {
-  const vendor = Buffer.from('Mineradio test', 'utf8');
+  const vendor = Buffer.from('Faveradio test', 'utf8');
   const parts = [];
   const vendorLength = Buffer.alloc(4);
   vendorLength.writeUInt32LE(vendor.length);
@@ -89,7 +89,7 @@ function minimalTaggedFlac() {
 }
 
 test('FLAC tags, embedded cover and same-name LRC survive a full library reload', async (t) => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mineradio-local-library-'));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-local-library-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const albumDirectory = path.join(root, 'music', 'Album');
   fs.mkdirSync(albumDirectory, { recursive: true });
@@ -109,8 +109,8 @@ test('FLAC tags, embedded cover and same-name LRC survive a full library reload'
   assert.equal(imported.tracks[0].name, '标签标题');
   assert.equal(imported.tracks[0].artist, '标签歌手');
   assert.equal(imported.tracks[0].album, '标签专辑');
-  assert.match(imported.tracks[0].cover, /^mineradio-local:\/\/cover\/[a-f0-9]{24}/);
-  assert.match(imported.tracks[0].localUrl, /^mineradio-local:\/\/audio\/[a-f0-9]{24}/);
+  assert.match(imported.tracks[0].cover, /^faveradio-local:\/\/cover\/[a-f0-9]{24}/);
+  assert.match(imported.tracks[0].localUrl, /^faveradio-local:\/\/audio\/[a-f0-9]{24}/);
   assert.equal(imported.tracks[0].hasLyric, true);
   assert.equal(imported.tracks[0].lyricSource, 'sidecar');
   assert.equal(Object.hasOwn(imported.tracks[0], 'lyric'), false);
@@ -150,7 +150,7 @@ test('FLAC tags, embedded cover and same-name LRC survive a full library reload'
 });
 
 test('subsequent imports append to the persistent library by default', async (t) => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mineradio-local-library-append-'));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-local-library-append-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const first = path.join(root, 'First.flac');
   const second = path.join(root, 'Second.flac');
@@ -187,7 +187,7 @@ test('GB18030 sidecar lyrics and synchronized embedded lyrics normalize to reada
 });
 
 test('metadata and manifest failures preserve the last committed cover and index', async (t) => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mineradio-local-library-transaction-'));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-local-library-transaction-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const audioPath = path.join(root, 'Song.flac');
   fs.writeFileSync(audioPath, Buffer.from('audio'));
@@ -254,10 +254,10 @@ test('renderer and Electron wiring restore persistent tracks instead of blob-onl
   const packageJson = JSON.parse(fs.readFileSync(path.join(appRoot, 'package.json'), 'utf8'));
 
   assert.match(main, /new LocalMusicLibrary\(\{ userDataPath: STABLE_USER_DATA_PATH \}\)/);
-  assert.doesNotMatch(main, /mineradio-local-library-read-sync/);
+  assert.doesNotMatch(main, /faveradio-local-library-read-sync/);
   assert.match(main, /await localMusicLibrary\.listTracks\(\)/);
-  assert.match(main, /mineradio-local-library-lyric/);
-  assert.match(main, /mineradio-local-library-authorize/);
+  assert.match(main, /faveradio-local-library-lyric/);
+  assert.match(main, /faveradio-local-library-authorize/);
   assert.match(main, /localMusicImportCapabilities/);
   assert.match(main, /LOCAL_IMPORT_CAPABILITY_INVALID/);
   assert.doesNotMatch(main, /localMusicLibrary\.importFiles\(payload && payload\.files/);
@@ -267,7 +267,7 @@ test('renderer and Electron wiring restore persistent tracks instead of blob-onl
   assert.match(preload, /listLocalMusicLibrary/);
   assert.match(preload, /readLocalMusicLyric/);
   assert.doesNotMatch(preload, /getPathForLocalFile:/);
-  assert.doesNotMatch(preload, /mineradio-local-library-remove/);
+  assert.doesNotMatch(preload, /faveradio-local-library-remove/);
   assert.match(upload, /importPersistentLocalAudioFiles/);
   assert.match(upload, /copy\.localMissing = false/);
   assert.match(upload, /persistentLocalLibraryTracks = tracks\.map\(cloneSong\)/);
@@ -280,6 +280,6 @@ test('renderer and Electron wiring restore persistent tracks instead of blob-onl
   assert.match(upload, /async function restorePersistedLocalLibrary/);
   assert.match(upload, /return -1;/);
   assert.match(playback, /readLocalMusicLyric\(song\.localFileId\)/);
-  assert.match(cover, /mineradio-local:\\\/\\\/cover/);
+  assert.match(cover, /faveradio-local:\\\/\\\/cover/);
   assert.equal(packageJson.dependencies['music-metadata'], '11.14.0');
 });

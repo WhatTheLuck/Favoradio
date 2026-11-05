@@ -1,7 +1,7 @@
 'use strict';
 // Original renderers run in an isolated same-origin canvas to preserve their Three.js,
 // camera, postprocessing and WebGL versions independently of the lyric stage.
-var MineradioExternalVisuals = (function () {
+var FaveradioExternalVisuals = (function () {
   var catalog, values={}, frames={}, active='', ready={}, panels={}, pending={};
   var base='vendor/source-visuals/';
   var starfieldTriggerDefaults={triggerMode:'bass-threshold',rmsSensitivity:1,rmsMinThreshold:.008,rmsFloorMultiplier:1.34,rmsCrestRatio:.34,rmsCooldown:.14,rmsPeakWindow:.22,rmsDecay:7.2,rmsInputMin:.5,rmsInputMax:.8};
@@ -51,7 +51,7 @@ var MineradioExternalVisuals = (function () {
     apply(kind,value);
     var original=panels[kind]&&panels[kind].querySelector('[data-original]');if(original)original.value=String(index);
     if(panels[kind])status(kind,'已加载'+(kind==='space'?'磁流体预设':'彩带预设')+'：'+preset.name);
-    window.dispatchEvent(new CustomEvent('mineradio-external-preset-change',{detail:{kind:kind,index:Number(index),name:preset.name}}));
+    window.dispatchEvent(new CustomEvent('faveradio-external-preset-change',{detail:{kind:kind,index:Number(index),name:preset.name}}));
     return preset.name;
   }
   async function list(kind,autoLoadLatest){
@@ -106,7 +106,7 @@ var MineradioExternalVisuals = (function () {
     values.space=complete('space',softwareDefaults.space||data.space.find(function(p){return p.name==='Venom';}).value);
     values.space.starfield=Object.assign({},starfieldTriggerDefaults,clone((softwareDefaults.space&&softwareDefaults.space.starfield)||(data.stars.find(function(p){return p.name==='Star';})||data.stars[0]).value.starfield));
     slots.cyber.append(panel('cyber'));slots.space.append(panel('space'));renderBody('cyber');renderBody('space');
-    window.dispatchEvent(new CustomEvent('mineradio-external-presets-ready'));
+    window.dispatchEvent(new CustomEvent('faveradio-external-presets-ready'));
     await Promise.all(['cyber','space'].map(function(kind){return list(kind,true).catch(function(e){status(kind,'自动加载失败：'+e.message);});}));
   }).catch(function(e){console.error('Visual presets:',e.message);});
   var lastAudio=0,waveform,visualAnalyser,visualSource,bins;

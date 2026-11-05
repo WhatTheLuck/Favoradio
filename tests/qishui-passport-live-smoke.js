@@ -5,7 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { app } = require('electron');
 
-const configFile = path.join(os.tmpdir(), `mineradio-qishui-passport-live-${process.pid}.json`);
+const configFile = path.join(os.tmpdir(), `faveradio-qishui-passport-live-${process.pid}.json`);
 process.env.QISHUI_QR_CONFIG_FILE = configFile;
 
 let timeout = null;

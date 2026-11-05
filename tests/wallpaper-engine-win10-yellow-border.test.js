@@ -21,7 +21,7 @@ function sourceBlock(text, startNeedle, endNeedle) {
 const captureBlock = sourceBlock(
   libraryText,
   'async function openWallpaperEngineCaptureStream(sessionId, fps, sourceId, options)',
-  'window.__mineradioPrepareWallpaperEngineCapture = async function'
+  'window.__faveradioPrepareWallpaperEngineCapture = async function'
 );
 
 assert.match(
@@ -42,8 +42,8 @@ assert.match(
 
 const scenePrepareBlock = sourceBlock(
   libraryText,
-  'window.__mineradioPrepareWallpaperEngineCapture = async function',
-  'window.__mineradioPrepareWallpaperEngineGlassCapture = async function'
+  'window.__faveradioPrepareWallpaperEngineCapture = async function',
+  'window.__faveradioPrepareWallpaperEngineGlassCapture = async function'
 );
 assert.match(
   scenePrepareBlock,
@@ -58,8 +58,8 @@ assert.doesNotMatch(
 
 const glassPrepareBlock = sourceBlock(
   libraryText,
-  'window.__mineradioPrepareWallpaperEngineGlassCapture = async function',
-  'window.__mineradioPrepareWallpaperEngineHostBoundsChange = function'
+  'window.__faveradioPrepareWallpaperEngineGlassCapture = async function',
+  'window.__faveradioPrepareWallpaperEngineHostBoundsChange = function'
 );
 assert.match(
   glassPrepareBlock,

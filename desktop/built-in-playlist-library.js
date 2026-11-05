@@ -4,7 +4,7 @@ const path = require('path');
 
 const BUILT_IN_PLAYLIST_VERSION = 1;
 const BUILT_IN_PLAYLIST_FILE = 'built-in-playlists.json';
-const BUNDLED_MUSIC_PLAYLIST_ID = crypto.createHash('sha256').update('mineradio-bundled-local-music').digest('hex').slice(0, 24);
+const BUNDLED_MUSIC_PLAYLIST_ID = crypto.createHash('sha256').update('faveradio-bundled-local-music').digest('hex').slice(0, 24);
 const MAX_PLAYLISTS = 100;
 const MAX_TRACKS_PER_PLAYLIST = 5000;
 const MAX_INDEX_BYTES = 32 * 1024 * 1024;
@@ -148,11 +148,11 @@ class BuiltInPlaylistLibrary {
     const first = playlist.tracks[0] || {};
     return {
       id: playlist.id,
-      provider: 'mineradio',
-      source: 'mineradio',
+      provider: 'faveradio',
+      source: 'faveradio',
       builtin: true,
       name: playlist.name,
-      creator: 'Mineradio',
+      creator: 'Faveradio',
       trackCount: playlist.tracks.length,
       cover: cleanText(first.cover, '', 4096),
       createdAt: playlist.createdAt,
@@ -285,6 +285,41 @@ class BuiltInPlaylistLibrary {
       playlist.tracks.push(track);
       playlist.updatedAt = Date.now();
       return { playlist: this.summary(playlist), added: true };
+    });
+  }
+
+  addTracks(id, sources) {
+    if (!Array.isArray(sources) || !sources.length || sources.length > MAX_TRACKS_PER_PLAYLIST) return Promise.reject(new Error('BUILT_IN_PLAYLIST_TRACK_INVALID'));
+    const tracks = sources.map(sanitizeTrack);
+    if (tracks.some(track => !track)) return Promise.reject(new Error('BUILT_IN_PLAYLIST_TRACK_INVALID'));
+    return this.mutate(next => {
+      const playlist = next.find(item => item.id === cleanText(id, '', 64).toLowerCase());
+      if (!playlist) throw new Error('BUILT_IN_PLAYLIST_NOT_FOUND');
+      const seen = new Set(playlist.tracks.map(track => track.builtInIdentity));
+      const added = tracks.filter(track => {
+        if (seen.has(track.builtInIdentity)) return false;
+        seen.add(track.builtInIdentity); return true;
+      });
+      if (playlist.tracks.length + added.length > MAX_TRACKS_PER_PLAYLIST) throw new Error('BUILT_IN_PLAYLIST_TRACK_LIMIT_REACHED');
+      playlist.tracks.push(...added);
+      playlist.updatedAt = Date.now();
+      return { playlist: this.summary(playlist), added: added.length };
+    });
+  }
+
+  removeTracks(id, sources) {
+    if (!Array.isArray(sources) || !sources.length || sources.length > MAX_TRACKS_PER_PLAYLIST) return Promise.reject(new Error('BUILT_IN_PLAYLIST_TRACK_INVALID'));
+    const tracks = sources.map(sanitizeTrack);
+    if (tracks.some(track => !track)) return Promise.reject(new Error('BUILT_IN_PLAYLIST_TRACK_INVALID'));
+    const identities = new Set(tracks.map(track => track.builtInIdentity));
+    return this.mutate(next => {
+      const playlist = next.find(item => item.id === cleanText(id, '', 64).toLowerCase());
+      if (!playlist) throw new Error('BUILT_IN_PLAYLIST_NOT_FOUND');
+      const before = playlist.tracks.length;
+      // Delete by identity so concurrent reordering cannot delete an unrelated song.
+      playlist.tracks = playlist.tracks.filter(track => !identities.has(track.builtInIdentity));
+      playlist.updatedAt = Date.now();
+      return { playlist: this.summary(playlist), removed: before - playlist.tracks.length };
     });
   }
 

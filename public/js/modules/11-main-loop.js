@@ -16,11 +16,11 @@ var renderPerfState = {
   lastRenderAt: 0,
   lastSampleAt: performance.now()
 };
-window.__mineradioRenderPerf = renderPerfState;
-if (window.__mineradioPerf && typeof window.__mineradioPerf.registerRenderState === 'function') {
-  window.__mineradioPerf.registerRenderState(renderPerfState);
+window.__faveradioRenderPerf = renderPerfState;
+if (window.__faveradioPerf && typeof window.__faveradioPerf.registerRenderState === 'function') {
+  window.__faveradioPerf.registerRenderState(renderPerfState);
 } else {
-  window.__mineradioPerf = renderPerfState;
+  window.__faveradioPerf = renderPerfState;
 }
 var splashWarmRenderLast = 0;
 var fixedRenderCadenceState = {
@@ -130,7 +130,7 @@ function shouldSkipAdaptiveRenderFrame(now) {
     renderPerfState.adaptiveCadenceTick += 1;
     if (cadence.divisor > 1 && (renderPerfState.adaptiveCadenceTick - 1) % cadence.divisor !== 0) {
       renderPerfState.skipped += 1;
-      if (window.__mineradioPerf && window.__mineradioPerf.count) window.__mineradioPerf.count('frame.skipped');
+      if (window.__faveradioPerf && window.__faveradioPerf.count) window.__faveradioPerf.count('frame.skipped');
       return true;
     }
     renderPerfState.lastRenderAt = now;
@@ -146,7 +146,7 @@ function shouldSkipAdaptiveRenderFrame(now) {
   var fixedCadenceKey = mode + ':' + fps;
   if (shouldSkipFixedRenderCadenceFrame(fixedRenderCadenceState, now, fps, displayHz, fixedCadenceKey)) {
     renderPerfState.skipped += 1;
-    if (window.__mineradioPerf && window.__mineradioPerf.count) window.__mineradioPerf.count('frame.skipped');
+    if (window.__faveradioPerf && window.__faveradioPerf.count) window.__faveradioPerf.count('frame.skipped');
     return true;
   }
   renderPerfState.lastRenderAt = now;
@@ -171,7 +171,7 @@ var mainFrameGates = {
   homeAudio: createFrameGate('main.homeAudio', 15),
   desktopOverlay: createFrameGate('main.desktopOverlay', 12)
 };
-window.__mineradioMainFrameGates = mainFrameGates;
+window.__faveradioMainFrameGates = mainFrameGates;
 var mainLoopBackgroundTimer = 0;
 var mainLoopAnimationRequested = false;
 function mainLoopDeepBackgroundSleeping() {
@@ -296,7 +296,7 @@ function targetMainDesktopOverlayFps(now) {
 function animate() {
   mainLoopAnimationRequested = false;
   scheduleNextMainLoopFrame();
-  var perfProbe = window.__mineradioPerf;
+  var perfProbe = window.__faveradioPerf;
   var framePerfStart = performance.now();
   var now = performance.now();
   if (mainLoopDeepBackgroundSleeping()) {
@@ -311,9 +311,9 @@ function animate() {
   sampleRenderPerf(now, dt);
   uniforms.uTime.value += dt;
   if (isMainSceneCoveredBySplash()) {
-    var splashWorkshopActive = window.MineradioSonicWorkshop && MineradioSonicWorkshop.isActive(fx);
-    if (window.MineradioSonicWorkshop) {
-      MineradioSonicWorkshop.update(dt, {
+    var splashWorkshopActive = window.FaveradioSonicWorkshop && FaveradioSonicWorkshop.isActive(fx);
+    if (window.FaveradioSonicWorkshop) {
+      FaveradioSonicWorkshop.update(dt, {
         scene: scene,
         fx: fx,
         time: uniforms.uTime.value,
@@ -582,8 +582,8 @@ function animate() {
   uniforms.uEnergy.value = audioEnergy;
   uniforms.uMouseXY.value.set(mouseWorld.x, mouseWorld.y);
   uniforms.uMouseActive.value = mouseActive ? 1 : 0;
-  var sonicPresetActiveEarly = window.MineradioSonicTopography && MineradioSonicTopography.isActive(fx);
-  var sonicWorkshopActiveEarly = window.MineradioSonicWorkshop && MineradioSonicWorkshop.isActive(fx);
+  var sonicPresetActiveEarly = window.FaveradioSonicTopography && FaveradioSonicTopography.isActive(fx);
+  var sonicWorkshopActiveEarly = window.FaveradioSonicWorkshop && FaveradioSonicWorkshop.isActive(fx);
   var skullBackdropDim = fx && fx.preset === SKULL_PRESET_INDEX ? 0.58 : (sonicPresetActiveEarly || sonicWorkshopActiveEarly ? 0.82 : 1);
   var shelfDimTarget = shouldDimWallpaperForShelf() ? 0.48 : skullBackdropDim;
   var shelfDimEase = shelfDimTarget < uniforms.uParticleDim.value ? 0.18 : 0.10;
@@ -624,10 +624,10 @@ function animate() {
   tickGestureRotation(dt);
   var skullPresetActive = fx && fx.preset === SKULL_PRESET_INDEX;
   var emomusicPresetActive = fx && Number(fx.preset) === 15;
-  var emomusicGalaxyState = window.MineradioEmoMusic && typeof MineradioEmoMusic.galaxyState === 'function' ? MineradioEmoMusic.galaxyState(fx) : { active: false, strength: 1 };
+  var emomusicGalaxyState = window.FaveradioEmoMusic && typeof FaveradioEmoMusic.galaxyState === 'function' ? FaveradioEmoMusic.galaxyState(fx) : { active: false, strength: 1 };
   var emomusicGalaxyActive = !!(emomusicPresetActive && emomusicGalaxyState.active);
   var externalPresetActive = fx && (Number(fx.preset) === CYBER_RIBBON_PRESET_INDEX || Number(fx.preset) === SPACE_VENOM_PRESET_INDEX || emomusicPresetActive);
-  var workshopPresetActive = window.MineradioSonicWorkshop && MineradioSonicWorkshop.isActive(fx);
+  var workshopPresetActive = window.FaveradioSonicWorkshop && FaveradioSonicWorkshop.isActive(fx);
   var presetUsesStarRiverParticles = fx && (Number(fx.preset) === 5 || (typeof SONIC_PRESET_INDEX !== 'undefined' && Number(fx.preset) === SONIC_PRESET_INDEX));
   var presetStarRiverMuted = presetUsesStarRiverParticles && fx.backgroundStarRiver === false;
   if (uniforms && uniforms.uPreset) uniforms.uPreset.value = emomusicGalaxyActive ? 5 : fx.preset;
@@ -655,8 +655,8 @@ function animate() {
   if (skullStepDt > 0) updateSkullParticleLayer(skullStepDt);
   if (perfProbe && perfProbe.markSince) perfProbe.markSince('visual.skull-particles', skullPerfStart);
   var sonicPerfStart = performance.now();
-  if (window.MineradioSonicTopography) {
-    MineradioSonicTopography.update(dt, {
+  if (window.FaveradioSonicTopography) {
+    FaveradioSonicTopography.update(dt, {
       scene: scene,
       fx: fx,
       time: uniforms.uTime.value,
@@ -669,16 +669,16 @@ function animate() {
   }
   if (perfProbe && perfProbe.markSince) perfProbe.markSince('visual.sonic-topography', sonicPerfStart);
   var sonicWorkshopPerfStart = performance.now();
-  if (window.MineradioSonicWorkshop) {
-    MineradioSonicWorkshop.update(dt, {
+  if (window.FaveradioSonicWorkshop) {
+    FaveradioSonicWorkshop.update(dt, {
       scene: scene,
       fx: fx,
       time: uniforms.uTime.value,
       audio: { bass: bass, mid: mid, treble: treble, beat: beatPulse, energy: audioEnergy }
     });
   }
-  if (window.MineradioExternalVisuals) {
-    MineradioExternalVisuals.update(dt, {
+  if (window.FaveradioExternalVisuals) {
+    FaveradioExternalVisuals.update(dt, {
       scene: scene,
       renderer: renderer,
       fx: fx,
@@ -690,8 +690,8 @@ function animate() {
       fftSize: (analyser && analyser.fftSize) || FFT_SIZE
     });
   }
-  if (window.MineradioEmoMusic) {
-    MineradioEmoMusic.update(dt, {
+  if (window.FaveradioEmoMusic) {
+    FaveradioEmoMusic.update(dt, {
       fx: fx,
       time: uniforms.uTime.value,
       playing: !!(playing && audio && !audio.paused),

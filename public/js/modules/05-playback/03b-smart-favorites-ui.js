@@ -99,7 +99,7 @@ function smartPlaylistIsLiked(playlist) {
 }
 
 function smartPlaylistProviderLabel(provider) {
-  return provider === 'qq' ? 'QQ' : (provider === 'spotify' ? 'SP' : (provider === 'kugou' ? 'KG' : (provider === 'qishui' ? 'QS' : (provider === 'mineradio' ? 'MR' : 'NE'))));
+  return provider === 'qq' ? 'QQ' : (provider === 'spotify' ? 'SP' : (provider === 'kugou' ? 'KG' : (provider === 'qishui' ? 'QS' : (provider === 'faveradio' ? 'MR' : 'NE'))));
 }
 
 function smartPlaylistCatalog() {
@@ -130,7 +130,7 @@ function renderSmartFavoritesSources() {
   if (!root) return;
   var rows = smartPlaylistCatalog();
   if (!rows.length) {
-    root.innerHTML = '<div class="smart-favorites-empty"><strong>还没有可选歌单</strong><span>请先登录音乐平台或创建 Mineradio 本地歌单。</span></div>';
+    root.innerHTML = '<div class="smart-favorites-empty"><strong>还没有可选歌单</strong><span>请先登录音乐平台或创建 Faveradio 本地歌单。</span></div>';
     return;
   }
   root.innerHTML = rows.map(function (playlist) {

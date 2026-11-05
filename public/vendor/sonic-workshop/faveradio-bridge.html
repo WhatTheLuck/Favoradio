@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mineradio Sonic Workshop Bridge</title>
+    <title>Faveradio Sonic Workshop Bridge</title>
     <link rel="icon" href="data:,">
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -29,7 +29,7 @@
         var defaultProperties = {
           schemecolor: '0.3333333333333333 0.0196078431372549 0.3333333333333333',
           theme: 'coral-mirage',
-          mineradioCustomTheme: null,
+          faveradioCustomTheme: null,
           themeCycleInterval: 50,
           peakColorEnabled: true,
           peakColorIntensity: 0.62,
@@ -95,11 +95,11 @@
           }).join(' ');
         }
 
-        function cloneMineradioTheme(theme) {
+        function cloneFaveradioTheme(theme) {
           if (!theme) return null;
           var out = {
-            name: theme.name || 'Mineradio Region Palette',
-            id: theme.id || 'mineradio-custom',
+            name: theme.name || 'Faveradio Region Palette',
+            id: theme.id || 'faveradio-custom',
             __primaryColor: normalizeHex(theme.__primaryColor || '#cb6c89', '#cb6c89'),
             uGlowIntensity: Number(theme.uGlowIntensity) || 1
           };
@@ -109,21 +109,21 @@
           return out;
         }
 
-        function mineradioThemeSignature(theme) {
-          theme = cloneMineradioTheme(theme);
+        function faveradioThemeSignature(theme) {
+          theme = cloneFaveradioTheme(theme);
           if (!theme) return '';
           return JSON.stringify(themeColorKeys.map(function (key) {
             return theme[key];
           }).concat([theme.__primaryColor, Number(theme.uGlowIntensity) || 1]));
         }
 
-        function mixMineradioTheme(from, to, t) {
-          from = cloneMineradioTheme(from) || cloneMineradioTheme(to);
-          to = cloneMineradioTheme(to) || cloneMineradioTheme(from);
+        function mixFaveradioTheme(from, to, t) {
+          from = cloneFaveradioTheme(from) || cloneFaveradioTheme(to);
+          to = cloneFaveradioTheme(to) || cloneFaveradioTheme(from);
           t = clamp01(t);
           var out = {
-            name: to.name || from.name || 'Mineradio Region Palette',
-            id: to.id || from.id || 'mineradio-custom',
+            name: to.name || from.name || 'Faveradio Region Palette',
+            id: to.id || from.id || 'faveradio-custom',
             __primaryColor: mixHex(from.__primaryColor, to.__primaryColor, t),
             uGlowIntensity: Number((from.uGlowIntensity + (to.uGlowIntensity - from.uGlowIntensity) * t).toFixed(3))
           };
@@ -243,32 +243,32 @@
         }
 
         function applyThemeTransition(targetTheme) {
-          targetTheme = cloneMineradioTheme(targetTheme);
+          targetTheme = cloneFaveradioTheme(targetTheme);
           if (!targetTheme) {
             stopThemeTransition();
             displayedTheme = null;
-            defaultProperties.mineradioCustomTheme = null;
+            defaultProperties.faveradioCustomTheme = null;
             if (propertyReady) applyDefaultProperties();
             return;
           }
-          var targetKey = mineradioThemeSignature(targetTheme);
-          var currentKey = mineradioThemeSignature(displayedTheme || defaultProperties.mineradioCustomTheme);
+          var targetKey = faveradioThemeSignature(targetTheme);
+          var currentKey = faveradioThemeSignature(displayedTheme || defaultProperties.faveradioCustomTheme);
           if (!displayedTheme || currentKey === targetKey) {
             stopThemeTransition();
             displayedTheme = targetTheme;
-            defaultProperties.mineradioCustomTheme = targetTheme;
+            defaultProperties.faveradioCustomTheme = targetTheme;
             defaultProperties.schemecolor = schemeColorFromHex(targetTheme.__primaryColor);
             if (propertyReady) applyDefaultProperties();
             return;
           }
-          var fromTheme = cloneMineradioTheme(displayedTheme || defaultProperties.mineradioCustomTheme) || targetTheme;
+          var fromTheme = cloneFaveradioTheme(displayedTheme || defaultProperties.faveradioCustomTheme) || targetTheme;
           var startedAt = performance.now();
           stopThemeTransition();
           function stepThemeTransition() {
             var raw = clamp01((performance.now() - startedAt) / THEME_TRANSITION_MS);
-            var shown = raw >= 1 ? targetTheme : mixMineradioTheme(fromTheme, targetTheme, themeEase(raw));
+            var shown = raw >= 1 ? targetTheme : mixFaveradioTheme(fromTheme, targetTheme, themeEase(raw));
             displayedTheme = shown;
-            defaultProperties.mineradioCustomTheme = shown;
+            defaultProperties.faveradioCustomTheme = shown;
             defaultProperties.schemecolor = schemeColorFromHex(shown.__primaryColor);
             if (propertyReady) applyDefaultProperties();
             if (raw >= 1) stopThemeTransition();
@@ -281,10 +281,10 @@
           propertyReady = true;
           applyDefaultProperties();
           notifyMediaChange();
-          try { parent.postMessage({ type: 'mineradio-sonic-workshop-ready' }, '*'); } catch (e) {}
+          try { parent.postMessage({ type: 'faveradio-sonic-workshop-ready' }, '*'); } catch (e) {}
         };
 
-        window.__mineradioApplyAudio = function (samples) {
+        window.__faveradioApplyAudio = function (samples) {
           if (!samples || !samples.length) samples = lastAudio;
           var next = new Array(512);
           var len = samples.length || 1;
@@ -297,7 +297,7 @@
           audioListeners.forEach(function (cb) { try { cb(next); } catch (e) {} });
         };
 
-        window.__mineradioApplyMedia = function (state) {
+        window.__faveradioApplyMedia = function (state) {
           state = state || {};
           window.__mediaState.title = state.title || '';
           window.__mediaState.artist = state.artist || '';
@@ -310,23 +310,23 @@
           notifyMediaChange();
         };
 
-        window.__mineradioApplyProperties = function (patch) {
+        window.__faveradioApplyProperties = function (patch) {
           patch = patch || {};
-          var hasThemePatch = Object.prototype.hasOwnProperty.call(patch, 'mineradioCustomTheme');
+          var hasThemePatch = Object.prototype.hasOwnProperty.call(patch, 'faveradioCustomTheme');
           Object.keys(patch).forEach(function (key) {
-            if (key === 'mineradioCustomTheme') return;
+            if (key === 'faveradioCustomTheme') return;
             if (hasThemePatch && key === 'schemecolor') return;
             if (Object.prototype.hasOwnProperty.call(defaultProperties, key)) defaultProperties[key] = patch[key];
           });
-          if (hasThemePatch) applyThemeTransition(patch.mineradioCustomTheme);
+          if (hasThemePatch) applyThemeTransition(patch.faveradioCustomTheme);
           else if (propertyReady) applyDefaultProperties();
         };
 
         window.addEventListener('message', function (event) {
           var data = event.data || {};
-          if (data.type === 'mineradio-sonic-workshop-audio') window.__mineradioApplyAudio(data.samples);
-          if (data.type === 'mineradio-sonic-workshop-media') window.__mineradioApplyMedia(data.media);
-          if (data.type === 'mineradio-sonic-workshop-properties') window.__mineradioApplyProperties(data.properties);
+          if (data.type === 'faveradio-sonic-workshop-audio') window.__faveradioApplyAudio(data.samples);
+          if (data.type === 'faveradio-sonic-workshop-media') window.__faveradioApplyMedia(data.media);
+          if (data.type === 'faveradio-sonic-workshop-properties') window.__faveradioApplyProperties(data.properties);
         });
 
         setTimeout(function retryProperties() {

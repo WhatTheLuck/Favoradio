@@ -263,7 +263,7 @@ function encodePatchedScene(scene, originalLength) {
 function signatureScript() {
   const source = [
     "$ErrorActionPreference = 'Stop'",
-    "$target = [Environment]::GetEnvironmentVariable('MINERADIO_WE_SIGNATURE_TARGET', 'Process')",
+    "$target = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_SIGNATURE_TARGET', 'Process')",
     'if ([string]::IsNullOrWhiteSpace($target)) { throw \'Missing signature target\' }',
     '$signature = Get-AuthenticodeSignature -LiteralPath $target',
     '[pscustomobject]@{',
@@ -277,7 +277,7 @@ function signatureScript() {
 function engineProcessProbeScript() {
   const source = String.raw`
 $ErrorActionPreference = 'SilentlyContinue'
-$target = [Environment]::GetEnvironmentVariable('MINERADIO_WE_ENGINE_TARGET', 'Process')
+$target = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_ENGINE_TARGET', 'Process')
 $expected = ''
 try { if (-not [string]::IsNullOrWhiteSpace($target)) { $expected = [IO.Path]::GetFullPath($target) } } catch { $expected = '' }
 $expectedRoot = ''
@@ -308,11 +308,11 @@ $selected = if ($preferred.Count -gt 0) { $preferred[0] } elseif ($matching.Coun
 function controlBrokerScript() {
   const source = String.raw`
 $ErrorActionPreference = 'Stop'
-$target = [Environment]::GetEnvironmentVariable('MINERADIO_WE_CONTROL_TARGET', 'Process')
-$commandLine = [Environment]::GetEnvironmentVariable('MINERADIO_WE_CONTROL_COMMAND_LINE', 'Process')
-$waitForExit = [Environment]::GetEnvironmentVariable('MINERADIO_WE_CONTROL_WAIT', 'Process') -eq '1'
+$target = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_CONTROL_TARGET', 'Process')
+$commandLine = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_CONTROL_COMMAND_LINE', 'Process')
+$waitForExit = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_CONTROL_WAIT', 'Process') -eq '1'
 $waitTimeout = 10000
-try { $waitTimeout = [Math]::Max(1000, [Math]::Min(20000, [int][Environment]::GetEnvironmentVariable('MINERADIO_WE_CONTROL_WAIT_TIMEOUT', 'Process'))) } catch { $waitTimeout = 10000 }
+try { $waitTimeout = [Math]::Max(1000, [Math]::Min(20000, [int][Environment]::GetEnvironmentVariable('FAVERADIO_WE_CONTROL_WAIT_TIMEOUT', 'Process'))) } catch { $waitTimeout = 10000 }
 if ([string]::IsNullOrWhiteSpace($target) -or -not [IO.File]::Exists($target)) { throw 'Missing Wallpaper Engine control target' }
 if ([string]::IsNullOrWhiteSpace($commandLine)) { throw 'Missing Wallpaper Engine control command line' }
 $source = @'
@@ -323,7 +323,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
-public static class MineradioExplorerParentLauncher {
+public static class FaveradioExplorerParentLauncher {
   const uint PROCESS_CREATE_PROCESS = 0x0080;
   const uint PROCESS_QUERY_LIMITED_INFORMATION = 0x1000;
   const uint TOKEN_QUERY = 0x0008;
@@ -535,7 +535,7 @@ public static class MineradioExplorerParentLauncher {
 '@
 Add-Type -TypeDefinition $source -Language CSharp
 $workingDirectory = [IO.Path]::GetDirectoryName($target)
-[void][MineradioExplorerParentLauncher]::Launch($target, $commandLine, $workingDirectory, $waitForExit, $waitTimeout)
+[void][FaveradioExplorerParentLauncher]::Launch($target, $commandLine, $workingDirectory, $waitForExit, $waitTimeout)
 `.trim();
   return Buffer.from(source, 'utf16le').toString('base64');
 }
@@ -543,13 +543,13 @@ $workingDirectory = [IO.Path]::GetDirectoryName($target)
 function nativeWindowControlScript() {
   const source = String.raw`
 $ErrorActionPreference = 'Stop'
-$action = [Environment]::GetEnvironmentVariable('MINERADIO_WE_WINDOW_ACTION', 'Process')
-$sourceId = [Environment]::GetEnvironmentVariable('MINERADIO_WE_WINDOW_SOURCE_ID', 'Process')
-$expectedTitle = [Environment]::GetEnvironmentVariable('MINERADIO_WE_WINDOW_TITLE', 'Process')
-$expectedExecutable = [Environment]::GetEnvironmentVariable('MINERADIO_WE_WINDOW_EXECUTABLE', 'Process')
-$hostWindowId = [Environment]::GetEnvironmentVariable('MINERADIO_WE_HOST_WINDOW_ID', 'Process')
-$hostExecutable = [Environment]::GetEnvironmentVariable('MINERADIO_WE_HOST_EXECUTABLE', 'Process')
-$hostCornerRadius = [Environment]::GetEnvironmentVariable('MINERADIO_WE_HOST_CORNER_RADIUS', 'Process')
+$action = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_WINDOW_ACTION', 'Process')
+$sourceId = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_WINDOW_SOURCE_ID', 'Process')
+$expectedTitle = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_WINDOW_TITLE', 'Process')
+$expectedExecutable = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_WINDOW_EXECUTABLE', 'Process')
+$hostWindowId = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_HOST_WINDOW_ID', 'Process')
+$hostExecutable = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_HOST_EXECUTABLE', 'Process')
+$hostCornerRadius = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_HOST_CORNER_RADIUS', 'Process')
 if ([string]::IsNullOrWhiteSpace($action) -or [string]::IsNullOrWhiteSpace($sourceId)) { throw 'Missing window control input' }
 $source = @'
 using System;
@@ -561,7 +561,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
-public sealed class MineradioWeWindowResult {
+public sealed class FaveradioWeWindowResult {
   public bool ok { get; set; }
   public bool missing { get; set; }
   public bool moved { get; set; }
@@ -584,7 +584,7 @@ public sealed class MineradioWeWindowResult {
   public long hostBottom { get; set; }
 }
 
-public static class MineradioWeWindowControl {
+public static class FaveradioWeWindowControl {
   const uint WM_CLOSE = 0x0010;
   const int SM_XVIRTUALSCREEN = 76;
   const int SM_YVIRTUALSCREEN = 77;
@@ -626,7 +626,7 @@ public static class MineradioWeWindowControl {
     return text.ToString();
   }
 
-  static MineradioWeWindowResult Snapshot(IntPtr hWnd, uint processId) {
+  static FaveradioWeWindowResult Snapshot(IntPtr hWnd, uint processId) {
     RECT rect;
     if (!GetWindowRect(hWnd, out rect)) throw new Win32Exception(Marshal.GetLastWin32Error());
     int virtualLeft = GetSystemMetrics(SM_XVIRTUALSCREEN);
@@ -635,7 +635,7 @@ public static class MineradioWeWindowControl {
     int virtualBottom = virtualTop + Math.Max(1, GetSystemMetrics(SM_CYVIRTUALSCREEN));
     long visibleWidth = Math.Max(0, Math.Min(rect.Right, virtualRight) - Math.Max(rect.Left, virtualLeft));
     long visibleHeight = Math.Max(0, Math.Min(rect.Bottom, virtualBottom) - Math.Max(rect.Top, virtualTop));
-    return new MineradioWeWindowResult {
+    return new FaveradioWeWindowResult {
       ok = true,
       left = rect.Left,
       top = rect.Top,
@@ -679,14 +679,14 @@ public static class MineradioWeWindowControl {
     return true;
   }
 
-  static MineradioWeWindowResult RunDpiAware(string action, string sourceId, string expectedTitle, string expectedExecutable, string hostWindowId, string hostExecutable, string hostCornerRadius) {
+  static FaveradioWeWindowResult RunDpiAware(string action, string sourceId, string expectedTitle, string expectedExecutable, string hostWindowId, string hostExecutable, string hostCornerRadius) {
     IntPtr hWnd = ParseHandle(sourceId);
-    if (!IsWindow(hWnd)) return new MineradioWeWindowResult { ok = true, missing = true };
+    if (!IsWindow(hWnd)) return new FaveradioWeWindowResult { ok = true, missing = true };
     if (!String.Equals(WindowTitle(hWnd), expectedTitle ?? "", StringComparison.Ordinal)) throw new InvalidOperationException("Capture window title mismatch");
     uint processId = ValidateProcess(hWnd, expectedExecutable);
 
     if (String.Equals(action, "close", StringComparison.OrdinalIgnoreCase)) {
-      MineradioWeWindowResult closeResult = Snapshot(hWnd, processId);
+      FaveradioWeWindowResult closeResult = Snapshot(hWnd, processId);
       closeResult.closePosted = PostMessageW(hWnd, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
       if (!closeResult.closePosted) throw new Win32Exception(Marshal.GetLastWin32Error());
       Stopwatch closeWait = Stopwatch.StartNew();
@@ -710,7 +710,7 @@ public static class MineradioWeWindowControl {
           SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOSENDCHANGING)) {
         throw new Win32Exception(Marshal.GetLastWin32Error());
       }
-      MineradioWeWindowResult parkResult = Snapshot(hWnd, processId);
+      FaveradioWeWindowResult parkResult = Snapshot(hWnd, processId);
       parkResult.moved = true;
       parkResult.parked = parkResult.visibleWidth <= 1 && parkResult.visibleHeight <= 1;
       if (!parkResult.parked) throw new InvalidOperationException("Capture source window did not enter the parking strip");
@@ -730,7 +730,7 @@ public static class MineradioWeWindowControl {
       || Math.Abs(sourceRect.Top - hostRect.Top) > tolerance
       || Math.Abs(sourceRect.Right - hostRect.Right) > tolerance
       || Math.Abs(sourceRect.Bottom - hostRect.Bottom) > tolerance);
-    MineradioWeWindowResult result = Snapshot(hWnd, processId);
+    FaveradioWeWindowResult result = Snapshot(hWnd, processId);
     result.moved = false;
     result.embedded = true;
     result.aligned = aligned;
@@ -742,7 +742,7 @@ public static class MineradioWeWindowControl {
     return result;
   }
 
-  public static MineradioWeWindowResult Run(string action, string sourceId, string expectedTitle, string expectedExecutable, string hostWindowId, string hostExecutable, string hostCornerRadius) {
+  public static FaveradioWeWindowResult Run(string action, string sourceId, string expectedTitle, string expectedExecutable, string hostWindowId, string hostExecutable, string hostCornerRadius) {
     IntPtr previousDpiContext = IntPtr.Zero;
     try {
       // powershell.exe has no PMv2 manifest, so GetWindowRect otherwise returns
@@ -760,7 +760,7 @@ public static class MineradioWeWindowControl {
 }
 '@
 Add-Type -TypeDefinition $source -Language CSharp
-[MineradioWeWindowControl]::Run($action, $sourceId, $expectedTitle, $expectedExecutable, $hostWindowId, $hostExecutable, $hostCornerRadius) | ConvertTo-Json -Compress
+[FaveradioWeWindowControl]::Run($action, $sourceId, $expectedTitle, $expectedExecutable, $hostWindowId, $hostExecutable, $hostCornerRadius) | ConvertTo-Json -Compress
 `.trim();
   return Buffer.from(source, 'utf16le').toString('base64');
 }
@@ -768,12 +768,12 @@ Add-Type -TypeDefinition $source -Language CSharp
 function nativeParallaxPointerRelayScript() {
   const source = String.raw`
 $ErrorActionPreference = 'Stop'
-$sourceId = [Environment]::GetEnvironmentVariable('MINERADIO_WE_POINTER_SOURCE_ID', 'Process')
-$expectedTitle = [Environment]::GetEnvironmentVariable('MINERADIO_WE_POINTER_SOURCE_TITLE', 'Process')
-$expectedExecutable = [Environment]::GetEnvironmentVariable('MINERADIO_WE_POINTER_SOURCE_EXECUTABLE', 'Process')
-$hostWindowId = [Environment]::GetEnvironmentVariable('MINERADIO_WE_POINTER_HOST_WINDOW_ID', 'Process')
-$hostExecutable = [Environment]::GetEnvironmentVariable('MINERADIO_WE_POINTER_HOST_EXECUTABLE', 'Process')
-$sessionId = [Environment]::GetEnvironmentVariable('MINERADIO_WE_POINTER_SESSION_ID', 'Process')
+$sourceId = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_POINTER_SOURCE_ID', 'Process')
+$expectedTitle = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_POINTER_SOURCE_TITLE', 'Process')
+$expectedExecutable = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_POINTER_SOURCE_EXECUTABLE', 'Process')
+$hostWindowId = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_POINTER_HOST_WINDOW_ID', 'Process')
+$hostExecutable = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_POINTER_HOST_EXECUTABLE', 'Process')
+$sessionId = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_POINTER_SESSION_ID', 'Process')
 if ([string]::IsNullOrWhiteSpace($sourceId) -or [string]::IsNullOrWhiteSpace($expectedTitle) -or
     [string]::IsNullOrWhiteSpace($expectedExecutable) -or [string]::IsNullOrWhiteSpace($hostWindowId) -or
     [string]::IsNullOrWhiteSpace($hostExecutable) -or [string]::IsNullOrWhiteSpace($sessionId)) {
@@ -788,7 +788,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
-public static class MineradioWeParallaxPointerRelay {
+public static class FaveradioWeParallaxPointerRelay {
   const uint WM_MOUSEMOVE = 0x0200;
   const uint GA_ROOT = 2;
 
@@ -982,7 +982,7 @@ public static class MineradioWeParallaxPointerRelay {
 }
 '@
 Add-Type -TypeDefinition $source -Language CSharp
-[MineradioWeParallaxPointerRelay]::Run($sourceId, $expectedTitle, $expectedExecutable, $hostWindowId, $hostExecutable, $sessionId)
+[FaveradioWeParallaxPointerRelay]::Run($sourceId, $expectedTitle, $expectedExecutable, $hostWindowId, $hostExecutable, $sessionId)
 `.trim();
   return Buffer.from(source, 'utf16le').toString('base64');
 }
@@ -990,18 +990,18 @@ Add-Type -TypeDefinition $source -Language CSharp
 function nativeDwmThumbnailSurfaceScript() {
   const source = String.raw`
 $ErrorActionPreference = 'Stop'
-$sourceId = [Environment]::GetEnvironmentVariable('MINERADIO_WE_DWM_SOURCE_ID', 'Process')
-$expectedTitle = [Environment]::GetEnvironmentVariable('MINERADIO_WE_DWM_SOURCE_TITLE', 'Process')
-$expectedExecutable = [Environment]::GetEnvironmentVariable('MINERADIO_WE_DWM_SOURCE_EXECUTABLE', 'Process')
-$hostWindowId = [Environment]::GetEnvironmentVariable('MINERADIO_WE_DWM_HOST_WINDOW_ID', 'Process')
-$hostExecutable = [Environment]::GetEnvironmentVariable('MINERADIO_WE_DWM_HOST_EXECUTABLE', 'Process')
-$hostCornerRadius = [Environment]::GetEnvironmentVariable('MINERADIO_WE_DWM_HOST_CORNER_RADIUS', 'Process')
-$desktopIconLayering = [Environment]::GetEnvironmentVariable('MINERADIO_WE_DWM_DESKTOP_ICON_LAYERING', 'Process')
-$visualOpacity = [Environment]::GetEnvironmentVariable('MINERADIO_WE_DWM_VISUAL_OPACITY', 'Process')
-$visualPositionX = [Environment]::GetEnvironmentVariable('MINERADIO_WE_DWM_VISUAL_POSITION_X', 'Process')
-$visualPositionY = [Environment]::GetEnvironmentVariable('MINERADIO_WE_DWM_VISUAL_POSITION_Y', 'Process')
-$visualScale = [Environment]::GetEnvironmentVariable('MINERADIO_WE_DWM_VISUAL_SCALE', 'Process')
-$sessionId = [Environment]::GetEnvironmentVariable('MINERADIO_WE_DWM_SESSION_ID', 'Process')
+$sourceId = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_DWM_SOURCE_ID', 'Process')
+$expectedTitle = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_DWM_SOURCE_TITLE', 'Process')
+$expectedExecutable = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_DWM_SOURCE_EXECUTABLE', 'Process')
+$hostWindowId = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_DWM_HOST_WINDOW_ID', 'Process')
+$hostExecutable = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_DWM_HOST_EXECUTABLE', 'Process')
+$hostCornerRadius = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_DWM_HOST_CORNER_RADIUS', 'Process')
+$desktopIconLayering = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_DWM_DESKTOP_ICON_LAYERING', 'Process')
+$visualOpacity = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_DWM_VISUAL_OPACITY', 'Process')
+$visualPositionX = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_DWM_VISUAL_POSITION_X', 'Process')
+$visualPositionY = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_DWM_VISUAL_POSITION_Y', 'Process')
+$visualScale = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_DWM_VISUAL_SCALE', 'Process')
+$sessionId = [Environment]::GetEnvironmentVariable('FAVERADIO_WE_DWM_SESSION_ID', 'Process')
 if ([string]::IsNullOrWhiteSpace($sourceId) -or [string]::IsNullOrWhiteSpace($expectedTitle) -or
     [string]::IsNullOrWhiteSpace($expectedExecutable) -or [string]::IsNullOrWhiteSpace($hostWindowId) -or
     [string]::IsNullOrWhiteSpace($hostExecutable) -or [string]::IsNullOrWhiteSpace($sessionId)) {
@@ -1018,7 +1018,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-public sealed class MineradioWeDwmSurfaceHost : Form {
+public sealed class FaveradioWeDwmSurfaceHost : Form {
   [StructLayout(LayoutKind.Sequential)]
   struct RECT { public int Left; public int Top; public int Right; public int Bottom; }
 
@@ -1132,7 +1132,7 @@ public sealed class MineradioWeDwmSurfaceHost : Form {
   int visualPositionY = 0;
   int visualScale = 1080000;
 
-  MineradioWeDwmSurfaceHost(IntPtr host, IntPtr source, string expectedTitle, int cornerRadius,
+  FaveradioWeDwmSurfaceHost(IntPtr host, IntPtr source, string expectedTitle, int cornerRadius,
       bool enableDesktopIconLayering, int initialOpacity, int initialPositionX,
       int initialPositionY, int initialScale) {
     hostWindow = host;
@@ -1151,7 +1151,7 @@ public sealed class MineradioWeDwmSurfaceHost : Form {
     ShowInTaskbar = true;
     StartPosition = FormStartPosition.Manual;
     BackColor = Color.Black;
-    Text = "Mineradio WE DWM Surface";
+    Text = "Faveradio WE DWM Surface";
     followTimer = new System.Windows.Forms.Timer();
     followTimer.Interval = 60;
     followTimer.Tick += delegate {
@@ -1393,7 +1393,7 @@ public sealed class MineradioWeDwmSurfaceHost : Form {
     // existing control bar, avoiding an extra transparent layer in the UI.
     // In desktop coexistence the authoritative Electron HWND is a shaped child
     // above DefView inside Explorer's icon WorkerW. Keep that same icon host
-    // between Mineradio and the one base DWM surface. Normal top-level windows
+    // between Faveradio and the one base DWM surface. Normal top-level windows
     // may opt in too; unrelated WorkerW children retain the exact fallback.
     IntPtr hostRoot = GetAncestor(hostWindow, GA_ROOT);
     // A hot flag change may overlap the native reparenting transition by one
@@ -1481,14 +1481,14 @@ public sealed class MineradioWeDwmSurfaceHost : Form {
     if (!Int32.TryParse(rawScale ?? "", out initialScale)) initialScale = 1080000;
     Application.EnableVisualStyles();
     Application.SetCompatibleTextRenderingDefault(false);
-    Application.Run(new MineradioWeDwmSurfaceHost(host, source, expectedTitle, cornerRadius,
+    Application.Run(new FaveradioWeDwmSurfaceHost(host, source, expectedTitle, cornerRadius,
       enableDesktopIconLayering, initialOpacity, initialPositionX, initialPositionY, initialScale));
   }
 }
 '@
 Add-Type -ReferencedAssemblies @('System.Windows.Forms', 'System.Drawing') -TypeDefinition $source -Language CSharp
 try {
-  [MineradioWeDwmSurfaceHost]::Run($sourceId, $expectedTitle, $expectedExecutable, $hostWindowId, $hostExecutable, $hostCornerRadius, $desktopIconLayering, $visualOpacity, $visualPositionX, $visualPositionY, $visualScale)
+  [FaveradioWeDwmSurfaceHost]::Run($sourceId, $expectedTitle, $expectedExecutable, $hostWindowId, $hostExecutable, $hostCornerRadius, $desktopIconLayering, $visualOpacity, $visualPositionX, $visualPositionY, $visualScale)
 } catch {
   [Console]::Error.WriteLine($_.Exception.ToString())
   if ($_.Exception.InnerException) { [Console]::Error.WriteLine($_.Exception.InnerException.ToString()) }
@@ -1553,8 +1553,8 @@ function defaultEngineProcessProbe(powerShellExecutable, nativeTempPath, expecte
         ...process.env,
         TEMP: nativeTempPath,
         TMP: nativeTempPath,
-        MINERADIO_NATIVE_TEMP_DIR: nativeTempPath,
-        MINERADIO_WE_ENGINE_TARGET: String(expectedExecutable || ''),
+        FAVERADIO_NATIVE_TEMP_DIR: nativeTempPath,
+        FAVERADIO_WE_ENGINE_TARGET: String(expectedExecutable || ''),
       },
     }, (error, stdout) => {
       if (error) {
@@ -1611,8 +1611,8 @@ class WallpaperEngineRuntime {
     this.powerShellExecutable = options.powerShellExecutable || 'powershell.exe';
     this.nativeTempPath = path.resolve(String(
       options.nativeTempPath
-      || process.env.MINERADIO_NATIVE_TEMP_DIR
-      || path.join(process.env.LOCALAPPDATA || process.env.APPDATA || process.cwd(), 'Mineradio', 'native-helper-temp')
+      || process.env.FAVERADIO_NATIVE_TEMP_DIR
+      || path.join(process.env.LOCALAPPDATA || process.env.APPDATA || process.cwd(), 'Faveradio', 'native-helper-temp')
     ));
     fs.mkdirSync(this.nativeTempPath, { recursive: true });
     this.nativeExecFile = options.nativeExecFile || childProcess.execFile;
@@ -1789,7 +1789,7 @@ class WallpaperEngineRuntime {
       ...process.env,
       TEMP: this.nativeTempPath,
       TMP: this.nativeTempPath,
-      MINERADIO_NATIVE_TEMP_DIR: this.nativeTempPath,
+      FAVERADIO_NATIVE_TEMP_DIR: this.nativeTempPath,
       ...extra,
     };
   }
@@ -1911,18 +1911,18 @@ class WallpaperEngineRuntime {
           shell: false,
           stdio: ['pipe', 'pipe', 'pipe'],
           env: this._powerShellEnv({
-            MINERADIO_WE_DWM_SOURCE_ID: sourceId,
-            MINERADIO_WE_DWM_SOURCE_TITLE: session.locationTitle,
-            MINERADIO_WE_DWM_SOURCE_EXECUTABLE: session.executable,
-            MINERADIO_WE_DWM_HOST_WINDOW_ID: hostWindowId,
-            MINERADIO_WE_DWM_HOST_EXECUTABLE: hostExecutable,
-            MINERADIO_WE_DWM_HOST_CORNER_RADIUS: String(session.dwmSurfaceHostCornerRadius || 0),
-            MINERADIO_WE_DWM_DESKTOP_ICON_LAYERING: session.dwmSurfaceDesktopIconLayering === true ? '1' : '0',
-            MINERADIO_WE_DWM_VISUAL_OPACITY: String(Math.round(Math.max(0.15, Math.min(1, Number(session.dwmVisualOpacity) || 1)) * 255)),
-            MINERADIO_WE_DWM_VISUAL_POSITION_X: String(Math.round(Math.max(-0.5, Math.min(0.5, Number(session.dwmVisualPositionX) || 0)) * 1000000)),
-            MINERADIO_WE_DWM_VISUAL_POSITION_Y: String(Math.round(Math.max(-0.5, Math.min(0.5, Number(session.dwmVisualPositionY) || 0)) * 1000000)),
-            MINERADIO_WE_DWM_VISUAL_SCALE: String(Math.round(Math.max(1, Math.min(1.6, Number(session.dwmVisualScale) || 1.08)) * 1000000)),
-            MINERADIO_WE_DWM_SESSION_ID: session.sessionId,
+            FAVERADIO_WE_DWM_SOURCE_ID: sourceId,
+            FAVERADIO_WE_DWM_SOURCE_TITLE: session.locationTitle,
+            FAVERADIO_WE_DWM_SOURCE_EXECUTABLE: session.executable,
+            FAVERADIO_WE_DWM_HOST_WINDOW_ID: hostWindowId,
+            FAVERADIO_WE_DWM_HOST_EXECUTABLE: hostExecutable,
+            FAVERADIO_WE_DWM_HOST_CORNER_RADIUS: String(session.dwmSurfaceHostCornerRadius || 0),
+            FAVERADIO_WE_DWM_DESKTOP_ICON_LAYERING: session.dwmSurfaceDesktopIconLayering === true ? '1' : '0',
+            FAVERADIO_WE_DWM_VISUAL_OPACITY: String(Math.round(Math.max(0.15, Math.min(1, Number(session.dwmVisualOpacity) || 1)) * 255)),
+            FAVERADIO_WE_DWM_VISUAL_POSITION_X: String(Math.round(Math.max(-0.5, Math.min(0.5, Number(session.dwmVisualPositionX) || 0)) * 1000000)),
+            FAVERADIO_WE_DWM_VISUAL_POSITION_Y: String(Math.round(Math.max(-0.5, Math.min(0.5, Number(session.dwmVisualPositionY) || 0)) * 1000000)),
+            FAVERADIO_WE_DWM_VISUAL_SCALE: String(Math.round(Math.max(1, Math.min(1.6, Number(session.dwmVisualScale) || 1.08)) * 1000000)),
+            FAVERADIO_WE_DWM_SESSION_ID: session.sessionId,
           }),
         });
       } catch (_) {
@@ -2214,7 +2214,7 @@ class WallpaperEngineRuntime {
     if (options.allowDirectSourceId === true) {
       return {
         id: `window:${expectedWindowId}:0`,
-        name: 'Mineradio WE DWM Surface',
+        name: 'Faveradio WE DWM Surface',
         directWindowSource: true,
       };
     }
@@ -2239,7 +2239,7 @@ class WallpaperEngineRuntime {
       const matched = sources.find((source) => {
         const match = /^window:(\d+):\d+$/.exec(String(source && source.id || ''));
         return !!match && match[1] === expectedWindowId
-          && String(source && source.name || '') === 'Mineradio WE DWM Surface';
+          && String(source && source.name || '') === 'Faveradio WE DWM Surface';
       });
       if (matched) return matched;
       await this.sleep(pollMs);
@@ -2413,12 +2413,12 @@ class WallpaperEngineRuntime {
           shell: false,
           stdio: ['pipe', 'pipe', 'pipe'],
           env: this._powerShellEnv({
-            MINERADIO_WE_POINTER_SOURCE_ID: sourceId,
-            MINERADIO_WE_POINTER_SOURCE_TITLE: session.locationTitle,
-            MINERADIO_WE_POINTER_SOURCE_EXECUTABLE: session.executable,
-            MINERADIO_WE_POINTER_HOST_WINDOW_ID: hostWindowId,
-            MINERADIO_WE_POINTER_HOST_EXECUTABLE: hostExecutable,
-            MINERADIO_WE_POINTER_SESSION_ID: session.sessionId,
+            FAVERADIO_WE_POINTER_SOURCE_ID: sourceId,
+            FAVERADIO_WE_POINTER_SOURCE_TITLE: session.locationTitle,
+            FAVERADIO_WE_POINTER_SOURCE_EXECUTABLE: session.executable,
+            FAVERADIO_WE_POINTER_HOST_WINDOW_ID: hostWindowId,
+            FAVERADIO_WE_POINTER_HOST_EXECUTABLE: hostExecutable,
+            FAVERADIO_WE_POINTER_SESSION_ID: session.sessionId,
           }),
         });
       } catch (_) {
@@ -2644,13 +2644,13 @@ class WallpaperEngineRuntime {
           maxBuffer: 128 * 1024,
           shell: false,
           env: this._powerShellEnv({
-            MINERADIO_WE_WINDOW_ACTION: String(action || ''),
-            MINERADIO_WE_WINDOW_SOURCE_ID: sourceId,
-            MINERADIO_WE_WINDOW_TITLE: String(details.locationTitle || ''),
-            MINERADIO_WE_WINDOW_EXECUTABLE: String(details.executable || ''),
-            MINERADIO_WE_HOST_WINDOW_ID: String(details.hostWindowId || ''),
-            MINERADIO_WE_HOST_EXECUTABLE: String(details.hostExecutable || ''),
-            MINERADIO_WE_HOST_CORNER_RADIUS: String(Math.max(0, Math.min(512, Number(details.cornerRadius) || 0))),
+            FAVERADIO_WE_WINDOW_ACTION: String(action || ''),
+            FAVERADIO_WE_WINDOW_SOURCE_ID: sourceId,
+            FAVERADIO_WE_WINDOW_TITLE: String(details.locationTitle || ''),
+            FAVERADIO_WE_WINDOW_EXECUTABLE: String(details.executable || ''),
+            FAVERADIO_WE_HOST_WINDOW_ID: String(details.hostWindowId || ''),
+            FAVERADIO_WE_HOST_EXECUTABLE: String(details.hostExecutable || ''),
+            FAVERADIO_WE_HOST_CORNER_RADIUS: String(Math.max(0, Math.min(512, Number(details.cornerRadius) || 0))),
           }),
         }, finish);
       } catch (error) {
@@ -2769,12 +2769,12 @@ class WallpaperEngineRuntime {
     const packageVolume = path.parse(path.resolve(scenePackage)).root.toLowerCase();
     const preferredStageRoot = nativeVolume === packageVolume
       ? path.resolve(this.nativeTempPath, 'wallpaper-engine-scene-stage')
-      : path.resolve(path.parse(scenePackage).root, 'MineradioCache', 'wallpaper-engine-scene-stage');
+      : path.resolve(path.parse(scenePackage).root, 'FaveradioCache', 'wallpaper-engine-scene-stage');
     let stageRoot = preferredStageRoot;
     try {
       await fs.promises.mkdir(stageRoot, { recursive: true });
     } catch (_) {
-      stageRoot = path.resolve(path.dirname(scenePackage), '.mineradio-scene-stage');
+      stageRoot = path.resolve(path.dirname(scenePackage), '.faveradio-scene-stage');
       await fs.promises.mkdir(stageRoot, { recursive: true });
     }
     const stageDirectory = path.resolve(stageRoot, session.sessionId);
@@ -2999,7 +2999,7 @@ class WallpaperEngineRuntime {
     const muted = await this._applySessionMute(session);
     if (!muted || this.active !== session || session.stopping === true) return false;
     if (!session.windowEmbedding || session.windowEmbedding.aligned !== true) return false;
-    // Keep the native WE source physically aligned behind Mineradio so the
+    // Keep the native WE source physically aligned behind Faveradio so the
     // engine continues to read the real Windows cursor. DWM mirrors that live
     // surface into a click-through helper directly beneath the transparent
     // Electron host; unlike Chromium window capture, it does not bake a second
@@ -3156,7 +3156,7 @@ class WallpaperEngineRuntime {
         maxBuffer: 64 * 1024,
         shell: false,
         env: this._powerShellEnv({
-          MINERADIO_WE_SIGNATURE_TARGET: executable,
+          FAVERADIO_WE_SIGNATURE_TARGET: executable,
         }),
       });
       const jsonLine = output.split(/\r?\n/).map((line) => line.trim()).reverse().find((line) => /^\{.*\}$/.test(line));
@@ -3355,10 +3355,10 @@ class WallpaperEngineRuntime {
           maxBuffer: 32 * 1024,
           shell: false,
           env: this._powerShellEnv({
-            MINERADIO_WE_CONTROL_TARGET: executable,
-            MINERADIO_WE_CONTROL_COMMAND_LINE: commandLine,
-            MINERADIO_WE_CONTROL_WAIT: options.waitForExit === true ? '1' : '0',
-            MINERADIO_WE_CONTROL_WAIT_TIMEOUT: options.waitForExit === true ? '10000' : '0',
+            FAVERADIO_WE_CONTROL_TARGET: executable,
+            FAVERADIO_WE_CONTROL_COMMAND_LINE: commandLine,
+            FAVERADIO_WE_CONTROL_WAIT: options.waitForExit === true ? '1' : '0',
+            FAVERADIO_WE_CONTROL_WAIT_TIMEOUT: options.waitForExit === true ? '10000' : '0',
           }),
         }, finish);
       } catch (error) {
@@ -3850,7 +3850,7 @@ class WallpaperEngineRuntime {
     const session = {
       id: String(id || '').toLowerCase(),
       sessionId,
-      locationTitle: `Mineradio Wallpaper ${sessionId}`,
+      locationTitle: `Faveradio Wallpaper ${sessionId}`,
       sourceId: '',
       windowSourceId: '',
       windowEmbedding: null,

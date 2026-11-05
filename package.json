@@ -1,9 +1,9 @@
 {
-  "name": "mineradio",
-  "productName": "Mineradio",
+  "name": "faveradio",
+  "productName": "Faveradio",
   "version": "2.3.6",
   "description": "Windows 沉浸式音乐播放器，融合桌面模式、歌词舞台、粒子视觉和 3D 歌单架。",
-  "author": "Mineradio",
+  "author": "Faveradio",
   "license": "GPL-3.0-only",
   "main": "desktop/main.js",
   "private": true,
@@ -15,8 +15,8 @@
   },
   "build": {
     "compression": "maximum",
-    "appId": "com.mineradio.desktop",
-    "productName": "Mineradio",
+    "appId": "com.faveradio.desktop",
+    "productName": "Faveradio",
     "directories": {
       "output": "dist",
       "buildResources": "build"
@@ -49,6 +49,7 @@
       "dj-analyzer.js",
       "LICENSE",
       "NOTICE.md",
+      "README.md",
       "docs/THIRD_PARTY_PORTS.md",
       "package.json",
       "!desktop/wallpaper-preload.js",
@@ -75,7 +76,7 @@
     ],
     "asar": false,
     "win": {
-      "executableName": "Mineradio",
+      "executableName": "Faveradio",
       "icon": "build/icon.ico",
       "signAndEditExecutable": false,
       "target": [
@@ -94,28 +95,28 @@
       "allowToChangeInstallationDirectory": false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Mineradio",
+      "shortcutName": "Faveradio",
       "installerIcon": "build/icon.ico",
       "uninstallerIcon": "build/icon.ico",
       "installerSidebar": "build/installerSidebar.bmp",
       "uninstallerSidebar": "build/installerSidebar.bmp",
       "installerHeader": "build/installerHeader.bmp",
       "include": "build/installer.nsh",
-      "artifactName": "Mineradio-${version}-Setup.${ext}"
+      "artifactName": "Faveradio-${version}-Setup.${ext}"
     },
     "publish": [
       {
         "provider": "github",
         "owner": "WhatTheLuck",
-        "repo": "Mineradio"
+        "repo": "Faveradio"
       }
     ]
   },
-  "mineradio": {
+  "faveradio": {
     "update": {
       "provider": "github",
       "owner": "WhatTheLuck",
-      "repo": "Mineradio",
+      "repo": "Faveradio",
       "preview": false,
       "preferMirrors": true,
       "mirrors": [

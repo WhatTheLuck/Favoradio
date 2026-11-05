@@ -6,7 +6,7 @@ const path = require('path');
 
 const SPOTIFY_ACCOUNTS_BASE = (process.env.SPOTIFY_ACCOUNTS_BASE || 'https://accounts.spotify.com').replace(/\/+$/, '');
 const SPOTIFY_API_BASE = (process.env.SPOTIFY_API_BASE || 'https://api.spotify.com/v1').replace(/\/+$/, '');
-const DEFAULT_SPOTIFY_MARKET = String(process.env.MINERADIO_SPOTIFY_MARKET || process.env.SPOTIFY_MARKET || 'US').trim().toUpperCase();
+const DEFAULT_SPOTIFY_MARKET = String(process.env.FAVERADIO_SPOTIFY_MARKET || process.env.SPOTIFY_MARKET || 'US').trim().toUpperCase();
 const DEFAULT_SPOTIFY_CONFIG_FILE = path.join(__dirname, '.spotify-credentials.json');
 const DEFAULT_SPOTIFY_TOKEN_FILE = path.join(__dirname, '.spotify-token.json');
 const DEFAULT_SPOTIFY_REDIRECT_URI = 'http://127.0.0.1:43879/callback';
@@ -21,7 +21,7 @@ const DEFAULT_SPOTIFY_SCOPES = [
   'playlist-modify-public',
 ];
 const SPOTIFY_LIKED_PLAYLIST_ID = 'spotify-liked';
-const SPOTIFY_UA = 'Mineradio/2.1.0 (Spotify Web API bridge)';
+const SPOTIFY_UA = 'Faveradio/2.1.0 (Spotify Web API bridge)';
 const SPOTIFY_SEARCH_LIMIT_MAX = 10;
 const SPOTIFY_PLAYLIST_PAGE_LIMIT = 50;
 
@@ -97,7 +97,7 @@ function spotifyConfigFileCandidates() {
     const resolved = path.resolve(value);
     if (!candidates.includes(resolved)) candidates.push(resolved);
   }
-  add(firstEnv(['SPOTIFY_CONFIG_FILE', 'MINERADIO_SPOTIFY_CONFIG_FILE']));
+  add(firstEnv(['SPOTIFY_CONFIG_FILE', 'FAVERADIO_SPOTIFY_CONFIG_FILE']));
   add(DEFAULT_SPOTIFY_CONFIG_FILE);
   add(path.join(__dirname, 'spotify-credentials.json'));
   return candidates;
@@ -133,7 +133,7 @@ function readSpotifyFileConfig() {
 }
 
 function getSpotifyConfigFile() {
-  return process.env.SPOTIFY_CONFIG_FILE || process.env.MINERADIO_SPOTIFY_CONFIG_FILE || DEFAULT_SPOTIFY_CONFIG_FILE;
+  return process.env.SPOTIFY_CONFIG_FILE || process.env.FAVERADIO_SPOTIFY_CONFIG_FILE || DEFAULT_SPOTIFY_CONFIG_FILE;
 }
 
 function saveSpotifyConfig(input) {
@@ -183,7 +183,7 @@ function saveSpotifyConfig(input) {
 }
 
 function getSpotifyTokenFile() {
-  return process.env.SPOTIFY_TOKEN_FILE || process.env.MINERADIO_SPOTIFY_TOKEN_FILE || DEFAULT_SPOTIFY_TOKEN_FILE;
+  return process.env.SPOTIFY_TOKEN_FILE || process.env.FAVERADIO_SPOTIFY_TOKEN_FILE || DEFAULT_SPOTIFY_TOKEN_FILE;
 }
 
 function readStoredSpotifyToken() {
@@ -257,21 +257,21 @@ function clearSpotifyToken() {
 
 function getSpotifyOAuthConfig() {
   const fileConfig = readSpotifyFileConfig();
-  const envClientId = firstEnv(['SPOTIFY_CLIENT_ID', 'MINERADIO_SPOTIFY_CLIENT_ID']);
-  const envClientSecret = firstEnv(['SPOTIFY_CLIENT_SECRET', 'MINERADIO_SPOTIFY_CLIENT_SECRET']);
-  const envRedirectUri = firstEnv(['SPOTIFY_REDIRECT_URI', 'MINERADIO_SPOTIFY_REDIRECT_URI']);
-  const envScopes = normalizeScopes(firstEnv(['SPOTIFY_SCOPES', 'SPOTIFY_SCOPE', 'MINERADIO_SPOTIFY_SCOPES']));
+  const envClientId = firstEnv(['SPOTIFY_CLIENT_ID', 'FAVERADIO_SPOTIFY_CLIENT_ID']);
+  const envClientSecret = firstEnv(['SPOTIFY_CLIENT_SECRET', 'FAVERADIO_SPOTIFY_CLIENT_SECRET']);
+  const envRedirectUri = firstEnv(['SPOTIFY_REDIRECT_URI', 'FAVERADIO_SPOTIFY_REDIRECT_URI']);
+  const envScopes = normalizeScopes(firstEnv(['SPOTIFY_SCOPES', 'SPOTIFY_SCOPE', 'FAVERADIO_SPOTIFY_SCOPES']));
   const clientId = envClientId || fileConfig.clientId;
   // Desktop PKCE must not depend on a secret stored in the packaged app or user JSON.
   // A client secret is accepted only from a backend-controlled environment for optional client-credentials requests.
   const clientSecret = envClientSecret;
   const redirectUri = envRedirectUri || fileConfig.redirectUri || DEFAULT_SPOTIFY_REDIRECT_URI;
-  // Mineradio owns the OAuth flow, so always include the scopes required by
+  // Faveradio owns the OAuth flow, so always include the scopes required by
   // the currently exposed account actions. Existing tokens still need a fresh
   // authorization before these newly requested scopes become effective.
   const configuredScopes = envScopes.length ? envScopes : fileConfig.scopes;
   const scopes = uniqueList(DEFAULT_SPOTIFY_SCOPES.concat(configuredScopes || []));
-  const market = (firstEnv(['SPOTIFY_MARKET', 'MINERADIO_SPOTIFY_MARKET']) || fileConfig.market || DEFAULT_SPOTIFY_MARKET || 'US').toUpperCase();
+  const market = (firstEnv(['SPOTIFY_MARKET', 'FAVERADIO_SPOTIFY_MARKET']) || fileConfig.market || DEFAULT_SPOTIFY_MARKET || 'US').toUpperCase();
   const missing = [];
   if (!clientId) missing.push('SPOTIFY_CLIENT_ID');
   const clientIdValid = spotifyClientIdLooksValid(clientId);
@@ -426,7 +426,7 @@ function spotifyErrorDetails(err) {
   } else if (statusCode === 404) {
     message = 'Spotify 没找到这个歌单，可能已删除、未公开或当前账号无权访问。';
   } else if (statusCode === 500 || statusCode === 502 || statusCode === 503) {
-    message = 'Spotify 服务暂时不可用，Mineradio 已完成有限重试，请稍后再试。';
+    message = 'Spotify 服务暂时不可用，Faveradio 已完成有限重试，请稍后再试。';
   } else if (/scope|permission|insufficient/i.test(apiMessage || code)) {
     message = 'Spotify 授权权限不够，请重新连接 Spotify 后再同步歌单。';
   }
@@ -958,7 +958,7 @@ async function handleSpotifySetupDiagnostics() {
     '回调地址',
     config.redirectValid
       ? '回调地址符合 Spotify 的 127.0.0.1 精确匹配规则。'
-      : '回调必须使用 Mineradio 显示的 127.0.0.1 地址。',
+      : '回调必须使用 Faveradio 显示的 127.0.0.1 地址。',
     { redirectUri: config.redirectUri }
   );
   push(
@@ -979,7 +979,7 @@ async function handleSpotifySetupDiagnostics() {
       push('profile', false, '账号验证', profileDetail.message, profileDetail);
     }
   } else {
-    push('profile', false, '账号验证', '完成 OAuth 授权后由 Mineradio 自动验证。');
+    push('profile', false, '账号验证', '完成 OAuth 授权后由 Faveradio 自动验证。');
   }
 
   const requiredReadScopes = ['user-read-private', 'user-library-read', 'playlist-read-private'];
@@ -1035,7 +1035,7 @@ async function handleSpotifySetupDiagnostics() {
     currentStep: !config.oauthConfigured ? 1 : (!(token.accessToken || token.refreshToken) ? 3 : (ready ? 4 : 3)),
     message: ready
       ? 'Spotify 账号、喜欢歌曲和歌单接口均已接通。'
-      : (profileDetail && profileDetail.message || '按当前步骤继续，Mineradio 会在每一步自动检测。'),
+      : (profileDetail && profileDetail.message || '按当前步骤继续，Faveradio 会在每一步自动检测。'),
   };
 }
 
@@ -1544,7 +1544,7 @@ async function handleSpotifyCreatePlaylist(name, opts) {
     name,
     public: isPublic,
     collaborative: false,
-    description: normalizeText(opts.description || 'Created with Mineradio'),
+    description: normalizeText(opts.description || 'Created with Faveradio'),
   }, { timeoutMs: 10000 });
   return {
     provider: 'spotify',
@@ -1567,7 +1567,7 @@ async function handleSpotifySongUrl(track) {
     restriction: {
       category: 'provider_limited',
       reason: 'spotify_metadata_only',
-      message: 'Spotify 官方 Web API 不提供可交给 Mineradio 播放的音频直链，正在自动换源。',
+      message: 'Spotify 官方 Web API 不提供可交给 Faveradio 播放的音频直链，正在自动换源。',
       action: 'switch_source',
     },
   };
@@ -1582,7 +1582,7 @@ async function handleSpotifyLyric(id) {
     yrc: '',
     ytlrc: '',
     source: 'none',
-    message: 'Spotify Web API 不提供歌词，Mineradio 会沿用跨平台歌词兜底。',
+    message: 'Spotify Web API 不提供歌词，Faveradio 会沿用跨平台歌词兜底。',
   };
 }
 

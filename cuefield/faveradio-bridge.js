@@ -1,5 +1,5 @@
 const { analyzeSectionCandidates } = require('./section-candidates');
-const { normalizeMineradioBeatMap } = require('./adapter-mineradio');
+const { normalizeFaveradioBeatMap } = require('./adapter-faveradio');
 const { buildCueProfile } = require('./cue-profile');
 const { parseLrc } = require('./lrc-anchors');
 const { buildStructureMap } = require('./structure-map');
@@ -35,7 +35,7 @@ function parseMaybeLrc(value) {
 
 function normalizedFixture(entry, key) {
   const track = toTrack(entry, key);
-  const analysis = normalizeMineradioBeatMap(track, entry.map || {});
+  const analysis = normalizeFaveradioBeatMap(track, entry.map || {});
   return {
     track,
     map: {

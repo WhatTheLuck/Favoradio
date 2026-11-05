@@ -1,6 +1,6 @@
 'use strict';
 
-var SMART_FAVORITES_STORE_KEY = 'mineradio-smart-favorites-v1';
+var SMART_FAVORITES_STORE_KEY = 'faveradio-smart-favorites-v1';
 var SMART_FAVORITES_ONLINE_CACHE_TTL = 30 * 60 * 1000;
 var SMART_FAVORITES_MIX_PRIVATE_RATIO = 0.7;
 var SMART_FAVORITES_TOP_N = 8;

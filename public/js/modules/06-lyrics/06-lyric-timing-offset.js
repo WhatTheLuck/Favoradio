@@ -1,4 +1,4 @@
-var LYRIC_TIMING_OFFSET_STORE_KEY = 'mineradio-lyric-timing-offsets-v1';
+var LYRIC_TIMING_OFFSET_STORE_KEY = 'faveradio-lyric-timing-offsets-v1';
 var LYRIC_TIMING_OFFSET_LIMIT = 500;
 var lyricTimingOffsetMap = readLyricTimingOffsetMap();
 var lyricTimingPopoverCloseTimer = null;
@@ -217,12 +217,12 @@ function adjustCurrentLyricTimingOffset(delta) {
 }
 
 function handleLyricTimingOffsetClick(e) {
-  if (e && e._mineradioLyricTimingHandled) return;
+  if (e && e._faveradioLyricTimingHandled) return;
   var stepBtn = e && e.target && e.target.closest ? e.target.closest('[data-lyric-offset-step]') : null;
   var resetBtn = e && e.target && e.target.closest ? e.target.closest('[data-lyric-offset-reset]') : null;
   if (!stepBtn && !resetBtn) return;
   if (e) {
-    e._mineradioLyricTimingHandled = true;
+    e._faveradioLyricTimingHandled = true;
     e.preventDefault();
     e.stopPropagation();
   }
@@ -233,8 +233,8 @@ function handleLyricTimingOffsetClick(e) {
 
 function bindLyricTimingOffsetControls() {
   var root = document.getElementById('lyric-timing-control');
-  if (!root || root._mineradioLyricTimingBound) return;
-  root._mineradioLyricTimingBound = true;
+  if (!root || root._faveradioLyricTimingBound) return;
+  root._faveradioLyricTimingBound = true;
   root.addEventListener('mouseenter', function () {
     suppressLyricTimingSiblingPanels(true);
     clearLyricTimingPopoverClose();

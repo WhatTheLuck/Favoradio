@@ -84,13 +84,13 @@ test('external visual audio and drag bridges survive player lifecycle changes',(
  const cyberBridge=fs.readFileSync(path.join(__dirname,'..','public','vendor','source-visuals','cyber-bridge.js'),'utf8');
  const spaceBridge=fs.readFileSync(path.join(__dirname,'..','public','vendor','source-visuals','space-bridge.js'),'utf8');
  assert.match(moduleSource,/invalidateAudioSource/);
- assert.match(graphSource,/MineradioExternalVisuals\.invalidateAudioSource\(\)/);
- assert.match(pointerSource,/MineradioExternalVisuals\.rotate\(dx, dy\)/);
+ assert.match(graphSource,/FaveradioExternalVisuals\.invalidateAudioSource\(\)/);
+ assert.match(pointerSource,/FaveradioExternalVisuals\.rotate\(dx, dy\)/);
  assert.match(cyberBridge,/rotate: \(deltaX, deltaY\)/);
  assert.match(spaceBridge,/rotate\(deltaX,deltaY\)/);
 });
 test('visual files are isolated by kind, survive restart, sort latest first, and reject traversal',()=>{
- const root=fs.mkdtempSync(path.join(os.tmpdir(),'mineradio-visual-'));
+ const root=fs.mkdtempSync(path.join(os.tmpdir(),'faveradio-visual-'));
  try{
  const store=new VisualPresetStore(root);
  const first=store.save('cyber','first',{ribbon:{ribbonLength:175}});

@@ -52,7 +52,7 @@ function fastStartupTimeout(promise, _timeoutMs, label, onTimeout) {
       settled = true;
       try { if (typeof onTimeout === 'function') onTimeout(); } catch (_) { }
       const error = new Error(`${label || 'startup operation'} timed out in test`);
-      error.code = 'MINERADIO_STARTUP_TIMEOUT';
+      error.code = 'FAVERADIO_STARTUP_TIMEOUT';
       reject(error);
     }, 20);
     Promise.resolve(promise).then((value) => {
@@ -154,7 +154,7 @@ async function testTrustedReadySignalRequiresTheExpectedDocument() {
   assert.strictEqual(result.url, expectedUrl);
   assert.strictEqual(result.phase, 'dom-ready');
   assert.deepStrictEqual(
-    { url: win.__mineradioTrustedMainDocumentReady.url, phase: win.__mineradioTrustedMainDocumentReady.phase },
+    { url: win.__faveradioTrustedMainDocumentReady.url, phase: win.__faveradioTrustedMainDocumentReady.phase },
     { url: expectedUrl, phase: 'dom-ready' }
   );
   signal.cancel();
@@ -162,7 +162,7 @@ async function testTrustedReadySignalRequiresTheExpectedDocument() {
 }
 
 async function testStalledLoadPromiseAcceptsTrustedDomReady() {
-  const harness = createLoadWithRetryHarness({ MINERADIO_STARTUP_TEST_STALL_LOAD_PROMISE: '1' });
+  const harness = createLoadWithRetryHarness({ FAVERADIO_STARTUP_TEST_STALL_LOAD_PROMISE: '1' });
   const fake = createFakeWindow(({ targetUrl, webContents, setCurrentUrl }) => {
     setCurrentUrl(targetUrl);
     setTimeout(() => webContents.emit('dom-ready'), 2);
@@ -184,12 +184,12 @@ async function testStalledLoadPromiseAcceptsTrustedDomReady() {
 }
 
 async function testTrulyUnreadyDocumentStillRetriesAndFails() {
-  const harness = createLoadWithRetryHarness({ MINERADIO_STARTUP_TEST_STALL_LOAD_PROMISE: '1' });
+  const harness = createLoadWithRetryHarness({ FAVERADIO_STARTUP_TEST_STALL_LOAD_PROMISE: '1' });
   const fake = createFakeWindow(() => Promise.resolve());
 
   await assert.rejects(
     harness.loadMainWindowWithRetry(fake.win),
-    error => error && error.code === 'MINERADIO_STARTUP_TIMEOUT'
+    error => error && error.code === 'FAVERADIO_STARTUP_TIMEOUT'
   );
   assert.strictEqual(fake.loadCalls(), 2, 'a document with no trusted ready signal must use the bounded retry');
   assert(fake.stopCalls() >= 2, 'only genuinely unready attempts may be stopped');
@@ -205,9 +205,9 @@ async function testTrulyUnreadyDocumentStillRetriesAndFails() {
 function testSourceContractKeepsTimeoutFailOpenNarrow() {
   assert.match(loadWithRetrySource, /Promise\.race\(\[observedLoadPromise, readySignal\.promise\]\)/);
   assert.match(loadWithRetrySource, /if \(readySignal\.isReady\(\)\) return;[\s\S]{0,100}win\.webContents\.stop\(\)/);
-  assert.match(loadWithRetrySource, /MINERADIO_STARTUP_TIMEOUT[\s\S]{0,100}readySignal\.isReady\(\)/);
+  assert.match(loadWithRetrySource, /FAVERADIO_STARTUP_TIMEOUT[\s\S]{0,100}readySignal\.isReady\(\)/);
   assert.match(loadWithRetrySource, /finally \{[\s\S]{0,100}readySignal\.cancel\(\)/);
-  assert.match(loadWithRetrySource, /MINERADIO_STARTUP_TEST_STALL_LOAD_PROMISE/);
+  assert.match(loadWithRetrySource, /FAVERADIO_STARTUP_TEST_STALL_LOAD_PROMISE/);
 }
 
 async function main() {

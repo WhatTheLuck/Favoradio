@@ -6,15 +6,15 @@ const { app, safeStorage } = require('electron');
 const { SmartFavoritesStore } = require('../desktop/smart-favorites-store');
 const { EmomusicVlmClient } = require('../desktop/emomusic-vlm-client');
 
-app.setName('Mineradio');
-const mineradioUserDataPath = path.join(app.getPath('appData'), 'Mineradio');
-app.setPath('userData', mineradioUserDataPath);
-let cacheRoot = fs.existsSync('D:\\') ? 'D:\\MineradioCache' : path.join(mineradioUserDataPath, 'cache');
+app.setName('Faveradio');
+const faveradioUserDataPath = path.join(app.getPath('appData'), 'Faveradio');
+app.setPath('userData', faveradioUserDataPath);
+let cacheRoot = fs.existsSync('D:\\') ? 'D:\\FaveradioCache' : path.join(faveradioUserDataPath, 'cache');
 try {
-  const saved = JSON.parse(fs.readFileSync(path.join(mineradioUserDataPath, 'cache-settings.json'), 'utf8'));
+  const saved = JSON.parse(fs.readFileSync(path.join(faveradioUserDataPath, 'cache-settings.json'), 'utf8'));
   if (saved && path.isAbsolute(saved.rootPath)) cacheRoot = saved.rootPath;
 } catch (_) { }
-app.setPath('sessionData', path.join(cacheRoot, 'chromium', 'Mineradio'));
+app.setPath('sessionData', path.join(cacheRoot, 'chromium', 'Faveradio'));
 
 function imageDataUrl(imagePath) {
   const extension = path.extname(imagePath).toLowerCase();
@@ -25,7 +25,7 @@ function imageDataUrl(imagePath) {
 app.whenReady().then(async () => {
   const imagePath = path.resolve(process.argv[2] || '');
   if (!imagePath || !fs.existsSync(imagePath)) throw new Error('Usage: electron scripts/test-emomusic-vlm.cjs <face-image>');
-  const store = new SmartFavoritesStore({ userDataPath: mineradioUserDataPath, safeStorage });
+  const store = new SmartFavoritesStore({ userDataPath: faveradioUserDataPath, safeStorage });
   const client = new EmomusicVlmClient({ credentialProvider: () => store.readCredential() });
   const result = await client.analyzeFrame(imageDataUrl(imagePath));
   process.stdout.write(JSON.stringify(result, null, 2) + '\n');

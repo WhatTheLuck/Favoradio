@@ -3,7 +3,7 @@ function toNumber(value, fallback) {
   return Number.isFinite(n) ? n : fallback;
 }
 
-const MINERADIO_BEAT_COMBOS = ['', 'downbeat', 'push', 'drop', 'rebound', 'accent'];
+const FAVERADIO_BEAT_COMBOS = ['', 'downbeat', 'push', 'drop', 'rebound', 'accent'];
 
 function clamp01(value) {
   return Math.max(0, Math.min(1, toNumber(value, 0)));
@@ -20,7 +20,7 @@ function normalizeBeatEvent(raw, index, gridStep) {
   if (Array.isArray(raw)) {
     const time = toNumber(raw[0], 0);
     const flags = Math.max(0, Math.round(toNumber(raw[8], 0)));
-    const combo = MINERADIO_BEAT_COMBOS[Math.max(0, Math.round(toNumber(raw[7], 0)))] || '';
+    const combo = FAVERADIO_BEAT_COMBOS[Math.max(0, Math.round(toNumber(raw[7], 0)))] || '';
     return {
       time,
       index,
@@ -114,7 +114,7 @@ function normalizeWindows(windows) {
     .sort((a, b) => a.start - b.start);
 }
 
-function normalizeMineradioBeatMap(track, map, extra = {}) {
+function normalizeFaveradioBeatMap(track, map, extra = {}) {
   const gridStep = toNumber(map && map.gridStep, 0);
   const rawBeats = (map && (map.cameraBeats || map.beats || map.kicks)) || [];
   const rawGridBeats = (map && (map.pulseBeats || map.beats || map.cameraBeats || map.kicks)) || [];
@@ -153,7 +153,7 @@ function normalizeMineradioBeatMap(track, map, extra = {}) {
       duration,
     },
     analysis: {
-      source: 'mineradio',
+      source: 'faveradio',
       beats,
       downbeats,
       gridBeats,
@@ -182,5 +182,5 @@ function normalizeMineradioBeatMap(track, map, extra = {}) {
 }
 
 module.exports = {
-  normalizeMineradioBeatMap,
+  normalizeFaveradioBeatMap,
 };

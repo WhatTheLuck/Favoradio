@@ -8,9 +8,9 @@ const core = require('../public/js/modules/00-state/12-smart-favorites-state.js'
 const { SmartFavoritesStore } = require('../desktop/smart-favorites-store.js');
 
 const merged = core.dedupeSmartFavoriteTracks([
-  { provider: 'qq', id: 'qq-1', name: 'Blue Hour', artist: 'Mineradio', duration: 201, manualTags: ['学习'] },
-  { provider: 'netease', id: 'ne-1', name: 'Blue Hour', artist: 'Mineradio', duration: 202, genre: ['Jazz'] },
-  { provider: 'qq', id: 'qq-2', name: 'Blue Hour (Live)', artist: 'Mineradio', duration: 201 },
+  { provider: 'qq', id: 'qq-1', name: 'Blue Hour', artist: 'Faveradio', duration: 201, manualTags: ['学习'] },
+  { provider: 'netease', id: 'ne-1', name: 'Blue Hour', artist: 'Faveradio', duration: 202, genre: ['Jazz'] },
+  { provider: 'qq', id: 'qq-2', name: 'Blue Hour (Live)', artist: 'Faveradio', duration: 201 },
 ]);
 assert.strictEqual(merged.length, 2, 'cross-platform duplicates merge while Live remains distinct');
 assert.strictEqual(merged[0].sourceVariants.length, 2, 'merged track retains both provider variants');
@@ -44,7 +44,7 @@ const recent = core.scoreAiCandidate(baseTrack, { recentKeys: [core.smartTrackKe
 const fresh = core.scoreAiCandidate(baseTrack, { recentKeys: [] });
 assert.ok(recent.score < fresh.score, 'recently played tracks are down-ranked');
 
-const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mineradio-smart-favorites-'));
+const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-smart-favorites-'));
 const fakeSafeStorage = {
   isEncryptionAvailable: () => true,
   encryptString: value => Buffer.from('protected:' + value, 'utf8'),
@@ -79,9 +79,9 @@ assert.ok(html.includes('id="ai-play-mode-btn"') && html.includes('id="smart-ai-
 assert.ok(html.includes('id="control-song-tags"'), 'the current-track area exposes editable tags');
 assert.match(html, /control-title[\s\S]*control-song-tags/, 'the tag drop area sits below the current song title in its metadata column');
 assert.match(aiPlayback, /setCurrentSmartTagDropTarget\(true\)/, 'dragging a tag reveals the current-song tag arrangement as its target');
-assert.match(uploadDragdrop, /isSmartTagDrag[\s\S]*text\/mineradio-tag/, 'internal tag drags are excluded from the global file-drop overlay');
+assert.match(uploadDragdrop, /isSmartTagDrag[\s\S]*text\/faveradio-tag/, 'internal tag drags are excluded from the global file-drop overlay');
 assert.match(queuePanel, /queueSmartFavoriteAnalysis\(playQueue\)/, 'known queued songs automatically enter tag analysis');
-assert.ok(preload.includes("ipcRenderer.invoke('mineradio-smart-favorites-analyze'") && main.includes("ipcMain.handle('mineradio-smart-favorites-analyze'"), 'LLM calls cross the trusted Electron bridge');
-assert.ok(!preload.includes('MINERADIO_LLM_API_KEY'), 'renderer bridge never reads the environment API key');
+assert.ok(preload.includes("ipcRenderer.invoke('faveradio-smart-favorites-analyze'") && main.includes("ipcMain.handle('faveradio-smart-favorites-analyze'"), 'LLM calls cross the trusted Electron bridge');
+assert.ok(!preload.includes('FAVERADIO_LLM_API_KEY'), 'renderer bridge never reads the environment API key');
 
 console.log('smart favorites and AI playback tests passed');

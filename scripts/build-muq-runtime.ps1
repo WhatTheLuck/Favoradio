@@ -16,19 +16,19 @@ New-Item -ItemType Directory -Force -Path $runtime | Out-Null
 $download = @'
 from huggingface_hub import snapshot_download
 import os
-root = os.environ['MINERADIO_MUQ_RUNTIME']
+root = os.environ['FAVERADIO_MUQ_RUNTIME']
 cache = os.path.join(root, 'hf-cache')
 snapshot_download('OpenMuQ/MuQ-MuLan-large', local_dir=os.path.join(root, 'model'), cache_dir=cache)
 snapshot_download('OpenMuQ/MuQ-large-msd-iter', cache_dir=cache, allow_patterns=['config.json', 'model.safetensors'])
 snapshot_download('xlm-roberta-base', cache_dir=cache, allow_patterns=['config.json', 'model.safetensors', 'tokenizer.json', 'tokenizer_config.json', 'sentencepiece.bpe.model', 'special_tokens_map.json'])
 '@
-$env:MINERADIO_MUQ_RUNTIME = $runtime
+$env:FAVERADIO_MUQ_RUNTIME = $runtime
 & $pythonExe -c $download
 if ($LASTEXITCODE -ne 0) { throw 'MuQ model download failed.' }
 $convert = @'
 import os, torch
 from safetensors.torch import save_file
-root = os.environ['MINERADIO_MUQ_RUNTIME']
+root = os.environ['FAVERADIO_MUQ_RUNTIME']
 source = os.path.join(root, 'model', 'pytorch_model.bin')
 target = os.path.join(root, 'model', 'model.safetensors')
 if not os.path.isfile(target):

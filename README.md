@@ -8,7 +8,7 @@ Faveradio 是一款面向 Windows 的桌面音乐播放器。它既可以播放�
 
 它不是简单的“播放器加频谱”：歌曲、歌词、封面、节奏、收藏标签和视觉参数被组织在同一个交互系统里。你可以只把它当作本地播放器，也可以逐步开启平台歌单、AI 推荐、Wallpaper Engine 或 EmoMusic 等高级能力。
 
-> 项目对外名称现为 **Faveradio**。为兼容既有用户数据、更新链路和安装安全逻辑，当前 `2.3.6` 安装包文件名、进程名及部分内部字段仍沿用 `Mineradio`；这不会影响正常使用。
+> Faveradio 参考 [Mineradio](https://github.com/XxHuberrr/Mineradio-paused) 开发，保留原项目及第三方贡献的来源与许可说明。
 
 ## 项目简介与社会价值
 
@@ -127,27 +127,15 @@ Faveradio 不是医疗器械，不测量脑活动、心率、血氧、压力激�
 
 ## 下载与安装
 
-当前正式版本：`2.3.6`
+当前源码版本：`2.3.6`，应用、安装器与用户数据目录统一使用 Faveradio。
 
-- [打开 Faveradio 2.3.6 Release](https://github.com/WhatTheLuck/Mineradio/releases/tag/v2.3.6)
-- Windows 安装包：`Mineradio-2.3.6-Setup.exe`
-- SHA-256：`c5ce72bc784e311a865d7389e04929e30f5e7297b7d1a646f8bc5d52fcb70fe0`。
+- [查看历史发行版](https://github.com/WhatTheLuck/Faveradio/releases)。仓库更名不会重新构建已发布的二进制文件；完整更名以本次源码构建的程序为准。
+- 本地构建安装包：运行 `npm ci`，准备 MuQ 运行资源后运行 `npm run build:win`，生成 `dist/Faveradio-2.3.6-Setup.exe`。
+- 默认安装到 `C:\Faveradio`，安装器使用独立目录以确保安全卸载。
+- 构建后可运行 `Get-FileHash .\dist\Faveradio-2.3.6-Setup.exe -Algorithm SHA256` 核对实际安装包；旧发行版的哈希不适用于新构建。
 - 内含 28 首本地 MP3，首次启动加入“本地音乐”歌单，可断网播放。
 
-安装步骤：
-
-1. 在 Release 页面下载 `Mineradio-2.3.6-Setup.exe`。
-2. 可选：在 PowerShell 中核对安装包哈希：
-
-   ```powershell
-   Get-FileHash .\Mineradio-2.3.6-Setup.exe -Algorithm SHA256
-   ```
-
-3. 运行安装包；默认安装到 `C:\Mineradio`，也可选择其它受支持的本地磁盘。
-4. 安装器会使用独立的 `Mineradio` 目录，这是当前版本保留的兼容目录名。
-5. 安装完成后从桌面快捷方式或开始菜单启动。
-
-当前安装包未使用商业代码签名证书。浏览器或 Windows SmartScreen 可能提示“未知发布者”；请确认文件来自本仓库 Release，并核对上述 SHA-256。若安全软件明确报告恶意内容或文件哈希不一致，请停止运行并重新下载。
+应用数据、登录会话与缓存也改用新名称，首次启动会使用独立的配置目录，旧版配置不会自动迁移，可能需要重新登录和导入本地收藏；原有数据不会删除。
 
 ## 第一次使用
 
@@ -391,8 +379,8 @@ Smart Favorites 的普通状态和缓存保存在兼容文件 `smart-favorites.j
 ### 获取源码
 
 ```powershell
-git clone https://github.com/WhatTheLuck/Mineradio.git
-cd Mineradio
+git clone https://github.com/WhatTheLuck/Faveradio.git
+cd Faveradio
 npm install
 ```
 
@@ -472,3 +460,18 @@ Faveradio 名称、界面视觉设计和项目原创视觉表达的相关权利�
 AI 播放默认开启，使用随安装包提供的本地 MuQ-MuLan 模型。首次播放歌单时，会从每首可播放歌曲约三分之一处取最多 10 秒，转为 24 kHz 单声道音频并编码；音频和标签向量缓存在用户数据目录的 `muq-embeddings.json`。风格标签按原文编码，场景标签编码为“适合在…时听的音乐”。“必须”会将候选限制在该标签在当前歌单相似度最高的一组歌曲中，“偏好”参与排序；推荐列表始终来自当前播放队列。切歌不等待编码；编码未完成且暂无推荐候选时按歌单顺序切换。歌单逐首显示已选标签的相关度百分比，未完成编码时显示“计算中”。无法读取完整音频的歌曲会跳过编码，并在播放器中提示编码失败。
 
 Windows 打包前运行 `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-muq-runtime.ps1`，在 `build/muq-placeholder-bundle/` 生成离线推理程序、FP16 MuQ-MuLan 主权重和骨干模型初始化占位文件。主权重加载时覆盖骨干参数；首次运行会在用户数据目录展开占位文件并缓存。打包脚本会检查这些文件，缺失时停止构建。MuQ 权重为 CC BY-NC 4.0；商业分发须另行获得授权。
+
+## 开发参考与来源
+
+Faveradio 参考 [XxHuberrr/Mineradio-paused](https://github.com/XxHuberrr/Mineradio-paused)（Mineradio）开发，沿用本仓库的 GPL-3.0-only 许可。原项目的名称、MR Logo 和相关视觉设计归原作者；更名不改变原作者及贡献者的署名。
+
+<a id="upstream-cuefield"></a>
+- Cuefield AutoMix：参考 [SLYysl/cuefield-mineradio](https://github.com/SLYysl/cuefield-mineradio)，版本 `c16f05a0bc731a49da7d42c135337fcac58f6dba`，GPL-3.0。
+
+<a id="upstream-desktop"></a>
+- 桌面模式、首页和 Wallpaper Engine 导入：参考 [ww085213/Mineradio-LX-Music](https://github.com/ww085213/Mineradio-LX-Music)，版本 `a5ef80a219709080700be5b1d00f1ea71a5a2576`、`82826df814c32853d99697c0ee60f749a2fcad79` 和 `812e2dc2e18bbc263e61dbd0206cb765e003d6e9`，GPL-3.0。
+
+<a id="upstream-qishui"></a>
+- 汽水二维码登录：参考 [Wx2yZx/Mineradio-Qishui-QR-Login](https://github.com/Wx2yZx/Mineradio-Qishui-QR-Login)，版本 `aaadaab7d011714f94fbe45b382ba8dcc7cf17b9`，GPL-3.0-only。
+
+详细移植范围和权利归属见 [NOTICE](./NOTICE.md) 与 [第三方移植说明](./docs/THIRD_PARTY_PORTS.md)。原作者支持渠道见 [Mineradio 上游仓库](https://github.com/XxHuberrr/Mineradio-paused)。

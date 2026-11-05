@@ -273,7 +273,7 @@ function commentTimeLabel(ms) {
   var t = Number(ms) || 0;
   if (!t) return '';
   try {
-    return new Date(t).toLocaleDateString(window.MineradioI18n && window.MineradioI18n.getLanguage() === 'en' ? 'en-US' : 'zh-CN', { month: 'short', day: 'numeric' });
+    return new Date(t).toLocaleDateString(window.FaveradioI18n && window.FaveradioI18n.getLanguage() === 'en' ? 'en-US' : 'zh-CN', { month: 'short', day: 'numeric' });
   } catch (e) {
     return '';
   }
@@ -290,7 +290,7 @@ function renderDetailComments(comments) {
       '</div>';
   }).join('') + '</div>';
 }
-window.addEventListener('mineradio-language-change', function () {
+window.addEventListener('faveradio-language-change', function () {
   document.querySelectorAll('#song-comments [data-comment-time]').forEach(function (node) {
     node.textContent = commentTimeLabel(Number(node.getAttribute('data-comment-time')));
   });
@@ -1239,7 +1239,7 @@ function songAccountStateKey(song) {
 }
 function playlistAccountProvider(playlist) {
   var provider = String(playlist && (playlist.provider || playlist.source) || '').toLowerCase();
-  return /^(mineradio|netease|qq|kugou|qishui|spotify)$/.test(provider) ? provider : 'netease';
+  return /^(faveradio|netease|qq|kugou|qishui|spotify)$/.test(provider) ? provider : 'netease';
 }
 function songAccountLoginStatus(provider) {
   if (provider === 'spotify') return spotifyLoginStatus || {};
@@ -1482,7 +1482,7 @@ function renderCollectModal() {
       '<div style="min-width:0"><div class="collect-title">' + escHtml(pl.name || '') + '</div><div class="collect-sub">' + (pl.trackCount || 0) + ' 首 · 可混合全部平台</div></div>' +
       '</div>';
   }).join('');
-  var html = '<div class="collect-section-title"><span>Mineradio 内置歌单</span><small>保存在本机，不受平台账号限制</small></div>' +
+  var html = '<div class="collect-section-title"><span>Faveradio 内置歌单</span><small>保存在本机，不受平台账号限制</small></div>' +
     (localRows || '<div class="collect-empty compact">还没有内置歌单，在上方输入名称即可创建</div>');
   var canWritePlatform = !!(adapter && adapter.collect && adapter.playlistAddUrl && isSongAccountLoggedIn(provider));
   if (canWritePlatform) {

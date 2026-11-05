@@ -9,7 +9,7 @@ const path = require('node:path');
 const { WallpaperEngineRuntime, nativeDwmThumbnailSurfaceScript } = require('../desktop/wallpaper-engine-runtime');
 
 test('idle Wallpaper Engine runtime disposes as a verified clean state', async () => {
-  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mineradio-we-idle-dispose-'));
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-we-idle-dispose-'));
   try {
     const runtime = new WallpaperEngineRuntime({
       nativeTempPath: tempRoot,
@@ -63,5 +63,5 @@ test('single DWM surface accepts bounded visual settings without another native 
   const helper = nativeDwmThumbnailSurfaceScript();
   assert.match(helper, /command\.StartsWith\("V\|"/);
   assert.match(helper, /properties\.opacity = \(byte\)visualOpacity/);
-  assert.doesNotMatch(helper, /Mineradio WE Glass Refraction/);
+  assert.doesNotMatch(helper, /Faveradio WE Glass Refraction/);
 });

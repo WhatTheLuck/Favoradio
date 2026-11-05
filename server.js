@@ -116,12 +116,12 @@ const {
   appendCuefieldFeedback,
   readCuefieldFeedbackStats,
 } = require('./cuefield/feedback-log');
-const { planCuefieldTransitionFromCache } = require('./cuefield/mineradio-bridge');
+const { planCuefieldTransitionFromCache } = require('./cuefield/faveradio-bridge');
 
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
-const LOGIN_EASTER_EGG_GATE_FILE = String(process.env.MINERADIO_LOGIN_EASTER_EGG_GATE_FILE || '');
-const LOGIN_EASTER_EGG_GATE_VERSION = String(process.env.MINERADIO_LOGIN_EASTER_EGG_GATE_VERSION || 'world-peace-v1');
+const LOGIN_EASTER_EGG_GATE_FILE = String(process.env.FAVERADIO_LOGIN_EASTER_EGG_GATE_FILE || '');
+const LOGIN_EASTER_EGG_GATE_VERSION = String(process.env.FAVERADIO_LOGIN_EASTER_EGG_GATE_VERSION || 'world-peace-v1');
 const LOGIN_EASTER_EGG_PROTECTED_ROUTES = new Set([
   '/api/login/cookie',
   '/api/login/qr/key',
@@ -137,12 +137,12 @@ const DEFAULT_COOKIE_FILE = path.join(__dirname, '.cookie');
 const DEFAULT_QQ_COOKIE_FILE = path.join(__dirname, '.qq-cookie');
 const DEFAULT_KUGOU_COOKIE_FILE = path.join(__dirname, '.kugou-cookie');
 const DEFAULT_QISHUI_COOKIE_FILE = path.join(__dirname, '.qishui-cookie');
-const BEATMAP_CACHE_DIR = process.env.MINERADIO_BEAT_CACHE_DIR || 'D:\\MineradioCache\\beatmaps';
+const BEATMAP_CACHE_DIR = process.env.FAVERADIO_BEAT_CACHE_DIR || 'D:\\FaveradioCache\\beatmaps';
 const CUEFIELD_FEEDBACK_FILE = process.env.CUEFIELD_FEEDBACK_FILE || path.join(__dirname, 'data', 'cuefield-feedback.jsonl');
-const LISTEN_SYNC_JOURNAL_FILE = process.env.MINERADIO_LISTEN_SYNC_FILE || path.join(__dirname, 'data', 'listen-sync-journal.json');
+const LISTEN_SYNC_JOURNAL_FILE = process.env.FAVERADIO_LISTEN_SYNC_FILE || path.join(__dirname, 'data', 'listen-sync-journal.json');
 const LISTEN_SYNC_JOURNAL_LIMIT = 600;
 const APP_PACKAGE = readPackageInfo();
-const APP_VERSION = process.env.MINERADIO_VERSION || APP_PACKAGE.version || '2.3.1';
+const APP_VERSION = process.env.FAVERADIO_VERSION || APP_PACKAGE.version || '2.3.1';
 const UPDATE_CONFIG = readUpdateConfig(APP_PACKAGE);
 const qishuiAudioDecryptor = new TrackDecryptor();
 const qishuiAudioDecryptCache = new Map();
@@ -437,7 +437,7 @@ function parseGitHubRepository(input) {
   return null;
 }
 function readUpdateConfig(pkg) {
-  const local = (pkg && pkg.mineradio && pkg.mineradio.update) || {};
+  const local = (pkg && pkg.faveradio && pkg.faveradio.update) || {};
   const disabled = local.disabled === true || local.provider === 'none';
   if (disabled) {
     return {
@@ -452,15 +452,15 @@ function readUpdateConfig(pkg) {
       manifest: '',
     };
   }
-  const repoHint = process.env.MINERADIO_UPDATE_REPOSITORY
+  const repoHint = process.env.FAVERADIO_UPDATE_REPOSITORY
     || process.env.GITHUB_REPOSITORY
     || local.repository
     || local.github
     || (pkg && pkg.repository && (pkg.repository.url || pkg.repository))
     || '';
   const parsed = parseGitHubRepository(repoHint) || {};
-  const owner = process.env.MINERADIO_UPDATE_OWNER || local.owner || parsed.owner || '';
-  const repo = process.env.MINERADIO_UPDATE_REPO || local.repo || parsed.repo || '';
+  const owner = process.env.FAVERADIO_UPDATE_OWNER || local.owner || parsed.owner || '';
+  const repo = process.env.FAVERADIO_UPDATE_REPO || local.repo || parsed.repo || '';
   return {
     provider: local.provider || 'github',
     owner,
@@ -470,9 +470,9 @@ function readUpdateConfig(pkg) {
     preview: local.preview !== false,
     preferMirrors: local.preferMirrors !== false,
     mirrors: readUpdateMirrors(local),
-    manifest: process.env.MINERADIO_UPDATE_MANIFEST
-      || process.env.MINERADIO_UPDATE_MANIFEST_URL
-      || process.env.MINERADIO_UPDATE_MANIFEST_FILE
+    manifest: process.env.FAVERADIO_UPDATE_MANIFEST
+      || process.env.FAVERADIO_UPDATE_MANIFEST_URL
+      || process.env.FAVERADIO_UPDATE_MANIFEST_FILE
       || '',
   };
 }
@@ -481,7 +481,7 @@ function parseUpdateMirrorList(value) {
   return String(value || '').split(/[\n,;]/);
 }
 function readUpdateMirrors(local) {
-  const envMirrors = process.env.MINERADIO_UPDATE_MIRRORS || process.env.MINERADIO_UPDATE_MIRROR || '';
+  const envMirrors = process.env.FAVERADIO_UPDATE_MIRRORS || process.env.FAVERADIO_UPDATE_MIRROR || '';
   const raw = envMirrors
     ? parseUpdateMirrorList(envMirrors)
     : parseUpdateMirrorList(local.mirrors || local.downloadMirrors || []);
@@ -606,7 +606,7 @@ function normalizeUpdateDownloadPages(values, fallbackLabel) {
 function extractReleaseDownloadPages(body) {
   const raw = String(body || '');
   const pages = [];
-  const hiddenPattern = /<!--\s*mineradio-download-page\s*:\s*(?:([^|<>\r\n]{1,32})\s*\|\s*)?(https:\/\/[^\s<>]+)\s*-->/gi;
+  const hiddenPattern = /<!--\s*faveradio-download-page\s*:\s*(?:([^|<>\r\n]{1,32})\s*\|\s*)?(https:\/\/[^\s<>]+)\s*-->/gi;
   let hidden = null;
   while ((hidden = hiddenPattern.exec(raw))) {
     pages.push({
@@ -668,7 +668,7 @@ function normalizeManifestUpdateInfo(data) {
     latestVersion,
     release: {
       tagName: release.tagName || release.tag_name || data.tagName || ('v' + latestVersion),
-      name: release.name || data.name || ('Mineradio v' + latestVersion),
+      name: release.name || data.name || ('Faveradio v' + latestVersion),
       version: latestVersion,
       publishedAt: release.publishedAt || release.published_at || data.publishedAt || '',
       htmlUrl,
@@ -690,7 +690,7 @@ async function readUpdateManifest(ref) {
   if (!value) throw new Error('UPDATE_MANIFEST_MISSING');
   if (/^https?:\/\//i.test(value)) {
     const resp = await fetch(value, {
-      headers: { 'User-Agent': `Mineradio/${APP_VERSION}` },
+      headers: { 'User-Agent': `Faveradio/${APP_VERSION}` },
     });
     if (!resp.ok) throw new Error('Update manifest ' + resp.status);
     return resp.json();
@@ -782,7 +782,7 @@ function localUpdateFallback(reason, opts) {
     latestVersion: APP_VERSION,
     release: {
       tagName: 'v' + APP_VERSION,
-      name: 'Mineradio v' + APP_VERSION,
+      name: 'Faveradio v' + APP_VERSION,
       version: APP_VERSION,
       htmlUrl: '',
       externalUrl: '',
@@ -881,7 +881,7 @@ async function fetchTextFromCandidates(candidates, timeoutMs) {
     const candidate = list[i];
     try {
       const resp = await fetchWithTimeout(candidate.url, {
-        headers: { 'User-Agent': `Mineradio/${APP_VERSION}` },
+        headers: { 'User-Agent': `Faveradio/${APP_VERSION}` },
       }, timeoutMs || 6500);
       if (!resp.ok) throw updateError('HTTP_' + resp.status, 'HTTP ' + resp.status);
       return { text: await resp.text(), candidate };
@@ -910,7 +910,7 @@ function parseLatestYmlUpdateInfo(text, reason) {
     latestVersion,
     release: {
       tagName: 'v' + latestVersion,
-      name: 'Mineradio v' + latestVersion,
+      name: 'Faveradio v' + latestVersion,
       version: latestVersion,
       publishedAt: releaseDate,
       htmlUrl,
@@ -922,7 +922,7 @@ function parseLatestYmlUpdateInfo(text, reason) {
       patch: null,
       patchAvailable: false,
       summary: '发现新版本，请前往发布页面获取安装包。',
-      notes: ['更新入口已改为浏览器外部下载', 'Mineradio 不再在本地下载或应用补丁'],
+      notes: ['更新入口已改为浏览器外部下载', 'Faveradio 不再在本地下载或应用补丁'],
     },
     source: 'latest-yml',
     reason: reason || '',
@@ -945,7 +945,7 @@ async function fetchLatestUpdateInfo() {
     const resp = await fetch(apiUrl, {
       signal: controller.signal,
       headers: {
-        'User-Agent': `Mineradio/${APP_VERSION}`,
+        'User-Agent': `Faveradio/${APP_VERSION}`,
         'Accept': 'application/vnd.github+json',
       },
     });
@@ -968,7 +968,7 @@ async function fetchLatestUpdateInfo() {
       latestVersion,
       release: {
         tagName: data.tag_name || ('v' + latestVersion),
-        name: data.name || ('Mineradio v' + latestVersion),
+        name: data.name || ('Faveradio v' + latestVersion),
         version: latestVersion,
         publishedAt: data.published_at || '',
         htmlUrl,
@@ -4646,7 +4646,7 @@ const server = http.createServer(async (req, res) => {
   const pn = url.pathname;
 
   if (pn === '/api/spotify' || pn.indexOf('/api/spotify/') === 0) {
-    sendJSON(res, { ok: false, error: 'PROVIDER_REMOVED', message: '该平台接口已从 Mineradio 移除。' }, 404);
+    sendJSON(res, { ok: false, error: 'PROVIDER_REMOVED', message: '该平台接口已从 Faveradio 移除。' }, 404);
     return;
   }
 
@@ -4662,8 +4662,8 @@ const server = http.createServer(async (req, res) => {
 
   if (pn === '/api/app/version') {
     sendJSON(res, {
-      name: APP_PACKAGE.name || 'mineradio',
-      productName: APP_PACKAGE.productName || 'Mineradio',
+      name: APP_PACKAGE.name || 'faveradio',
+      productName: APP_PACKAGE.productName || 'Faveradio',
       version: APP_VERSION,
       update: {
         provider: UPDATE_CONFIG.provider,
@@ -4769,7 +4769,7 @@ const server = http.createServer(async (req, res) => {
       ok: false,
       externalOnly: true,
       error: 'UPDATE_EXTERNAL_ONLY',
-      message: 'Mineradio 已停用客户端本地下载与快速补丁，请使用外部下载页面。',
+      message: 'Faveradio 已停用客户端本地下载与快速补丁，请使用外部下载页面。',
     }, 410);
     return;
   }
@@ -4786,7 +4786,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // Cuefield only consumes Mineradio's existing local beat-map cache. It never
+  // Cuefield only consumes Faveradio's existing local beat-map cache. It never
   // receives account cookies, song files, or playback URLs on this route.
   if (pn === '/api/cuefield/transition') {
     if (req.method !== 'POST') {
@@ -4821,7 +4821,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // Feedback remains on this computer under Electron userData. The fan project's
-  // optional remote-feedback module is intentionally not wired into Mineradio.
+  // optional remote-feedback module is intentionally not wired into Faveradio.
   if (pn === '/api/cuefield/feedback') {
     if (req.method === 'GET') {
       try {
@@ -5039,7 +5039,7 @@ const server = http.createServer(async (req, res) => {
           : (err.code === 'SPOTIFY_CLIENT_ID_INVALID'
             ? 'Client ID 格式不正确，请只复制 Spotify Dashboard 中的 Client ID。'
             : (err.code === 'SPOTIFY_REDIRECT_URI_INVALID'
-              ? '回调地址无效，请使用 Mineradio 显示的 127.0.0.1 回调地址。'
+              ? '回调地址无效，请使用 Faveradio 显示的 127.0.0.1 回调地址。'
               : err.message)),
         missing,
       }, err && /^SPOTIFY_(?:CLIENT_ID|REDIRECT_URI)_/.test(String(err.code || '')) ? 400 : 500);
@@ -6354,6 +6354,26 @@ const server = http.createServer(async (req, res) => {
       console.error('[PlaylistCreate]', err);
       sendJSON(res, { error: err.message }, 500);
     }
+    return;
+  }
+
+  if (pn === '/api/playlist/remove-songs') {
+    if (req.method !== 'POST') { sendJSON(res, { error: 'METHOD_NOT_ALLOWED' }, 405); return; }
+    try {
+      if (!await requireLogin(res)) return;
+      const body = await readRequestBody(req);
+      const pid = String(body.pid || '');
+      const ids = Array.isArray(body.ids) ? [...new Set(body.ids.map(String))] : [];
+      if (!/^\d+$/.test(pid) || !ids.length || ids.length > 10000 || ids.some(id => !/^\d+$/.test(id))) {
+        sendJSON(res, { error: 'INVALID_PLAYLIST_OR_TRACK_IDS' }, 400); return;
+      }
+      const result = await playlist_tracks({ op: 'del', pid, tracks: ids.join(','), cookie: userCookie, timestamp: Date.now() });
+      if (normalizeApiCode(result) !== 200) {
+        sendJSON(res, { success: false, error: normalizeApiMessage(result) || 'PLAYLIST_REMOVE_FAILED' }, 409); return;
+      }
+      invalidateNeteasePlaylistTrackIndex(pid);
+      sendJSON(res, { success: true });
+    } catch (error) { sendJSON(res, { success: false, error: error.message }, 500); }
     return;
   }
 

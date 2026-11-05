@@ -8,8 +8,8 @@ const path = require('path');
 const { spawn, spawnSync } = require('child_process');
 const { PNG } = require('pngjs');
 
-const QA_PARENT = 'D:\\MineradioCache\\we-lifecycle-qa';
-const DEFAULT_EXE = path.resolve(__dirname, '..', '..', '..', 'Mineradio.exe');
+const QA_PARENT = 'D:\\FaveradioCache\\we-lifecycle-qa';
+const DEFAULT_EXE = path.resolve(__dirname, '..', '..', '..', 'Faveradio.exe');
 const workshopArgument = process.argv.find((value) => /^--workshop=\d+$/.test(value));
 const executableArgument = process.argv.find((value) => /^--exe=.+/.test(value));
 const requestedWorkshopId = workshopArgument ? workshopArgument.slice('--workshop='.length) : '';
@@ -22,7 +22,7 @@ const executablePath = executableArgument
   : DEFAULT_EXE;
 const keepData = process.argv.includes('--keep-data');
 const runId = `${new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14)}-${process.pid}-${Math.random().toString(16).slice(2, 10)}`;
-const runtimeName = `Mineradio-WE-Lifecycle-QA-${runId}`;
+const runtimeName = `Faveradio-WE-Lifecycle-QA-${runId}`;
 const qaRoot = path.join(QA_PARENT, runId);
 const appDataRoot = path.join(qaRoot, 'appdata');
 const localAppDataRoot = path.join(qaRoot, 'localappdata');
@@ -32,7 +32,7 @@ const linkedUserDataTarget = path.join(appDataRoot, runtimeName);
 const systemAppDataRoot = path.resolve(process.env.APPDATA || path.join(process.env.USERPROFILE || 'C:\\Users\\Default', 'AppData', 'Roaming'));
 const systemUserDataPath = path.join(systemAppDataRoot, runtimeName);
 const resultPath = path.join(qaRoot, 'result.json');
-const logPath = path.join(qaRoot, 'mineradio.log');
+const logPath = path.join(qaRoot, 'faveradio.log');
 
 function sleep(milliseconds) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
@@ -48,7 +48,7 @@ function ensureQaDirectories() {
     rootPath: cacheRoot,
   }, null, 2), 'utf8');
   assert(path.dirname(systemUserDataPath) === systemAppDataRoot, 'System QA userData path escaped the appData root');
-  assert(/^Mineradio-WE-Lifecycle-QA-[A-Za-z0-9-]+$/.test(path.basename(systemUserDataPath)), 'System QA userData name is not unique and safe');
+  assert(/^Faveradio-WE-Lifecycle-QA-[A-Za-z0-9-]+$/.test(path.basename(systemUserDataPath)), 'System QA userData name is not unique and safe');
   if (path.resolve(systemUserDataPath) !== path.resolve(linkedUserDataTarget)) {
     assert(!fs.existsSync(systemUserDataPath), `Unique QA system userData path unexpectedly exists: ${systemUserDataPath}`);
     fs.symlinkSync(linkedUserDataTarget, systemUserDataPath, 'junction');
@@ -58,7 +58,7 @@ function ensureQaDirectories() {
 function removeSystemUserDataJunction() {
   if (path.resolve(systemUserDataPath) === path.resolve(linkedUserDataTarget)) return;
   assert(path.dirname(systemUserDataPath) === systemAppDataRoot, 'Refusing to remove a userData path outside the system appData root');
-  assert(/^Mineradio-WE-Lifecycle-QA-[A-Za-z0-9-]+$/.test(path.basename(systemUserDataPath)), 'Refusing to remove a non-QA system userData path');
+  assert(/^Faveradio-WE-Lifecycle-QA-[A-Za-z0-9-]+$/.test(path.basename(systemUserDataPath)), 'Refusing to remove a non-QA system userData path');
   let stat;
   try { stat = fs.lstatSync(systemUserDataPath); } catch (error) {
     if (error && error.code === 'ENOENT') return;
@@ -116,7 +116,7 @@ Add-Type -TypeDefinition @'
 using System;
 using System.Text;
 using System.Runtime.InteropServices;
-public static class MineradioWeLifecycleWindows {
+public static class FaveradioWeLifecycleWindows {
   [StructLayout(LayoutKind.Sequential)] public struct RECT { public int Left; public int Top; public int Right; public int Bottom; }
   public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
   [DllImport("user32.dll")] public static extern bool EnumWindows(EnumWindowsProc callback, IntPtr lParam);
@@ -141,30 +141,30 @@ public static class MineradioWeLifecycleWindows {
 
 function exactWindowsByTitle(title) {
   const output = powershellEncoded(`${WINDOW_NATIVE_SOURCE}
-$expected=[Environment]::GetEnvironmentVariable('MINERADIO_QA_WINDOW_TITLE')
+$expected=[Environment]::GetEnvironmentVariable('FAVERADIO_QA_WINDOW_TITLE')
 $items=[Collections.Generic.List[object]]::new()
-$callback=[MineradioWeLifecycleWindows+EnumWindowsProc]{
+$callback=[FaveradioWeLifecycleWindows+EnumWindowsProc]{
   param([IntPtr]$handle,[IntPtr]$state)
-  $length=[MineradioWeLifecycleWindows]::GetWindowTextLength($handle)
+  $length=[FaveradioWeLifecycleWindows]::GetWindowTextLength($handle)
   if ($length -gt 0) {
     $text=[Text.StringBuilder]::new($length+1)
-    [void][MineradioWeLifecycleWindows]::GetWindowText($handle,$text,$text.Capacity)
+    [void][FaveradioWeLifecycleWindows]::GetWindowText($handle,$text,$text.Capacity)
     if ($text.ToString() -ceq $expected) {
       [uint32]$ownerPid=0
-      [void][MineradioWeLifecycleWindows]::GetWindowThreadProcessId($handle,[ref]$ownerPid)
+      [void][FaveradioWeLifecycleWindows]::GetWindowThreadProcessId($handle,[ref]$ownerPid)
       $items.Add([pscustomobject]@{
         handle=$handle.ToInt64().ToString()
         pid=[int]$ownerPid
-        visible=[MineradioWeLifecycleWindows]::IsWindowVisible($handle)
+        visible=[FaveradioWeLifecycleWindows]::IsWindowVisible($handle)
         title=$text.ToString()
       })
     }
   }
   return $true
 }
-[void][MineradioWeLifecycleWindows]::EnumWindows($callback,[IntPtr]::Zero)
+[void][FaveradioWeLifecycleWindows]::EnumWindows($callback,[IntPtr]::Zero)
 ConvertTo-Json -Compress -InputObject @($items)
-`, { MINERADIO_QA_WINDOW_TITLE: String(title || '') });
+`, { FAVERADIO_QA_WINDOW_TITLE: String(title || '') });
   if (!output) return [];
   const value = JSON.parse(output.split(/\r?\n/).filter(Boolean).slice(-1)[0]);
   return Array.isArray(value) ? value : [value].filter(Boolean);
@@ -172,28 +172,28 @@ ConvertTo-Json -Compress -InputObject @($items)
 
 function topLevelWindowsByPid(processId) {
   const output = powershellEncoded(`${WINDOW_NATIVE_SOURCE}
-$expected=[uint32][Environment]::GetEnvironmentVariable('MINERADIO_QA_PROCESS_ID')
+$expected=[uint32][Environment]::GetEnvironmentVariable('FAVERADIO_QA_PROCESS_ID')
 $items=[Collections.Generic.List[object]]::new()
-$callback=[MineradioWeLifecycleWindows+EnumWindowsProc]{
+$callback=[FaveradioWeLifecycleWindows+EnumWindowsProc]{
   param([IntPtr]$handle,[IntPtr]$state)
   [uint32]$ownerPid=0
-  [void][MineradioWeLifecycleWindows]::GetWindowThreadProcessId($handle,[ref]$ownerPid)
+  [void][FaveradioWeLifecycleWindows]::GetWindowThreadProcessId($handle,[ref]$ownerPid)
   if ($ownerPid -eq $expected) {
-    $length=[MineradioWeLifecycleWindows]::GetWindowTextLength($handle)
+    $length=[FaveradioWeLifecycleWindows]::GetWindowTextLength($handle)
     $text=[Text.StringBuilder]::new([Math]::Max(1,$length+1))
-    if ($length -gt 0) { [void][MineradioWeLifecycleWindows]::GetWindowText($handle,$text,$text.Capacity) }
+    if ($length -gt 0) { [void][FaveradioWeLifecycleWindows]::GetWindowText($handle,$text,$text.Capacity) }
     $items.Add([pscustomobject]@{
       handle=$handle.ToInt64().ToString()
       pid=[int]$ownerPid
-      visible=[MineradioWeLifecycleWindows]::IsWindowVisible($handle)
+      visible=[FaveradioWeLifecycleWindows]::IsWindowVisible($handle)
       title=$text.ToString()
     })
   }
   return $true
 }
-[void][MineradioWeLifecycleWindows]::EnumWindows($callback,[IntPtr]::Zero)
+[void][FaveradioWeLifecycleWindows]::EnumWindows($callback,[IntPtr]::Zero)
 ConvertTo-Json -Compress -InputObject @($items)
-`, { MINERADIO_QA_PROCESS_ID: String(processId || 0) });
+`, { FAVERADIO_QA_PROCESS_ID: String(processId || 0) });
   if (!output) return [];
   const value = JSON.parse(output.split(/\r?\n/).filter(Boolean).slice(-1)[0]);
   return Array.isArray(value) ? value : [value].filter(Boolean);
@@ -201,55 +201,55 @@ ConvertTo-Json -Compress -InputObject @($items)
 
 function windowHandleExists(handle) {
   const output = powershellEncoded(`${WINDOW_NATIVE_SOURCE}
-$handle=[IntPtr]::new([long][Environment]::GetEnvironmentVariable('MINERADIO_QA_HOST_HANDLE'))
-if ([MineradioWeLifecycleWindows]::IsWindow($handle)) { '1' } else { '0' }
-`, { MINERADIO_QA_HOST_HANDLE: String(handle || '') });
+$handle=[IntPtr]::new([long][Environment]::GetEnvironmentVariable('FAVERADIO_QA_HOST_HANDLE'))
+if ([FaveradioWeLifecycleWindows]::IsWindow($handle)) { '1' } else { '0' }
+`, { FAVERADIO_QA_HOST_HANDLE: String(handle || '') });
   return output.split(/\r?\n/).filter(Boolean).slice(-1)[0] === '1';
 }
 
 function restoreExactHostWindow(handle) {
   powershellEncoded(`${WINDOW_NATIVE_SOURCE}
-$handle=[IntPtr]::new([long][Environment]::GetEnvironmentVariable('MINERADIO_QA_HOST_HANDLE'))
-if (-not [MineradioWeLifecycleWindows]::IsWindow($handle)) { throw 'QA host window no longer exists' }
-$foreground=[MineradioWeLifecycleWindows]::GetForegroundWindow()
+$handle=[IntPtr]::new([long][Environment]::GetEnvironmentVariable('FAVERADIO_QA_HOST_HANDLE'))
+if (-not [FaveradioWeLifecycleWindows]::IsWindow($handle)) { throw 'QA host window no longer exists' }
+$foreground=[FaveradioWeLifecycleWindows]::GetForegroundWindow()
 [uint32]$foregroundPid=0
-$foregroundThread=if ($foreground -ne [IntPtr]::Zero) { [MineradioWeLifecycleWindows]::GetWindowThreadProcessId($foreground,[ref]$foregroundPid) } else { 0 }
-$currentThread=[MineradioWeLifecycleWindows]::GetCurrentThreadId()
+$foregroundThread=if ($foreground -ne [IntPtr]::Zero) { [FaveradioWeLifecycleWindows]::GetWindowThreadProcessId($foreground,[ref]$foregroundPid) } else { 0 }
+$currentThread=[FaveradioWeLifecycleWindows]::GetCurrentThreadId()
 $attached=$false
 if ($foregroundThread -gt 0 -and $foregroundThread -ne $currentThread) {
-  $attached=[MineradioWeLifecycleWindows]::AttachThreadInput($currentThread,$foregroundThread,$true)
+  $attached=[FaveradioWeLifecycleWindows]::AttachThreadInput($currentThread,$foregroundThread,$true)
 }
 try {
-  [void][MineradioWeLifecycleWindows]::ShowWindowAsync($handle,9)
-  [void][MineradioWeLifecycleWindows]::SetWindowPos($handle,[IntPtr]::new(-1),0,0,0,0,0x43)
-  [void][MineradioWeLifecycleWindows]::BringWindowToTop($handle)
-  [void][MineradioWeLifecycleWindows]::SetForegroundWindow($handle)
-  [void][MineradioWeLifecycleWindows]::SetWindowPos($handle,[IntPtr]::new(-2),0,0,0,0,0x43)
+  [void][FaveradioWeLifecycleWindows]::ShowWindowAsync($handle,9)
+  [void][FaveradioWeLifecycleWindows]::SetWindowPos($handle,[IntPtr]::new(-1),0,0,0,0,0x43)
+  [void][FaveradioWeLifecycleWindows]::BringWindowToTop($handle)
+  [void][FaveradioWeLifecycleWindows]::SetForegroundWindow($handle)
+  [void][FaveradioWeLifecycleWindows]::SetWindowPos($handle,[IntPtr]::new(-2),0,0,0,0,0x43)
   Start-Sleep -Milliseconds 120
 } finally {
-  if ($attached) { [void][MineradioWeLifecycleWindows]::AttachThreadInput($currentThread,$foregroundThread,$false) }
+  if ($attached) { [void][FaveradioWeLifecycleWindows]::AttachThreadInput($currentThread,$foregroundThread,$false) }
 }
-`, { MINERADIO_QA_HOST_HANDLE: String(handle || '') });
+`, { FAVERADIO_QA_HOST_HANDLE: String(handle || '') });
 }
 
 function closeExactQaWindow(title) {
   if (!title) return;
   powershellEncoded(`${WINDOW_NATIVE_SOURCE}
-$expected=[Environment]::GetEnvironmentVariable('MINERADIO_QA_WINDOW_TITLE')
-$callback=[MineradioWeLifecycleWindows+EnumWindowsProc]{
+$expected=[Environment]::GetEnvironmentVariable('FAVERADIO_QA_WINDOW_TITLE')
+$callback=[FaveradioWeLifecycleWindows+EnumWindowsProc]{
   param([IntPtr]$handle,[IntPtr]$state)
-  $length=[MineradioWeLifecycleWindows]::GetWindowTextLength($handle)
+  $length=[FaveradioWeLifecycleWindows]::GetWindowTextLength($handle)
   if ($length -gt 0) {
     $text=[Text.StringBuilder]::new($length+1)
-    [void][MineradioWeLifecycleWindows]::GetWindowText($handle,$text,$text.Capacity)
+    [void][FaveradioWeLifecycleWindows]::GetWindowText($handle,$text,$text.Capacity)
     if ($text.ToString() -ceq $expected) {
-      [void][MineradioWeLifecycleWindows]::PostMessage($handle,0x0010,[IntPtr]::Zero,[IntPtr]::Zero)
+      [void][FaveradioWeLifecycleWindows]::PostMessage($handle,0x0010,[IntPtr]::Zero,[IntPtr]::Zero)
     }
   }
   return $true
 }
-[void][MineradioWeLifecycleWindows]::EnumWindows($callback,[IntPtr]::Zero)
-`, { MINERADIO_QA_WINDOW_TITLE: String(title) });
+[void][FaveradioWeLifecycleWindows]::EnumWindows($callback,[IntPtr]::Zero)
+`, { FAVERADIO_QA_WINDOW_TITLE: String(title) });
 }
 
 function listWallpaperEngineProcesses() {
@@ -283,7 +283,7 @@ async function waitForCdpTarget(port, child, timeoutMs = 60000) {
   const deadline = Date.now() + timeoutMs;
   let lastError = null;
   while (Date.now() < deadline) {
-    if (child.exitCode != null) throw new Error(`Mineradio exited before CDP became ready (${child.exitCode})`);
+    if (child.exitCode != null) throw new Error(`Faveradio exited before CDP became ready (${child.exitCode})`);
     try {
       const response = await fetch(`http://127.0.0.1:${port}/json/list`);
       const targets = await response.json();
@@ -294,7 +294,7 @@ async function waitForCdpTarget(port, child, timeoutMs = 60000) {
     }
     await sleep(250);
   }
-  throw new Error(`Timed out waiting for Mineradio CDP: ${lastError && lastError.message || 'no page target'}`);
+  throw new Error(`Timed out waiting for Faveradio CDP: ${lastError && lastError.message || 'no page target'}`);
 }
 
 class CdpClient {
@@ -416,11 +416,11 @@ const STATE_EXPRESSION = `(async () => {
     videoHeight: Number(video && video.videoHeight) || 0,
     videoTrackState: String(videoTrack && videoTrack.readyState || ''),
     videoTrackSettings,
-    capturePath: stream && typeof stream.__mineradioCapturePath === 'string'
-      ? stream.__mineradioCapturePath
+    capturePath: stream && typeof stream.__faveradioCapturePath === 'string'
+      ? stream.__faveradioCapturePath
       : '',
-    cursorSuppressed: stream && typeof stream.__mineradioCursorSuppressed === 'boolean'
-      ? stream.__mineradioCursorSuppressed
+    cursorSuppressed: stream && typeof stream.__faveradioCursorSuppressed === 'boolean'
+      ? stream.__faveradioCursorSuppressed
       : null,
     audioTrackCount: stream && stream.getAudioTracks ? stream.getAudioTracks().length : -1,
     innerWidth: Number(window.innerWidth) || 0,
@@ -730,7 +730,7 @@ async function waitForHostWindow(processId, timeoutMs = 20000) {
     if (visible) return visible;
     await sleep(250);
   }
-  throw new Error(`QA Mineradio host window was not found for PID ${processId}: ${JSON.stringify(windows)}`);
+  throw new Error(`QA Faveradio host window was not found for PID ${processId}: ${JSON.stringify(windows)}`);
 }
 
 async function waitForProcessExit(child, timeoutMs = 20000) {
@@ -743,7 +743,7 @@ async function waitForProcessExit(child, timeoutMs = 20000) {
 
 async function main() {
   assert(process.platform === 'win32', 'Wallpaper Engine lifecycle QA is Windows-only');
-  assert(fs.existsSync(executablePath), `Mineradio executable not found: ${executablePath}`);
+  assert(fs.existsSync(executablePath), `Faveradio executable not found: ${executablePath}`);
   assert(path.parse(qaRoot).root.toUpperCase() === 'D:\\', 'Lifecycle QA data must stay on D:');
   ensureQaDirectories();
 
@@ -776,11 +776,11 @@ async function main() {
       LOCALAPPDATA: localAppDataRoot,
       TEMP: tempRoot,
       TMP: tempRoot,
-      MINERADIO_RUNTIME_NAME: runtimeName,
-      MINERADIO_APP_USER_MODEL_ID: `com.mineradio.we-lifecycle-qa.${runId}`,
-      MINERADIO_NO_DESKTOP_SHORTCUT: '1',
-      MINERADIO_CREATE_DESKTOP_SHORTCUT: '0',
-      ...(productionThrottling ? {} : { MINERADIO_KEEP_BACKGROUND_RENDERING: '1' }),
+      FAVERADIO_RUNTIME_NAME: runtimeName,
+      FAVERADIO_APP_USER_MODEL_ID: `com.faveradio.we-lifecycle-qa.${runId}`,
+      FAVERADIO_NO_DESKTOP_SHORTCUT: '1',
+      FAVERADIO_CREATE_DESKTOP_SHORTCUT: '0',
+      ...(productionThrottling ? {} : { FAVERADIO_KEEP_BACKGROUND_RENDERING: '1' }),
     };
     child = spawn(executablePath, [`--remote-debugging-port=${port}`], {
       cwd: path.dirname(executablePath),
@@ -817,7 +817,7 @@ async function main() {
     const actualSessionDataPath = String(cacheSnapshot && cacheSnapshot.settings && cacheSnapshot.settings.activeChromiumPath || '');
     const actualNativePath = String(cacheSnapshot && cacheSnapshot.settings && cacheSnapshot.settings.activeNativePath || '');
     const actualWallpaperCachePath = String(cacheSnapshot && cacheSnapshot.settings && cacheSnapshot.settings.activeWallpaperEnginePath || '');
-    assert(actualUserDataPath && fs.existsSync(actualUserDataPath), 'QA userData path was not reported by Mineradio');
+    assert(actualUserDataPath && fs.existsSync(actualUserDataPath), 'QA userData path was not reported by Faveradio');
     assert.strictEqual(path.resolve(fs.realpathSync(actualUserDataPath)), path.resolve(fs.realpathSync(linkedUserDataTarget)), 'QA userData is not physically redirected to D:');
     assert(path.resolve(actualSessionDataPath).startsWith(path.resolve(cacheRoot) + path.sep), 'QA Chromium session data is not isolated under the D-drive run root');
     assert(path.resolve(actualNativePath).startsWith(path.resolve(cacheRoot) + path.sep), 'QA WE/native cache is not isolated under the configured D-drive run root');
@@ -850,7 +850,7 @@ async function main() {
       && state.runtime.parallaxPointerRelayReady && state.runtime.parallaxPointerRelayActive
     ), 70000), '', { phase: 'initial windowed', rounded: true });
     const initialPhysical = physicalSceneSummary(initial);
-    const initialTitle = `Mineradio Wallpaper ${initial.sessionId}`;
+    const initialTitle = `Faveradio Wallpaper ${initial.sessionId}`;
     knownSessionTitles.add(initialTitle);
     const initialWindows = await waitForExactWindowCount(initialTitle, 1);
     const initialFrames = await sampleFrames(client);
@@ -952,7 +952,7 @@ async function main() {
       && state.runtime.sourceWindowAligned
       && state.runtime.parallaxPointerRelayReady && state.runtime.parallaxPointerRelayActive
     ), 70000), initial.sessionId, { phase: 'stop-all windowed restart', rounded: true });
-    const stopAllRaceTitle = `Mineradio Wallpaper ${afterStopAllRace.sessionId}`;
+    const stopAllRaceTitle = `Faveradio Wallpaper ${afterStopAllRace.sessionId}`;
     knownSessionTitles.add(stopAllRaceTitle);
     const stopAllRaceWindows = await waitForExactWindowCount(stopAllRaceTitle, 1);
     await waitForExactWindowCount(initialTitle, 0);
@@ -983,7 +983,7 @@ async function main() {
       && state.runtime && state.runtime.active && state.runtime.sourceWindowAligned
       && state.runtime.parallaxPointerRelayReady && state.runtime.parallaxPointerRelayActive
     ), 70000), afterStopAllRace.sessionId, { phase: 'minimize windowed restore', rounded: true });
-    const minimizeRestoreTitle = `Mineradio Wallpaper ${restoredFromMinimize.sessionId}`;
+    const minimizeRestoreTitle = `Faveradio Wallpaper ${restoredFromMinimize.sessionId}`;
     knownSessionTitles.add(minimizeRestoreTitle);
     const minimizeRestoreWindows = await waitForExactWindowCount(minimizeRestoreTitle, 1);
     await waitForExactWindowCount(stopAllRaceTitle, 0);
@@ -1017,7 +1017,7 @@ async function main() {
       && state.runtime.parallaxPointerRelayReady && state.runtime.parallaxPointerRelayActive
     ), 70000), restoredFromMinimize.sessionId, { phase: 'tray windowed restore', rounded: true });
     const restoredFromHidePhysical = physicalSceneSummary(restoredFromHide);
-    const hideRestoreTitle = `Mineradio Wallpaper ${restoredFromHide.sessionId}`;
+    const hideRestoreTitle = `Faveradio Wallpaper ${restoredFromHide.sessionId}`;
     knownSessionTitles.add(hideRestoreTitle);
     const hideRestoreWindows = await waitForExactWindowCount(hideRestoreTitle, 1);
     await waitForExactWindowCount(minimizeRestoreTitle, 0);
@@ -1038,7 +1038,7 @@ async function main() {
       && state.runtime.parallaxPointerRelayReady && state.runtime.parallaxPointerRelayActive
     ), 70000), restoredFromHide.sessionId, { phase: 'native fullscreen', rounded: false });
     const fullscreenPhysical = physicalSceneSummary(fullscreen);
-    const fullscreenTitle = `Mineradio Wallpaper ${fullscreen.sessionId}`;
+    const fullscreenTitle = `Faveradio Wallpaper ${fullscreen.sessionId}`;
     knownSessionTitles.add(fullscreenTitle);
     const fullscreenWindows = await waitForExactWindowCount(fullscreenTitle, 1);
     await waitForExactWindowCount(hideRestoreTitle, 0);
@@ -1085,7 +1085,7 @@ async function main() {
       initialPhysical.expectedPhysical.height,
       'Windowed restore height did not return to the initial physical size'
     );
-    const fullscreenRestoreTitle = `Mineradio Wallpaper ${restoredFromFullscreen.sessionId}`;
+    const fullscreenRestoreTitle = `Faveradio Wallpaper ${restoredFromFullscreen.sessionId}`;
     knownSessionTitles.add(fullscreenRestoreTitle);
     const fullscreenRestoreWindows = await waitForExactWindowCount(fullscreenRestoreTitle, 1);
     await waitForExactWindowCount(fullscreenTitle, 0);
@@ -1105,7 +1105,7 @@ async function main() {
       if (!/closed|Target|context|session/i.test(String(error && error.message || error))) throw error;
     }
     const exit = await waitForProcessExit(child, 20000);
-    assert(exit, 'QA Mineradio did not exit within 20 seconds');
+    assert(exit, 'QA Faveradio did not exit within 20 seconds');
     cleanExit = true;
     evidence.phases.fastExit = {
       exit,
@@ -1115,7 +1115,7 @@ async function main() {
     for (const title of knownSessionTitles) await waitForExactWindowCount(title, 0, 20000);
     const hostGoneDeadline = Date.now() + 10000;
     while (Date.now() < hostGoneDeadline && windowHandleExists(hostHandle)) await sleep(250);
-    assert.strictEqual(windowHandleExists(hostHandle), false, 'QA Mineradio host window survived process exit');
+    assert.strictEqual(windowHandleExists(hostHandle), false, 'QA Faveradio host window survived process exit');
     evidence.phases.fastExit.orphanExactWindowCount = 0;
     evidence.wallpaperProcessesAfter = listWallpaperEngineProcesses();
     evidence.ok = true;

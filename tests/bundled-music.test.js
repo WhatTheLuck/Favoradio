@@ -8,7 +8,7 @@ const { BuiltInPlaylistLibrary, BUNDLED_MUSIC_PLAYLIST_ID } = require('../deskto
 const { syncBundledMusic } = require('../desktop/bundled-music');
 
 test('bundled MP3s become an offline local playlist and remain stable across restarts', async (t) => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mineradio-bundled-music-'));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-bundled-music-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const appPath = path.join(root, 'app');
   const userDataPath = path.join(root, 'user');
@@ -31,7 +31,7 @@ test('bundled MP3s become an offline local playlist and remain stable across res
   assert.equal(playlist.trackCount, 1);
   const track = first.builtInPlaylistLibrary.page(playlist.id).tracks[0];
   assert.equal(track.name, '离线歌曲');
-  assert.match(track.localUrl, /^mineradio-local:\/\/audio\//);
+  assert.match(track.localUrl, /^faveradio-local:\/\/audio\//);
   const response = await first.localMusicLibrary.mediaResponse(new Request(track.localUrl, { headers: { Range: 'bytes=0-3' } }));
   assert.equal(response.status, 206);
   assert.equal(await response.text(), 'test');

@@ -37,6 +37,6 @@ assert.match(shader, /Preset 12: ABYSSAL BLOOM/);
 assert.match(grid, /preset-card-premium/);
 assert.match(css, /\.preset-card\.preset-card-premium/);
 assert.match(mainLoop, /authoredParticles = fx\.preset >= 9 && fx\.preset <= 12/);
-assert.doesNotMatch(shader + grid + data, /Mineradio WE Glass Refraction|#mineradio-control-glass-filter/);
+assert.doesNotMatch(shader + grid + data, /Faveradio WE Glass Refraction|#faveradio-control-glass-filter/);
 
 console.log('OK curated-visual-presets');

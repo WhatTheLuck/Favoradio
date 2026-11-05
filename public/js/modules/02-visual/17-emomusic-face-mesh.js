@@ -2,7 +2,7 @@
 
 // Camera pixels never reach the stage or renderer persistence. A compressed snapshot
 // crosses the trusted Electron bridge only when SiliconFlow VLM analysis runs.
-var MineradioEmoMusic = (function () {
+var FaveradioEmoMusic = (function () {
   var PRESET_INDEX = 15;
   var MEDIAPIPE_ROOT = 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/';
   var FACE_LOSS_GRACE_MS = 900;
@@ -242,7 +242,7 @@ var MineradioEmoMusic = (function () {
     // camera pass, pixel scan, model, or gaze-specific frame limiter.
     now=Number(now)||performance.now();
     var next=estimateGaze(landmarks,cameraSourceAspect(),{x:settings.gazeCenterX,y:settings.gazeCenterY},settings.gazeDeadzone);applyGazeOffset(next,settings.gazeOffsetX,settings.gazeOffsetY,settings.gazeDeadzone);next.updatedAt=now;gazeState=smoothGaze(gazeState,next,settings.gazeSmoothing);
-    if(gazeState.valid)window.dispatchEvent(new CustomEvent('mineradio-gaze-update',{detail:{x:gazeState.x,y:gazeState.y,confidence:gazeState.confidence,direction:gazeState.direction,pupilRatio:gazeState.pupilRatio}}));
+    if(gazeState.valid)window.dispatchEvent(new CustomEvent('faveradio-gaze-update',{detail:{x:gazeState.x,y:gazeState.y,confidence:gazeState.confidence,direction:gazeState.direction,pupilRatio:gazeState.pupilRatio}}));
   }
   function fitTransform(points) {
     var minX = 1, maxX = 0, minY = 1, maxY = 0;
@@ -585,7 +585,7 @@ var MineradioEmoMusic = (function () {
     drawLasers(base,w,h,audio,time);drawGazeOverlay(w,h,audio);if(settings.eyeTracking&&gazeState.valid)detail+=' · GAZE '+gazeState.direction+' '+Math.round(gazeState.confidence*100)+'%';drawStatus('EMOMUSIC · NEURAL FIELD LIVE',detail,true);ctx.restore();
   }
 
-  function mapCameraError(error) { var name = String(error && error.name || ''); return name === 'NotAllowedError' || name === 'SecurityError' ? '请允许 Mineradio 使用摄像头' : name === 'NotReadableError' ? '摄像头正被其他程序占用' : name === 'NotFoundError' || name === 'OverconstrainedError' ? '所选摄像头不可用，请切换设备' : '面部识别启动失败'; }
+  function mapCameraError(error) { var name = String(error && error.name || ''); return name === 'NotAllowedError' || name === 'SecurityError' ? '请允许 Faveradio 使用摄像头' : name === 'NotReadableError' ? '摄像头正被其他程序占用' : name === 'NotFoundError' || name === 'OverconstrainedError' ? '所选摄像头不可用，请切换设备' : '面部识别启动失败'; }
   function inferenceLoop() { if (!active || !faceMesh || !video) return; raf = requestAnimationFrame(inferenceLoop); if (!hostVisible() || inferenceBusy || video.readyState < 2 || performance.now() - lastInferenceAt < inferenceInterval()) return; lastInferenceAt = performance.now(); inferenceBusy = true; Promise.resolve(faceMesh.send({ image: video })).catch(function (error) { console.warn('[EmoMusic] Face Mesh frame failed:', error && (error.message || error.name) || error); if (++inferenceErrors >= 3) { cleanup(false); failure='人脸识别运行失败，正在重试'; cameraRetryAt=performance.now()+5000;setPanelStatus(failure); } }).finally(function () { inferenceBusy = false; }); }
   async function start() {
     if (active || starting) return; starting = true; failure = ''; var startEpoch = ++epoch; ensureCanvas().classList.add('active'); document.body.classList.add('emomusic-active');
@@ -678,7 +678,7 @@ var MineradioEmoMusic = (function () {
   function setMode(mode){
     if(['particles','mesh','surface'].indexOf(mode)<0)return false;
     settings.mode=mode;syncPanel();
-    window.dispatchEvent(new CustomEvent('mineradio-emomusic-mode-change',{detail:{mode:mode}}));
+    window.dispatchEvent(new CustomEvent('faveradio-emomusic-mode-change',{detail:{mode:mode}}));
     return true;
   }
   function calibrateGaze(){

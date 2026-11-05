@@ -11,7 +11,7 @@ const archivePath = path.join(appRoot, 'public', 'default-user-fx-archive.json')
 const sourceArgIndex = process.argv.indexOf('--source');
 const sourcePath = sourceArgIndex >= 0 && process.argv[sourceArgIndex + 1]
   ? path.resolve(process.argv[sourceArgIndex + 1])
-  : path.join(process.env.APPDATA || '', 'Mineradio', 'current-fx-autosave.json');
+  : path.join(process.env.APPDATA || '', 'Faveradio', 'current-fx-autosave.json');
 const shouldWrite = process.argv.includes('--write');
 
 function readFxDefaults() {
@@ -36,7 +36,7 @@ const snapshot = { visualPresetSchema: current.visualPresetSchema || 'skull-pres
 for (const key of keys) snapshot[key] = current[key];
 const timestamp = Number(current.autosavedAt) || Date.now();
 const archive = {
-  type: 'mineradio-user-fx-archive',
+  type: 'faveradio-user-fx-archive',
   schema: 1,
   exportedAt: timestamp,
   name: '默认测试',

@@ -71,7 +71,7 @@ function buildCuefieldVersion({ root, appVersion, env = process.env } = {}) {
   return Object.freeze({
     buildSha: variantBuildSha(configuredSha, variantId),
     plannerVersion: identifier('plannerVersion', env.CUEFIELD_PLANNER_VERSION, 'cuefield-planner-v1', 48),
-    runtimeVersion: identifier('runtimeVersion', env.CUEFIELD_RUNTIME_VERSION, `mineradio-${normalizedAppVersion}`, 48),
+    runtimeVersion: identifier('runtimeVersion', env.CUEFIELD_RUNTIME_VERSION, `faveradio-${normalizedAppVersion}`, 48),
     capabilityLevel: identifier('capabilityLevel', env.CUEFIELD_CAPABILITY_LEVEL, 'whole-track-baseline', 40),
     stemAnalyzer: env.CUEFIELD_STEM_ANALYZER
       ? identifier('stemAnalyzer', env.CUEFIELD_STEM_ANALYZER, '', 40)

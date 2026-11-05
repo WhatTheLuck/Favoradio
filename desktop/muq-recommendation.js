@@ -78,7 +78,7 @@ class MuqRecommendation {
   start() {
     if (this.worker && !this.worker.killed) return;
     if (!this.status().available) throw new Error('MUQ_RUNTIME_NOT_BUNDLED');
-    this.worker = spawn(this.runtimePath, [this.modelPath], { stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true, env: { ...process.env, MINERADIO_MUQ_EXPANDED_ROOT: path.join(this.userDataPath, 'muq-expanded-v6') } });
+    this.worker = spawn(this.runtimePath, [this.modelPath], { stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true, env: { ...process.env, FAVERADIO_MUQ_EXPANDED_ROOT: path.join(this.userDataPath, 'muq-expanded-v6') } });
     this.worker.stderr.on('data', chunk => { this.stderr = (this.stderr + chunk.toString('utf8')).slice(-1000); });
     this.worker.stdout.on('data', chunk => {
       this.stdout += chunk.toString('utf8');

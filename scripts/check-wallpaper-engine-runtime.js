@@ -175,14 +175,14 @@ function makeDwmSurfaceSpawn(records, commands, options = {}) {
         child.emit('error', new Error('synthetic DWM surface startup failure'));
         return;
       }
-      const sourceHandle = Number(String(spawnOptions.env.MINERADIO_WE_DWM_SOURCE_ID || '').split(':')[1]) || 4242;
+      const sourceHandle = Number(String(spawnOptions.env.FAVERADIO_WE_DWM_SOURCE_ID || '').split(':')[1]) || 4242;
       child.stdout.write(`${JSON.stringify({
         ok: true,
         ready: true,
-        hostWindowHandle: Number(spawnOptions.env.MINERADIO_WE_DWM_HOST_WINDOW_ID) || 31337,
+        hostWindowHandle: Number(spawnOptions.env.FAVERADIO_WE_DWM_HOST_WINDOW_ID) || 31337,
         sourceWindowHandle: sourceHandle,
         surfaceWindowHandle: 6262,
-        desktopIconLayering: spawnOptions.env.MINERADIO_WE_DWM_DESKTOP_ICON_LAYERING === '1',
+        desktopIconLayering: spawnOptions.env.FAVERADIO_WE_DWM_DESKTOP_ICON_LAYERING === '1',
       })}\n`);
     });
     return child;
@@ -234,7 +234,7 @@ function makeWindowController(records = []) {
 }
 
 async function main() {
-  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'mineradio-we-runtime-'));
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-we-runtime-'));
   const steamLibrary = path.join(temp, 'SteamLibrary');
   const engineRoot = path.join(steamLibrary, 'steamapps', 'common', 'wallpaper_engine');
   const executable = path.join(engineRoot, 'wallpaper64.exe');
@@ -336,7 +336,7 @@ async function main() {
         }
         const sources = [{ id: captureSourceId, name: title }];
         if (exposeGlassCaptureSource) {
-          sources.push({ id: 'window:6262:0', name: 'Mineradio WE DWM Surface' });
+          sources.push({ id: 'window:6262:0', name: 'Faveradio WE DWM Surface' });
         }
         return sources;
       },
@@ -377,7 +377,7 @@ async function main() {
   assert.strictEqual(stalledLayeringSession.dwmSurfaceProcess, null,
     'an unresponsive icon-layer helper must be retired before leaving coexistence');
   assert(stalledLayeringCommands.includes('I|0') && stalledLayeringCommands.includes('Q'),
-    'the fallback must request ordinary ordering and stop only the Mineradio DWM helper');
+    'the fallback must request ordinary ordering and stop only the Faveradio DWM helper');
   if (stalledLayeringSession.dwmSurfaceRetryTimer) clearTimeout(stalledLayeringSession.dwmSurfaceRetryTimer);
   stalledLayeringSession.dwmSurfaceRetryTimer = null;
   stalledLayeringChild.emit('exit', 0, null);
@@ -395,13 +395,13 @@ async function main() {
     '-properties',
     'RAW~({"volume":0})~END',
     '-location',
-    'Mineradio Wallpaper spaced-path-test',
+    'Faveradio Wallpaper spaced-path-test',
   ]);
   assert.strictEqual(spacedControlCalls.length, 1);
   assert.strictEqual(spacedControlCalls[0].file, 'wallpaper64.exe');
   assert.strictEqual(spacedControlCalls[0].options.cwd, 'C:\\Program Files\\Wallpaper Engine');
   assert(spacedControlCalls[0].args.includes('RAW~({"volume":0})~END'));
-  assert(spacedControlCalls[0].args.includes('"Mineradio Wallpaper spaced-path-test"'));
+  assert(spacedControlCalls[0].args.includes('"Faveradio Wallpaper spaced-path-test"'));
   assert.strictEqual(spacedControlCalls[0].options.shell, false);
   assert.strictEqual(spacedControlCalls[0].options.windowsVerbatimArguments, true);
   await spacedControlRuntime.dispose();
@@ -424,7 +424,7 @@ async function main() {
     assert.strictEqual(signatureCalls[0].file, 'powershell.exe');
     assert(signatureCalls[0].args.includes('-EncodedCommand'));
     assert(!signatureCalls[0].args.some((arg) => String(arg).includes(executable)), 'signature target must not be interpolated into the PowerShell command');
-    assert.strictEqual(signatureCalls[0].options.env.MINERADIO_WE_SIGNATURE_TARGET, executable);
+    assert.strictEqual(signatureCalls[0].options.env.FAVERADIO_WE_SIGNATURE_TARGET, executable);
     assert.strictEqual(signatureCalls[0].options.shell, false);
 
     const startedPromise = runtime.start('0123456789abcdef01234567', {
@@ -484,19 +484,19 @@ async function main() {
     assert(!firstDwmSurface.args.includes('-EncodedCommand'), 'the large DWM helper must launch from a hashed UTF-8 script file');
     assert.deepStrictEqual(firstDwmSurface.options.stdio, ['pipe', 'pipe', 'pipe']);
     assert.strictEqual(firstDwmSurface.options.shell, false);
-    assert.strictEqual(firstDwmSurface.options.env.MINERADIO_WE_DWM_SOURCE_ID, 'window:4242:0');
-    assert.strictEqual(firstDwmSurface.options.env.MINERADIO_WE_DWM_HOST_WINDOW_ID, '31337');
-    assert.strictEqual(firstDwmSurface.options.env.MINERADIO_WE_DWM_SOURCE_EXECUTABLE, executable);
-    assert.strictEqual(firstDwmSurface.options.env.MINERADIO_WE_DWM_HOST_EXECUTABLE, executable);
-    assert.strictEqual(firstDwmSurface.options.env.MINERADIO_WE_DWM_DESKTOP_ICON_LAYERING, '1',
+    assert.strictEqual(firstDwmSurface.options.env.FAVERADIO_WE_DWM_SOURCE_ID, 'window:4242:0');
+    assert.strictEqual(firstDwmSurface.options.env.FAVERADIO_WE_DWM_HOST_WINDOW_ID, '31337');
+    assert.strictEqual(firstDwmSurface.options.env.FAVERADIO_WE_DWM_SOURCE_EXECUTABLE, executable);
+    assert.strictEqual(firstDwmSurface.options.env.FAVERADIO_WE_DWM_HOST_EXECUTABLE, executable);
+    assert.strictEqual(firstDwmSurface.options.env.FAVERADIO_WE_DWM_DESKTOP_ICON_LAYERING, '1',
       'a desktop-icon layering request made while the helper is down must replay into its next start');
-    assert.strictEqual(firstDwmSurface.options.env.MINERADIO_WE_DWM_SESSION_ID, started.sessionId);
+    assert.strictEqual(firstDwmSurface.options.env.FAVERADIO_WE_DWM_SESSION_ID, started.sessionId);
     const helperFile = firstDwmSurface.args[firstDwmSurface.args.indexOf('-File') + 1];
     const dwmHelperSource = fs.readFileSync(helperFile, 'utf8');
     assert(dwmHelperSource.includes('DwmRegisterThumbnail'));
     assert(!dwmHelperSource.includes('DwmQueryThumbnailSourceSize'));
     assert(!dwmHelperSource.includes('GlassRefractionSurface'));
-    assert(!dwmHelperSource.includes('Mineradio WE Glass Refraction'));
+    assert(!dwmHelperSource.includes('Faveradio WE Glass Refraction'));
     assert(!dwmHelperSource.includes('command.StartsWith("G|"'),
       'the native helper must not retain a second glass-layer geometry protocol');
     assert(dwmHelperSource.includes('message.Result = new IntPtr(HTTRANSPARENT)'),
@@ -560,7 +560,7 @@ async function main() {
     });
     assert.deepStrictEqual(glassCaptureSource, {
       id: 'window:6262:0',
-      name: 'Mineradio WE DWM Surface',
+      name: 'Faveradio WE DWM Surface',
     });
     const activatedDwm = await runtime.activateDwmSurface(started.sessionId);
     assert.strictEqual(activatedDwm.dwmSurfaceActive, true);
@@ -600,8 +600,8 @@ async function main() {
     assert.strictEqual(await runtime.confirmCaptureReady(started.sessionId), true);
     assert.strictEqual(runtime.getStatus().dwmSurfaceReady, true, 'the refreshed source must receive a new session-bound DWM helper');
     assert.strictEqual(dwmSurfaceSpawns.length, 2);
-    assert.strictEqual(dwmSurfaceSpawns[1].options.env.MINERADIO_WE_DWM_SOURCE_ID, 'window:4242:1');
-    assert.strictEqual(dwmSurfaceSpawns[1].options.env.MINERADIO_WE_DWM_DESKTOP_ICON_LAYERING, '1',
+    assert.strictEqual(dwmSurfaceSpawns[1].options.env.FAVERADIO_WE_DWM_SOURCE_ID, 'window:4242:1');
+    assert.strictEqual(dwmSurfaceSpawns[1].options.env.FAVERADIO_WE_DWM_DESKTOP_ICON_LAYERING, '1',
       'full-desktop coexistence must opt into Explorer icon-host z-order explicitly');
     assert.strictEqual(runtime.getStatus().dwmDesktopIconLayering, true,
       'the helper ready acknowledgement must expose its initial icon-layer state');
@@ -657,7 +657,7 @@ async function main() {
     muteCalls.forEach((mute) => {
       assert.strictEqual(mute.file, path.basename(executable));
       assert.strictEqual(mute.options.cwd, path.dirname(executable));
-      assert.strictEqual(mute.args[mute.args.indexOf('-location') + 1].replace(/^\"|\"$/g, ''), locationTitle, 'every mute control must use the unique Mineradio location');
+      assert.strictEqual(mute.args[mute.args.indexOf('-location') + 1].replace(/^\"|\"$/g, ''), locationTitle, 'every mute control must use the unique Faveradio location');
       assert.deepStrictEqual(JSON.parse(mute.args[mute.args.indexOf('-properties') + 1].slice(5, -5)), {
         volume: 0,
         newproperty: 0,
@@ -1408,7 +1408,7 @@ async function main() {
       useDesktopShellBroker: false,
       windowController: makeWindowController(),
       execFile: (file, args, options, callback) => {
-        const target = String(options && options.env && options.env.MINERADIO_WE_SIGNATURE_TARGET || '');
+        const target = String(options && options.env && options.env.FAVERADIO_WE_SIGNATURE_TARGET || '');
         invalidColdEngineSignatureCalls.push({ file, args: [...args], options: { ...options }, target });
         queueMicrotask(() => callback(null, JSON.stringify({ status: 'NotSigned', subject: '' }), ''));
         return new EventEmitter();
@@ -1600,7 +1600,7 @@ async function main() {
       assert.strictEqual(muteRetryOpens.length, 1, 'a location-mute retry must not reopen the PAK or create another window');
       assert.strictEqual(muteRetryOpens[0].args[muteRetryOpens[0].args.indexOf('-file') + 1], scenePak);
       const muteRetryLocation = muteRetryOpens[0].args[muteRetryOpens[0].args.indexOf('-playInWindow') + 1];
-      assert(/^Mineradio Wallpaper [a-f0-9]{24}$/.test(muteRetryLocation));
+      assert(/^Faveradio Wallpaper [a-f0-9]{24}$/.test(muteRetryLocation));
       const muteRetryPropertyCalls = muteRetryControls.filter((call) => call.args[1] === 'applyProperties');
       assert.strictEqual(muteRetryPropertyCalls.length, 2, 'the first CONTROL_FAILED must be retried once before startup succeeds');
       muteRetryPropertyCalls.forEach((call) => {
@@ -1638,9 +1638,9 @@ async function main() {
       library: { getNativeSceneTarget: async (id) => ({ id, projectFile, scenePackage }) },
       desktopCapturer: {
         async getSources() {
-          const openCall = brokerCalls.find((call) => /\bopenWallpaper\b/.test(call.options.env.MINERADIO_WE_CONTROL_COMMAND_LINE || ''));
+          const openCall = brokerCalls.find((call) => /\bopenWallpaper\b/.test(call.options.env.FAVERADIO_WE_CONTROL_COMMAND_LINE || ''));
           if (!openCall) return [];
-          const match = /-playInWindow\s+"([^"]+)"/.exec(openCall.options.env.MINERADIO_WE_CONTROL_COMMAND_LINE || '');
+          const match = /-playInWindow\s+"([^"]+)"/.exec(openCall.options.env.FAVERADIO_WE_CONTROL_COMMAND_LINE || '');
           return match ? [{ id: 'window:broker:0', name: match[1] }] : [];
         },
       },
@@ -1657,11 +1657,11 @@ async function main() {
     assert(!brokerOpen.args.some((arg) => String(arg).includes(executable) || String(arg).includes(projectFile)), 'trusted paths must not be interpolated into PowerShell arguments');
     assert.strictEqual(brokerOpen.options.shell, false);
     assert(brokerOpen.options.timeout >= 15000, 'desktop-token broker needs a low-spec-safe compile timeout');
-    assert.strictEqual(brokerOpen.options.env.MINERADIO_WE_CONTROL_TARGET, executable);
-    assert.strictEqual(brokerOpen.options.env.TEMP, brokerOpen.options.env.MINERADIO_NATIVE_TEMP_DIR, 'Add-Type helpers must use the stable native temp directory');
-    assert.strictEqual(brokerOpen.options.env.TMP, brokerOpen.options.env.MINERADIO_NATIVE_TEMP_DIR, 'PowerShell TMP must match the stable native temp directory');
-    assert(/\bopenWallpaper\b/.test(brokerOpen.options.env.MINERADIO_WE_CONTROL_COMMAND_LINE));
-    assert(/wallpaper-engine-scene-stage/i.test(brokerOpen.options.env.MINERADIO_WE_CONTROL_COMMAND_LINE), 'an embedded sound package must launch through the cached silent Scene manifest');
+    assert.strictEqual(brokerOpen.options.env.FAVERADIO_WE_CONTROL_TARGET, executable);
+    assert.strictEqual(brokerOpen.options.env.TEMP, brokerOpen.options.env.FAVERADIO_NATIVE_TEMP_DIR, 'Add-Type helpers must use the stable native temp directory');
+    assert.strictEqual(brokerOpen.options.env.TMP, brokerOpen.options.env.FAVERADIO_NATIVE_TEMP_DIR, 'PowerShell TMP must match the stable native temp directory');
+    assert(/\bopenWallpaper\b/.test(brokerOpen.options.env.FAVERADIO_WE_CONTROL_COMMAND_LINE));
+    assert(/wallpaper-engine-scene-stage/i.test(brokerOpen.options.env.FAVERADIO_WE_CONTROL_COMMAND_LINE), 'an embedded sound package must launch through the cached silent Scene manifest');
     const decodedBroker = Buffer.from(brokerOpen.args[brokerOpen.args.indexOf('-EncodedCommand') + 1], 'base64').toString('utf16le');
     assert(decodedBroker.includes('GetShellWindow'));
     assert(decodedBroker.includes('GetIntegrityRid'));
@@ -1671,18 +1671,18 @@ async function main() {
     assert(decodedBroker.includes('TerminateProcess'), 'the broker must terminate a child that did not inherit medium integrity');
     assert(!decodedBroker.includes(executable) && !decodedBroker.includes(projectFile));
     brokerCalls.slice(1, 2).forEach((call) => {
-      assert(/\bapplyProperties\b/.test(call.options.env.MINERADIO_WE_CONTROL_COMMAND_LINE));
-      assert(/-location\s+"Mineradio Wallpaper [a-f0-9]{24}"/.test(call.options.env.MINERADIO_WE_CONTROL_COMMAND_LINE), 'audio suppression must target only the Mineradio pop-out location');
-      assert(call.options.env.MINERADIO_WE_CONTROL_COMMAND_LINE.includes('RAW~({"volume":0})~END'), 'the broker must preserve Wallpaper Engine RAW JSON without backslash escaping');
-      assert(!/\s-control\s+mute(?:\s|$)/.test(call.options.env.MINERADIO_WE_CONTROL_COMMAND_LINE), 'global Wallpaper Engine mute must never be used');
+      assert(/\bapplyProperties\b/.test(call.options.env.FAVERADIO_WE_CONTROL_COMMAND_LINE));
+      assert(/-location\s+"Faveradio Wallpaper [a-f0-9]{24}"/.test(call.options.env.FAVERADIO_WE_CONTROL_COMMAND_LINE), 'audio suppression must target only the Faveradio pop-out location');
+      assert(call.options.env.FAVERADIO_WE_CONTROL_COMMAND_LINE.includes('RAW~({"volume":0})~END'), 'the broker must preserve Wallpaper Engine RAW JSON without backslash escaping');
+      assert(!/\s-control\s+mute(?:\s|$)/.test(call.options.env.FAVERADIO_WE_CONTROL_COMMAND_LINE), 'global Wallpaper Engine mute must never be used');
     });
-    assert(/\bcloseWallpaper\b/.test(brokerCalls[2].options.env.MINERADIO_WE_CONTROL_COMMAND_LINE));
+    assert(/\bcloseWallpaper\b/.test(brokerCalls[2].options.env.FAVERADIO_WE_CONTROL_COMMAND_LINE));
     await brokerRuntime._runTransientControl(executable, ['-control', 'getWallpaper', '-monitor', '0']);
     assert.strictEqual(brokerCalls.length, 4, 'the elevated readiness probe must use the desktop-token broker');
     const readyBroker = brokerCalls[3];
-    assert(/\bgetWallpaper\b/.test(readyBroker.options.env.MINERADIO_WE_CONTROL_COMMAND_LINE));
-    assert.strictEqual(readyBroker.options.env.MINERADIO_WE_CONTROL_WAIT, '1', 'the readiness broker must wait for the control process to exit');
-    assert.strictEqual(readyBroker.options.env.MINERADIO_WE_CONTROL_WAIT_TIMEOUT, '10000');
+    assert(/\bgetWallpaper\b/.test(readyBroker.options.env.FAVERADIO_WE_CONTROL_COMMAND_LINE));
+    assert.strictEqual(readyBroker.options.env.FAVERADIO_WE_CONTROL_WAIT, '1', 'the readiness broker must wait for the control process to exit');
+    assert.strictEqual(readyBroker.options.env.FAVERADIO_WE_CONTROL_WAIT_TIMEOUT, '10000');
     const decodedReadyBroker = Buffer.from(readyBroker.args[readyBroker.args.indexOf('-EncodedCommand') + 1], 'base64').toString('utf16le');
     assert(decodedReadyBroker.includes('WaitForSingleObject'));
     assert(decodedReadyBroker.includes('GetExitCodeProcess'));

@@ -7,7 +7,7 @@ const test = require('node:test');
 const { BuiltInPlaylistLibrary } = require('../desktop/built-in-playlist-library');
 
 test('built-in playlists persist mixed-provider songs without changing their source', async (t) => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mineradio-built-in-playlists-'));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-built-in-playlists-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const library = new BuiltInPlaylistLibrary({ userDataPath: root });
 
@@ -19,7 +19,7 @@ test('built-in playlists persist mixed-provider songs without changing their sou
   await library.addTrack(id, { provider: 'qq', id: 'qq-1', mid: '003QQMID', mediaMid: '004MEDIA', name: 'QQ 歌曲', artist: 'B' });
   await library.addTrack(id, { provider: 'kugou', id: 'kg-1', hash: 'ABCDEF', albumAudioId: '900', name: '酷狗歌曲', artist: 'C' });
   await library.addTrack(id, { provider: 'qishui', id: 'qs-1', providerSongId: 'qs-1', name: '汽水歌曲', artist: 'D' });
-  await library.addTrack(id, { provider: 'local', id: 'local:0123456789abcdef01234567', localFileId: '0123456789abcdef01234567', localKey: '0123456789abcdef01234567', localUrl: 'mineradio-local://audio/0123456789abcdef01234567?cap=test', name: '本地歌曲', artist: 'E' });
+  await library.addTrack(id, { provider: 'local', id: 'local:0123456789abcdef01234567', localFileId: '0123456789abcdef01234567', localKey: '0123456789abcdef01234567', localUrl: 'faveradio-local://audio/0123456789abcdef01234567?cap=test', name: '本地歌曲', artist: 'E' });
 
   const duplicate = await library.addTrack(id, { provider: 'qq', mid: '003QQMID', name: '同一首 QQ 歌曲', artist: 'B' });
   assert.equal(duplicate.duplicate, true);
@@ -62,16 +62,16 @@ test('Electron and renderer wiring exposes built-in playlists in collection, pan
   const shelfContent = fs.readFileSync(path.join(appRoot, 'public', 'js', 'modules', '04-shelf', '03-content-list-manager.js'), 'utf8');
 
   assert.match(main, /new BuiltInPlaylistLibrary\(\{ userDataPath: STABLE_USER_DATA_PATH \}\)/);
-  assert.match(main, /mineradio-built-in-playlist-add-track/);
+  assert.match(main, /faveradio-built-in-playlist-add-track/);
   assert.match(preload, /listBuiltInPlaylists/);
   assert.match(preload, /addBuiltInPlaylistTrack/);
   assert.match(loader, /06-lyrics\/00-built-in-playlists\.js/);
   assert.match(builtInRenderer, /function addTrackToBuiltInPlaylist/);
-  assert.match(panel, /Mineradio 内置歌单/);
+  assert.match(panel, /Faveradio 内置歌单/);
   assert.match(panel, /fetchPlaylistTracksPage/);
-  assert.match(loaders, /mineradio:/);
+  assert.match(loaders, /faveradio:/);
   assert.match(collect, /可混合全部平台/);
   assert.doesNotMatch(collect, /function openCollectModal\(song\)[\s\S]{0,240}ensureLoggedInForAction/);
-  assert.match(shelf, /provider === 'mineradio'/);
+  assert.match(shelf, /provider === 'faveradio'/);
   assert.match(shelfContent, /builtInPlaylistTracksPage/);
 });

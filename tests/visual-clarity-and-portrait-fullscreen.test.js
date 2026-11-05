@@ -42,5 +42,5 @@ test('Wallpaper Engine controls persist and use the existing DWM surface', () =>
   assert.match(renderer, /visualOpacity:/);
   assert.match(renderer, /setWallpaperEngineVisualSetting\(/);
   assert.match(preload, /updateWallpaperEngineVisualSettings/);
-  assert.match(main, /mineradio-wallpaper-engine-visual-settings/);
+  assert.match(main, /faveradio-wallpaper-engine-visual-settings/);
 });

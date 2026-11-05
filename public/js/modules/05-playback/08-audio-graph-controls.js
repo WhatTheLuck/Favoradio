@@ -3,8 +3,8 @@ function audioGraphHealthy() {
   return !!(audio && audioReady && audioCtx && audioCtx.state !== 'closed' && source && audioSourceMedia === audio && analyser && beatAnalyser && (gainNode || analysisSinkNode));
 }
 function disconnectAudioGraphNodes(keepSource) {
-  if (window.MineradioExternalVisuals && typeof MineradioExternalVisuals.invalidateAudioSource === 'function') {
-    MineradioExternalVisuals.invalidateAudioSource();
+  if (window.FaveradioExternalVisuals && typeof FaveradioExternalVisuals.invalidateAudioSource === 'function') {
+    FaveradioExternalVisuals.invalidateAudioSource();
   }
   [source, analyser, beatAnalyser, gainNode, analysisSinkNode].forEach(function (node) {
     if (!node) return;
@@ -43,7 +43,7 @@ function replaceAudioElementForGraphRecovery(reason, opts) {
   var rate = oldAudio.playbackRate || 1;
   var endedHandler = preservePlayback ? oldAudio.onended : null;
   var metadataHandler = preservePlayback ? oldAudio.onloadedmetadata : null;
-  var queueItemKey = oldAudio.__mineradioQueueItemKey;
+  var queueItemKey = oldAudio.__faveradioQueueItemKey;
   try { oldAudio.pause(); } catch (e) { }
   disconnectAudioGraphNodes(false);
   try {
@@ -57,7 +57,7 @@ function replaceAudioElementForGraphRecovery(reason, opts) {
   audio.playbackRate = rate;
   audio.onended = endedHandler;
   audio.onloadedmetadata = metadataHandler;
-  audio.__mineradioQueueItemKey = queueItemKey;
+  audio.__faveradioQueueItemKey = queueItemKey;
   bindPlaybackProgressEvents(audio);
   applyVolumeToAudio();
   if (src) {
@@ -73,9 +73,9 @@ function replaceAudioElementForGraphRecovery(reason, opts) {
 }
 function resetPlaybackAudioGraphForSourceSwitch(reason) {
   if (!audio) return;
-  var preparedGraph = audio.__mineradioPreparedAudioGraph;
+  var preparedGraph = audio.__faveradioPreparedAudioGraph;
   var previousSourceMedia = audioSourceMedia;
-  var sourceUsesCapture = !!(source && source.__mineradioUsesCapture);
+  var sourceUsesCapture = !!(source && source.__faveradioUsesCapture);
   var mediaElementChanged = !!(source && previousSourceMedia && previousSourceMedia !== audio);
   // Chromium can permanently freeze the media clock when an element that was
   // once bound to MediaElementSource is later kept on captureStream across a
@@ -102,7 +102,7 @@ function resetPlaybackAudioGraphForSourceSwitch(reason) {
     gainNode = preparedGraph.gainNode;
     analysisSinkNode = null;
     audioSourceMedia = audio;
-    audio.__mineradioMediaSourceBound = true;
+    audio.__faveradioMediaSourceBound = true;
     preparedGraph.adopted = true;
     audioReady = true;
   }
@@ -115,26 +115,26 @@ function initAudio() {
   if (audioCtx && audioCtx.state === 'closed') replaceAudioElementForGraphRecovery('closed-context');
   if (!audioCtx || audioCtx.state === 'closed') audioCtx = new AudioContextCtor();
   var keepSource = !!(source && audioSourceMedia === audio && source.context === audioCtx && audioCtx.state !== 'closed');
-  var sourceUsesCapture = !!(keepSource && source.__mineradioUsesCapture);
+  var sourceUsesCapture = !!(keepSource && source.__faveradioUsesCapture);
   disconnectAudioGraphNodes(keepSource);
   if (!source) {
-    var forceCapture = !!audio.__mineradioForceCaptureSource;
+    var forceCapture = !!audio.__faveradioForceCaptureSource;
     // Once this Audio element has fallen back from its lifetime-bound
     // MediaElementSource, every later graph rebuild for the same element must
     // stay on captureStream. Keep this marker through failed/overlapping init
     // attempts; clearing it before capture has an audio track reopens the
     // forbidden MediaElementSource rebind path on the next retry.
     var mediaSource = null;
-    if (!forceCapture && !audio.__mineradioMediaSourceBound && audioCtx.createMediaElementSource) {
+    if (!forceCapture && !audio.__faveradioMediaSourceBound && audioCtx.createMediaElementSource) {
       try {
         mediaSource = audioCtx.createMediaElementSource(audio);
       } catch (mediaErr) {
         mediaSource = null;
-        audio.__mineradioMediaSourceBound = true;
+        audio.__faveradioMediaSourceBound = true;
         console.warn('media element source unavailable:', mediaErr && (mediaErr.message || mediaErr));
       }
     }
-    if (!forceCapture && !mediaSource && audio.__mineradioMediaSourceBound) {
+    if (!forceCapture && !mediaSource && audio.__faveradioMediaSourceBound) {
       replaceAudioElementForGraphRecovery('media-source-rebind');
       if (!audioCtx || audioCtx.state === 'closed') audioCtx = new AudioContextCtor();
       try {
@@ -168,11 +168,11 @@ function initAudio() {
       console.warn('capture stream graph unavailable:', captureSourceErr && (captureSourceErr.message || captureSourceErr));
       return false;
     }
-    source.__mineradioUsesCapture = !mediaSource;
+    source.__faveradioUsesCapture = !mediaSource;
     audioSourceMedia = audio;
     // This is a lifetime marker, not the type of the current graph source.
     // Never reset it merely because the active fallback happens to be capture.
-    if (mediaSource) audio.__mineradioMediaSourceBound = true;
+    if (mediaSource) audio.__faveradioMediaSourceBound = true;
     sourceUsesCapture = !mediaSource;
   }
   analyser = audioCtx.createAnalyser();
@@ -226,15 +226,15 @@ function rebuildPlaybackGraphWithCapture(reason) {
   // MediaElementSource to captureStream. Reconnect the existing source node
   // instead; a silent analyser must never be repaired by sacrificing the media
   // clock. Fresh, never-bound elements may still use capture as a fallback.
-  if (audio.__mineradioMediaSourceBound) {
-    if (!source || source.__mineradioUsesCapture || audioSourceMedia !== audio) return false;
+  if (audio.__faveradioMediaSourceBound) {
+    if (!source || source.__faveradioUsesCapture || audioSourceMedia !== audio) return false;
     disconnectAudioGraphNodes(true);
     var reused = initAudio();
     if (reused) console.warn('audio analyser reconnected with lifetime media source:', reason || 'silent-graph');
     return reused;
   }
   disconnectAudioGraphNodes(false);
-  audio.__mineradioForceCaptureSource = true;
+  audio.__faveradioForceCaptureSource = true;
   var ok = initAudio();
   if (ok) console.warn('audio analyser recovered with capture stream:', reason || 'silent-graph');
   return ok;
@@ -274,7 +274,7 @@ function schedulePlaybackAnalyserRecovery(reason) {
       // a frozen clock is a media stall and must never be treated as a silent
       // analyser graph.
       if (advancingSilentSamples < 2) return;
-      if (source && !source.__mineradioUsesCapture && audio.captureStream) {
+      if (source && !source.__faveradioUsesCapture && audio.captureStream) {
         rebuildPlaybackGraphWithCapture(reason || 'silent-after-track-switch');
         ensurePlaybackAudioGraph('analyser-health-capture-' + (reason || 'playback'));
       }

@@ -338,7 +338,7 @@ document.addEventListener('keydown', function (e) {
 });
 var dropOv = document.getElementById('drop-overlay'), dragCount = 0;
 function dragHasType(e, type) { return !!(e.dataTransfer && Array.prototype.indexOf.call(e.dataTransfer.types || [], type) >= 0); }
-function isSmartTagDrag(e) { return (typeof smartAiDraggingTag !== 'undefined' && !!smartAiDraggingTag) || dragHasType(e, 'text/mineradio-tag'); }
+function isSmartTagDrag(e) { return (typeof smartAiDraggingTag !== 'undefined' && !!smartAiDraggingTag) || dragHasType(e, 'text/faveradio-tag'); }
 function isFileDrag(e) { return dragHasType(e, 'Files') || !!(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length); }
 document.addEventListener('dragenter', function (e) { if (isSmartTagDrag(e) || !isFileDrag(e)) return;e.preventDefault();dragCount++;dropOv.classList.add('show'); });
 document.addEventListener('dragleave', function (e) { if (isSmartTagDrag(e) || !isFileDrag(e)) return;e.preventDefault();dragCount--;if (dragCount <= 0) { dragCount = 0; dropOv.classList.remove('show'); } });

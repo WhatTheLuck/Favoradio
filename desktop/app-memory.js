@@ -28,7 +28,7 @@ function getMemorySnapshot() {
 }
 
 function tempScriptPath() {
-  return path.join(os.tmpdir(), 'mineradio-app-trim-' + process.pid + '-' + Date.now() + '.ps1');
+  return path.join(os.tmpdir(), 'faveradio-app-trim-' + process.pid + '-' + Date.now() + '.ps1');
 }
 
 function safeUnlink(filePath) {
@@ -46,7 +46,7 @@ function trimAppWorkingSets(pids) {
     'Add-Type @\'',
     'using System;',
     'using System.Runtime.InteropServices;',
-    'public static class MineradioTrim {',
+    'public static class FaveradioTrim {',
     '  [DllImport("psapi.dll")] public static extern bool EmptyWorkingSet(IntPtr h);',
     '  [DllImport("kernel32.dll")] public static extern IntPtr OpenProcess(int access, bool inherit, int pid);',
     '  [DllImport("kernel32.dll")] public static extern bool CloseHandle(IntPtr h);',
@@ -62,7 +62,7 @@ function trimAppWorkingSets(pids) {
     '}',
     '\'@',
     '$pids = @(' + pidLiteral + ')',
-    '$trimmed = [MineradioTrim]::TrimMany([int[]]$pids)',
+    '$trimmed = [FaveradioTrim]::TrimMany([int[]]$pids)',
     'Write-Output (@{ ok=$true; trimmed=$trimmed; scope="app"; pids=$pids } | ConvertTo-Json -Compress)',
   ].join('\r\n');
   fs.writeFileSync(scriptPath, script, 'utf8');

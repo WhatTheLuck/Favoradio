@@ -1,6 +1,6 @@
-var WALLPAPER_ENGINE_SELECTION_STORE_KEY = 'mineradio-wallpaper-engine-selection-v1';
-var WALLPAPER_ENGINE_HIDDEN_STORE_KEY = 'mineradio-wallpaper-engine-hidden-v1';
-var WALLPAPER_ENGINE_FAVORITE_STORE_KEY = 'mineradio-wallpaper-engine-favorites-v1';
+var WALLPAPER_ENGINE_SELECTION_STORE_KEY = 'faveradio-wallpaper-engine-selection-v1';
+var WALLPAPER_ENGINE_HIDDEN_STORE_KEY = 'faveradio-wallpaper-engine-hidden-v1';
+var WALLPAPER_ENGINE_FAVORITE_STORE_KEY = 'faveradio-wallpaper-engine-favorites-v1';
 var wallpaperEngineProjects = [];
 var wallpaperEngineLibrarySnapshot = null;
 var wallpaperEngineMediaToken = '';
@@ -60,7 +60,7 @@ function cancelWallpaperEnginePointerActivity() {
 function wallpaperEnginePointerActivityReady() {
   // A native WE source is briefly aligned over the Electron host while the
   // capture stream is prepared. Chromium can keep Page Visibility hidden
-  // after that source is parked even though the real Mineradio window is
+  // after that source is parked even though the real Faveradio window is
   // visible. Desktop sessions therefore trust the main-process window state;
   // browser fallback still resolves to document.hidden.
   if (!wallpaperEngineDesktopHostIsVisible()
@@ -296,7 +296,7 @@ function wallpaperEngineProjectById(id) {
 function wallpaperEngineMediaUrl(item, kind) {
   item = item || {};
   kind = kind === 'media' ? 'media' : 'preview';
-  return 'mineradio-wallpaper://' + kind + '/' + encodeURIComponent(item.id || '') + '?v=' + encodeURIComponent(String(item.updatedAt || 0)) + '&token=' + encodeURIComponent(wallpaperEngineMediaToken);
+  return 'faveradio-wallpaper://' + kind + '/' + encodeURIComponent(item.id || '') + '?v=' + encodeURIComponent(String(item.updatedAt || 0)) + '&token=' + encodeURIComponent(wallpaperEngineMediaToken);
 }
 
 function wallpaperEngineProjectLabel(item) {
@@ -592,7 +592,7 @@ async function hardenWallpaperEngineCaptureStream(stream) {
     }).catch(function () { return false; });
   }));
   try {
-    stream.__mineradioCursorSuppressed = !!tracks.length && cursorResults.every(function (value) { return value === true; });
+    stream.__faveradioCursorSuppressed = !!tracks.length && cursorResults.every(function (value) { return value === true; });
   } catch (e4) { }
   return stream;
 }
@@ -640,7 +640,7 @@ async function syncWallpaperEngineCaptureFrameRate() {
   }
 }
 
-window.__mineradioSyncWallpaperEngineCaptureFrameRate = syncWallpaperEngineCaptureFrameRate;
+window.__faveradioSyncWallpaperEngineCaptureFrameRate = syncWallpaperEngineCaptureFrameRate;
 
 function stopWallpaperEngineNativeSession(sessionId) {
   var api = wallpaperEngineDesktopApi();
@@ -671,15 +671,15 @@ async function openWallpaperEngineCaptureStream(sessionId, fps, sourceId, option
     trustedCursorFreeSurface: options.trustedCursorFreeSurface === true
   };
   try {
-    if (diagnostics.purpose === 'dwm-glass') window.__mineradioWallpaperEngineGlassCaptureDiagnostics = diagnostics;
-    else window.__mineradioWallpaperEngineCaptureDiagnostics = diagnostics;
+    if (diagnostics.purpose === 'dwm-glass') window.__faveradioWallpaperEngineGlassCaptureDiagnostics = diagnostics;
+    else window.__faveradioWallpaperEngineCaptureDiagnostics = diagnostics;
   } catch (e) { }
   function recordAttempt(path, stream, error) {
     var track = stream && stream.getVideoTracks ? stream.getVideoTracks()[0] : null;
     var entry = {
       path: path,
       ok: !!track,
-      cursorSuppressed: !!(stream && stream.__mineradioCursorSuppressed),
+      cursorSuppressed: !!(stream && stream.__faveradioCursorSuppressed),
       settings: null,
       constraints: null,
       error: error ? String(error && (error.message || error.name) || error).slice(0, 500) : ''
@@ -709,11 +709,11 @@ async function openWallpaperEngineCaptureStream(sessionId, fps, sourceId, option
       });
       if (sourceStream && sourceStream.getVideoTracks && sourceStream.getVideoTracks().length) {
         var hardenedSourceStream = await hardenWallpaperEngineCaptureStream(sourceStream);
-        try { hardenedSourceStream.__mineradioCapturePath = 'source-id-media'; } catch (e4) { }
+        try { hardenedSourceStream.__faveradioCapturePath = 'source-id-media'; } catch (e4) { }
         var sourceAttempt = recordAttempt('source-id-media', hardenedSourceStream, null);
         if (sourceAttempt.cursorSuppressed || options.trustedCursorFreeSurface === true
-          || window.__mineradioAllowUnverifiedSourceCapture === true) {
-          try { hardenedSourceStream.__mineradioUnverifiedCursorCapture = !sourceAttempt.cursorSuppressed; } catch (e5) { }
+          || window.__faveradioAllowUnverifiedSourceCapture === true) {
+          try { hardenedSourceStream.__faveradioUnverifiedCursorCapture = !sourceAttempt.cursorSuppressed; } catch (e5) { }
           diagnostics.selectedPath = 'source-id-media';
           return hardenedSourceStream;
         }
@@ -745,7 +745,7 @@ async function openWallpaperEngineCaptureStream(sessionId, fps, sourceId, option
       });
       if (displayStream && displayStream.getVideoTracks && displayStream.getVideoTracks().length) {
         var hardenedDisplayStream = await hardenWallpaperEngineCaptureStream(displayStream);
-        try { hardenedDisplayStream.__mineradioCapturePath = 'display-media'; } catch (e6) { }
+        try { hardenedDisplayStream.__faveradioCapturePath = 'display-media'; } catch (e6) { }
         recordAttempt('display-media', hardenedDisplayStream, null);
         diagnostics.selectedPath = 'display-media';
         return hardenedDisplayStream;
@@ -763,7 +763,7 @@ async function openWallpaperEngineCaptureStream(sessionId, fps, sourceId, option
   throw new Error('WALLPAPER_CAPTURE_FAILED: ' + displayName + ': ' + displayMessage + ' (source: ' + sourceMessage + ')');
 }
 
-window.__mineradioPrepareWallpaperEngineCapture = async function (sessionId, fps, sourceId) {
+window.__faveradioPrepareWallpaperEngineCapture = async function (sessionId, fps, sourceId) {
   sessionId = String(sessionId || '');
   if (!/^[a-f0-9]{24}$/i.test(sessionId)) return { ok: false, error: 'WALLPAPER_ENGINE_SESSION_INVALID' };
   try {
@@ -782,7 +782,7 @@ window.__mineradioPrepareWallpaperEngineCapture = async function (sessionId, fps
   }
 };
 
-window.__mineradioPrepareWallpaperEngineGlassCapture = async function (sessionId, fps, sourceId) {
+window.__faveradioPrepareWallpaperEngineGlassCapture = async function (sessionId, fps, sourceId) {
   sessionId = String(sessionId || '');
   if (!/^[a-f0-9]{24}$/i.test(sessionId)) return { ok: false, error: 'WALLPAPER_ENGINE_SESSION_INVALID' };
   try {
@@ -805,7 +805,7 @@ window.__mineradioPrepareWallpaperEngineGlassCapture = async function (sessionId
   }
 };
 
-window.__mineradioPrepareWallpaperEngineHostBoundsChange = function (sessionId, reason) {
+window.__faveradioPrepareWallpaperEngineHostBoundsChange = function (sessionId, reason) {
   sessionId = String(sessionId || '');
   reason = String(reason || '').slice(0, 80);
   if (!wallpaperEngineSelection.active || wallpaperEngineSelection.kind !== 'engine') {
@@ -866,7 +866,7 @@ window.__mineradioPrepareWallpaperEngineHostBoundsChange = function (sessionId, 
   return { ok: true, frozen: true, reason: reason };
 };
 
-window.__mineradioPrepareWallpaperEngineDesktopPreview = function (sessionId, reason) {
+window.__faveradioPrepareWallpaperEngineDesktopPreview = function (sessionId, reason) {
   sessionId = String(sessionId || '');
   reason = String(reason || 'full-desktop-passive').slice(0, 80);
   if (!wallpaperEngineSelection.active || wallpaperEngineSelection.kind !== 'engine') {
@@ -1263,7 +1263,7 @@ async function ensureWallpaperEngineGlassSamplerCapture(sessionId, layerToken, a
     wallpaperEngineGlassCaptureRetryAttempt = 0;
     document.body.classList.add('wallpaper-engine-glass-sampler-ready');
     try {
-      window.__mineradioWallpaperEngineGlassSamplerState = {
+      window.__faveradioWallpaperEngineGlassSamplerState = {
         ok: true,
         sessionId: sessionId,
         captureMode: 'dwm-glass-svg-sampler',
@@ -1287,7 +1287,7 @@ async function ensureWallpaperEngineGlassSamplerCapture(sessionId, layerToken, a
   } catch (error) {
     if (captureToken === wallpaperEngineGlassCaptureToken) {
       try {
-        window.__mineradioWallpaperEngineGlassSamplerState = {
+        window.__faveradioWallpaperEngineGlassSamplerState = {
           ok: false,
           sessionId: sessionId,
           captureMode: 'dwm-glass-svg-sampler',
@@ -1405,15 +1405,15 @@ function wallpaperEnginePlayWasInterrupted(error) {
 
 function wallpaperEngineRuntimeErrorText(error) {
   var code = String(error && (error.code || error.message) || error || '');
-  if (/WALLPAPER_ENGINE_HOST_ELEVATED/.test(code)) return 'Mineradio 正以管理员身份运行，无法捕获 WE 实时窗口；请取消“以管理员身份运行”后重启播放器';
+  if (/WALLPAPER_ENGINE_HOST_ELEVATED/.test(code)) return 'Faveradio 正以管理员身份运行，无法捕获 WE 实时窗口；请取消“以管理员身份运行”后重启播放器';
   if (/WALLPAPER_ENGINE_NOT_INSTALLED/.test(code)) return '未找到 Wallpaper Engine 本体';
   if (/WALLPAPER_ENGINE_SIGNATURE_INVALID/.test(code)) return 'Wallpaper Engine 运行时签名无效';
-  if (/WALLPAPER_ENGINE_WINDOW_CLOSE_FAILED/.test(code)) return '上一次 Mineradio 实时壁纸窗口仍在收尾，请稍后重试；Wallpaper Engine 本体会保留';
+  if (/WALLPAPER_ENGINE_WINDOW_CLOSE_FAILED/.test(code)) return '上一次 Faveradio 实时壁纸窗口仍在收尾，请稍后重试；Wallpaper Engine 本体会保留';
   if (/WALLPAPER_ENGINE_DWM_SURFACE_FAILED|WALLPAPER_ENGINE_PARALLAX_RELAY_FAILED/.test(code)) return 'WE 原生鼠标视差连接失败，本次会话已关闭；请再次点击重连';
   if (/WALLPAPER_ENGINE_CONTROL_FAILED/.test(code)) return 'WE 场景控制暂时未就绪，请稍后重试';
   if (/WALLPAPER_ENGINE_WINDOW_TIMEOUT/.test(code)) return 'WE 场景窗口启动超时';
   if (/WALLPAPER_ENGINE_CAPTURE_UNAVAILABLE|WALLPAPER_CAPTURE_UNSUPPORTED/.test(code)) return '当前系统不支持实时窗口捕获';
-  if (/InvalidStateError/.test(code)) return 'WE 实时画面连接需要 Mineradio 保持在前台';
+  if (/InvalidStateError/.test(code)) return 'WE 实时画面连接需要 Faveradio 保持在前台';
   if (/NotAllowedError|Permission denied|PermissionDismissed/i.test(code)) return 'WE 实时画面捕获权限被拒绝';
   if (/NotReadableError/.test(code)) return 'WE 实时捕获通道暂时忙，已清理本次会话；请再次点击重连';
   if (/WALLPAPER_ENGINE_REFRESH_SUPERSEDED/.test(code)) return 'WE 实时窗口正在切换，请重试';
@@ -1788,8 +1788,8 @@ function handleWallpaperEngineHostBoundsChange(payload) {
     restartWallpaperEngineAfterHostBoundsChange();
     return;
   }
-  if (phase === 'prepare' && typeof window.__mineradioPrepareWallpaperEngineHostBoundsChange === 'function') {
-    window.__mineradioPrepareWallpaperEngineHostBoundsChange(payload && payload.sessionId, payload && payload.reason);
+  if (phase === 'prepare' && typeof window.__faveradioPrepareWallpaperEngineHostBoundsChange === 'function') {
+    window.__faveradioPrepareWallpaperEngineHostBoundsChange(payload && payload.sessionId, payload && payload.reason);
   }
 }
 
@@ -2360,7 +2360,7 @@ function bindWallpaperEngineLibraryEvents() {
           return;
         }
         if (document.hidden) {
-          window.__mineradioPrepareWallpaperEngineHostBoundsChange(wallpaperEngineNativeSessionId, 'document-hidden');
+          window.__faveradioPrepareWallpaperEngineHostBoundsChange(wallpaperEngineNativeSessionId, 'document-hidden');
           stopWallpaperEngineNativeSession();
         } else if (item && wallpaperEngineHostBoundsPreparing) {
           wallpaperEngineHostBoundsPreparing = false;

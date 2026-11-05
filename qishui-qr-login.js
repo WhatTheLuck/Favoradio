@@ -1,7 +1,7 @@
 'use strict';
 
 // Focused authentication bridge ported from
-// Wx2yZx/Mineradio-Qishui-QR-Login revision
+// Qishui QR authentication (see README.md#upstream-qishui) revision
 // aaadaab7d011714f94fbe45b382ba8dcc7cf17b9 (GPL-3.0-only).
 
 const fs = require('fs');

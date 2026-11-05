@@ -1,9 +1,9 @@
 'use strict';
 
-// Focused authentication port from Wx2yZx/Mineradio-Qishui-QR-Login
+// Focused authentication port from Qishui QR authentication (see README.md#upstream-qishui)
 // revision aaadaab7d011714f94fbe45b382ba8dcc7cf17b9 (GPL-3.0-only).
 // This module intentionally owns only the official Passport Web QR flow.
-// Mineradio's catalogue, playlist and playback adapters remain in qishui-api.js.
+// Faveradio's catalogue, playlist and playback adapters remain in qishui-api.js.
 
 const crypto = require('crypto');
 const fs = require('fs');
@@ -20,7 +20,7 @@ const SDK_VERSION = '2.4.13';
 const VERIFY_SDK_VERSION = '1.0.29';
 const SECURE_SDK_VERSION = '3.3.5';
 const BDMS_VERSION = '1.0.0.41';
-const AUTH_PARTITION = 'persist:mineradio-qishui-auth-v6';
+const AUTH_PARTITION = 'persist:faveradio-qishui-auth-v6';
 const OFFICIAL_BDMS_URL =
   'https://lf-headquarters-speed.yhgfb-cn-static.com/obj/rc-client-security/web/stable/1.0.0.41/bdms.js';
 const UA =

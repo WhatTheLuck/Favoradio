@@ -19,7 +19,7 @@ function createMedia() {
     paused: false,
     ended: false,
     onended: function () {},
-    __mineradioQueueItemKey: 'old',
+    __faveradioQueueItemKey: 'old',
     pause() { this.paused = true; },
     removeAttribute(name) { if (name === 'src') this.src = ''; },
     load() {},
@@ -238,11 +238,11 @@ function testStaticRecoveryWiring() {
   assert(/if \(recovered === true\) return true/.test(controlsText));
   assert(/clearPlaybackResumeWatchdogs\(\)/.test(fallbackText));
   assert(/playbackResumeRecovery\.serial =/.test(fallbackText));
-  assert(/audio\.__mineradioTrackSwitchToken = token/.test(startText));
+  assert(/audio\.__faveradioTrackSwitchToken = token/.test(startText));
   assert(/audioEl !== audio/.test(progressText));
-  assert(/__mineradioTrackSwitchToken\) !== Number\(trackSwitchToken\)/.test(progressText));
+  assert(/__faveradioTrackSwitchToken\) !== Number\(trackSwitchToken\)/.test(progressText));
   assert(/playbackMediaMatchesCurrentQueueItem\(audioEl\)/.test(progressText));
-  assert(/ownerQueueItemKey:\s*String\(audioEl\.__mineradioQueueItemKey/.test(progressText));
+  assert(/ownerQueueItemKey:\s*String\(audioEl\.__faveradioQueueItemKey/.test(progressText));
   assert(/function playbackStallRecoveryOwnerStillCurrent/.test(controlsText));
   assert((controlsText.match(/playbackStallRecoveryOwnerStillCurrent\(/g) || []).length >= 4);
   assert(/recoverySerial !== playbackResumeRecovery\.serial/.test(controlsText));

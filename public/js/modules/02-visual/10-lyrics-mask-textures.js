@@ -37,7 +37,7 @@ function configureLyricTextureSampling(texture) {
   texture.anisotropy = Math.min(anisotropyBudget, maxAnisotropy);
   texture.needsUpdate = true;
   texture.userData = texture.userData || {};
-  texture.userData.__mineradioLyricMipmapped = mipmapsAllowed;
+  texture.userData.__faveradioLyricMipmapped = mipmapsAllowed;
   return texture;
 }
 
@@ -373,7 +373,7 @@ function makeLyricMask(input, layoutOverride) {
   applyLyricVerticalEdgeFade(ctx, W, H, lyricEdgeFadeValue() * (payload.contextLayer ? 1.15 : 0.74), activeLine, lines.length);
   var tex = new THREE.CanvasTexture(canvas);
   tex.userData = tex.userData || {};
-  tex.userData.__mineradioLyricOwned = true;
+  tex.userData.__faveradioLyricOwned = true;
   configureLyricTextureSampling(tex);
   return { texture: tex, width: W, height: H, textWidth: width, activeTextWidth: activeWidth, textHeight: blockH, fontSize: fontSize, lineHeight: lineHeight, lineY0: y0, lineCount: lines.length, lines: lines, entries: entries, activeLine: activeLine, contextLayer: payload.contextLayer, activeLayer: payload.activeLayer, fitScaleX: fitScaleX, textMin: layout.textMin, textMax: layout.textMax, stoneSeed: stoneSeed };
 }
@@ -488,9 +488,9 @@ function makeLyricQualityTexture(mask, tier) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   var texture = new THREE.CanvasTexture(canvas);
   texture.userData = texture.userData || {};
-  texture.userData.__mineradioLyricOwned = true;
-  texture.userData.__mineradioLyricQuality = true;
-  texture.userData.__mineradioLyricQualityBytes = target.bytes;
+  texture.userData.__faveradioLyricOwned = true;
+  texture.userData.__faveradioLyricQuality = true;
+  texture.userData.__faveradioLyricQualityBytes = target.bytes;
   configureLyricTextureSampling(texture);
   return { texture: texture, tier: target.tier, width: target.width, height: target.height, bytes: target.bytes, key: target.tier + 'x|' + target.width + 'x' + target.height + '|' + stoneSeed };
 }
@@ -568,11 +568,11 @@ function compactLyricLineMaskTexture(mask) {
   compactCtx.drawImage(sourceCanvas, 0, 0, compactCanvas.width, compactCanvas.height);
   var compactTexture = new THREE.CanvasTexture(compactCanvas);
   compactTexture.userData = compactTexture.userData || {};
-  compactTexture.userData.__mineradioLyricOwned = true;
+  compactTexture.userData.__faveradioLyricOwned = true;
   configureLyricTextureSampling(compactTexture);
   var originalTexture = mask.texture;
   originalTexture.userData = originalTexture.userData || {};
-  originalTexture.userData.__mineradioDisposed = true;
+  originalTexture.userData.__faveradioDisposed = true;
   originalTexture.dispose();
   sourceCanvas.width = 1;
   sourceCanvas.height = 1;
@@ -712,7 +712,7 @@ function stepLyricReadabilityTextureBuild(state) {
   applyLyricVerticalEdgeFade(ctx, state.W, state.H, lyricEdgeFadeValue() * (state.mask && state.mask.contextLayer ? 1.08 : 0.62), state.activeLine, state.lines.length);
   var tex = new THREE.CanvasTexture(state.canvas);
   tex.userData = tex.userData || {};
-  tex.userData.__mineradioLyricOwned = true;
+  tex.userData.__faveradioLyricOwned = true;
   configureLyricTextureSampling(tex);
   state.texture = tex;
   state.phase = LYRIC_READABILITY_BUILD_PHASES;
@@ -862,7 +862,7 @@ function finishLyricGlowTexturePixels(state) {
   ctx.restore();
   var tex = new THREE.CanvasTexture(state.canvas);
   tex.userData = tex.userData || {};
-  tex.userData.__mineradioLyricOwned = true;
+  tex.userData.__faveradioLyricOwned = true;
   configureLyricTextureSampling(tex);
   Object.assign(tex.userData, {
     width: state.W,
