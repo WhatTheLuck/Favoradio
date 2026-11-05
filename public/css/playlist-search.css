@@ -1,0 +1,48 @@
+.pl-search {
+  display: grid;
+  grid-template-rows: 36px 30px 28px 34px 24px;
+  gap: 5px;
+  padding-top: 7px;
+  height: 184px;
+  box-sizing: border-box;
+  color: #e6edf5;
+  font-size: 12px;
+}
+.pl-search-form, .pl-search-filter, .pl-search-selection, .pl-search-collect {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  margin: 0;
+}
+.pl-search input[type="search"], .pl-search select, .pl-search button {
+  min-width: 0;
+  height: 30px;
+  box-sizing: border-box;
+  padding: 3px 7px;
+  border: 1px solid rgba(255, 255, 255, .25);
+  border-radius: 6px;
+  background: #182331;
+  color: inherit;
+  font: inherit;
+}
+.pl-search input[type="search"] { flex: 1; width: 0; caret-color: var(--fc-accent, #00f5d4); }
+.pl-search input::placeholder { color: #b8c4d2; }
+.pl-search select { max-width: 100%; }
+.pl-search button { flex: 0 0 auto; cursor: pointer; }
+.pl-search button:hover:not(:disabled) { background: #2d4258; }
+.pl-search :disabled { opacity: .48; cursor: default; }
+.pl-search :focus-visible, [data-pl-search-select]:focus-visible { outline: 2px solid var(--fc-accent, #00f5d4); outline-offset: 2px; }
+.pl-search input[type="checkbox"], [data-pl-search-select] { accent-color: var(--fc-accent, #00f5d4); width: 16px; height: 16px; flex: 0 0 16px; margin: 0; }
+.pl-search-filter input[type="range"] { min-width: 30px; width: 0; flex: 1; accent-color: var(--fc-accent, #00f5d4); }
+.pl-search-filter output { width: 34px; text-align: right; font-variant-numeric: tabular-nums; }
+.pl-search-filter button { margin-left: auto; }
+.pl-search-selection label { display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+.pl-search-selection span { flex: 1; text-align: right; font-variant-numeric: tabular-nums; }
+.pl-search-collect select { flex: 1; width: 0; }
+.pl-search-status { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; line-height: 24px; color: #c1cedd; }
+.pl-search-score { display: grid; flex: 0 0 58px; gap: 2px; font-size: 11px; text-align: right; font-variant-numeric: tabular-nums; color: #e6edf5; }
+.pl-search-score meter { width: 58px; height: 8px; border: 0; background: #344355; border-radius: 4px; }
+.pl-search-score meter::-webkit-meter-bar { background: #344355; border: 0; }
+.pl-search-score meter::-webkit-meter-optimum-value { background: var(--fc-accent, #00f5d4); }
+#playlist-panel .pl-detail-row:has([data-pl-search-select]) { height: 50px; min-height: 50px; gap: 6px; }

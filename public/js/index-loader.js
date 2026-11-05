@@ -85,6 +85,7 @@
     'js/modules/06-lyrics/00-built-in-playlists.js',
     'js/modules/06-lyrics/01-playlist-panel-shell.js',
     'js/modules/06-lyrics/02-playlist-detail.js',
+    'js/modules/06-lyrics/02a-playlist-search.js',
     'js/modules/06-lyrics/03-podcast-playlist-loaders.js',
     'js/modules/06-lyrics/04-progress-seek.js',
     'js/modules/06-lyrics/05-upload-dragdrop.js',

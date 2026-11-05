@@ -121,6 +121,7 @@ async function removeTrackFromBuiltInPlaylist(id, index) {
   }
   if (playlistPanelDetailState && playlistPanelDetailState.key === 'faveradio:' + String(id || '')) {
     playlistPanelDetailState.tracks.splice(Number(index), 1);
+    if (typeof playlistSearchReset === 'function') playlistSearchReset(false);
     playlistPanelDetailState.total = Math.max(0, playlistPanelDetailState.tracks.length);
     playlistPanelDetailState.nextOffset = playlistPanelDetailState.tracks.length;
     playlistPanelDetailState.hasMore = false;
