@@ -252,7 +252,7 @@ function bindCurrentSmartTagDrop() {
     event.preventDefault();
     root.classList.remove('drop-ready');
     var song = currentIdx >= 0 && playQueue[currentIdx] || null;
-    var value = smartAiDraggingTag || (event.dataTransfer && event.dataTransfer.getData('text/faveradio-tag'));
+    var value = smartAiDraggingTag || (event.dataTransfer && event.dataTransfer.getData('text/favoradio-tag'));
     if (!song || !value || !setSmartTrackManualTag(song, value)) return;
     renderCurrentSmartTags();
     safeRenderQueuePanel('smart-tag-added');
@@ -285,7 +285,7 @@ function renderSmartAiControlBar() {
         smartAiDraggingTag = button.getAttribute('data-smart-ai-tag');
         button.classList.add('smart-ai-dragging');
         setCurrentSmartTagDropTarget(true);
-        if (event.dataTransfer) { event.dataTransfer.effectAllowed = 'copy'; event.dataTransfer.setData('text/faveradio-tag', smartAiDraggingTag); }
+        if (event.dataTransfer) { event.dataTransfer.effectAllowed = 'copy'; event.dataTransfer.setData('text/favoradio-tag', smartAiDraggingTag); }
       });
       button.addEventListener('dragend', function () { smartAiDraggingTag = ''; button.classList.remove('smart-ai-dragging'); setCurrentSmartTagDropTarget(false); });
     });

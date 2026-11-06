@@ -56,8 +56,8 @@ var lyricColorPresets = [
   { name: '酒红', color: '#6d1f35' },
   { name: '墨黑', color: '#111318' },
 ];
-var USER_FX_ARCHIVE_STORE_KEY = 'faveradio-user-fx-archives-v1';
-var USER_FX_ARCHIVE_EXPORT_TYPE = 'faveradio-user-fx-archive';
+var USER_FX_ARCHIVE_STORE_KEY = 'favoradio-user-fx-archives-v1';
+var USER_FX_ARCHIVE_EXPORT_TYPE = 'favoradio-user-fx-archive';
 var USER_FX_ARCHIVE_SCHEMA = 1;
 var USER_FX_SHARE_PREFIX = 'MR2';
 var USER_FX_SHARE_VERSION = 1;
@@ -1292,7 +1292,7 @@ function userFxArchiveExportPayload(slot) {
   };
 }
 function safeArchiveFileName(name) {
-  return String(name || 'Faveradio 用户存档').replace(/[\\/:*?"<>|]+/g, '-').slice(0, 48) + '.json';
+  return String(name || 'Favoradio 用户存档').replace(/[\\/:*?"<>|]+/g, '-').slice(0, 48) + '.json';
 }
 function exportUserFxArchive(index) {
   var slot = userFxArchiveAt(index);

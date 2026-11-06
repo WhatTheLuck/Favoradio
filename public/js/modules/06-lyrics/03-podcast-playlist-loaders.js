@@ -90,7 +90,7 @@ async function loadPodcastRadioIntoQueue(id, autoplay, title) {
 }
 function playlistQueueSource(id) {
   var raw = String(id || '');
-  if (raw.indexOf('faveradio:') === 0) return { provider: 'faveradio', id: raw.slice(10), requestId: raw };
+  if (raw.indexOf('favoradio:') === 0) return { provider: 'favoradio', id: raw.slice(10), requestId: raw };
   if (raw.indexOf('qq:') === 0) return { provider: 'qq', id: raw.slice(3), requestId: raw };
   if (raw.indexOf('kugou:') === 0) return { provider: 'kugou', id: raw.slice(6), requestId: raw };
   if (raw.indexOf('qishui:') === 0) return { provider: 'qishui', id: raw.slice(7), requestId: raw };

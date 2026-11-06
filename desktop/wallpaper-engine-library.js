@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const { execFile } = require('child_process');
 const { Readable } = require('stream');
 
-const WALLPAPER_ENGINE_SCHEME = 'faveradio-wallpaper';
+const WALLPAPER_ENGINE_SCHEME = 'favoradio-wallpaper';
 const WALLPAPER_ENGINE_APP_ID = '431960';
 const CONFIG_FILE = 'wallpaper-engine-library.json';
 const MAX_PROJECT_JSON_BYTES = 1024 * 1024;

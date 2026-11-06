@@ -919,13 +919,13 @@ async function playLocalQueueSong(song, idx, token, firstVisualPlay, opts, resum
   applyVolumeToAudio();
   await applyAudioOutputDevice(audio);
   audio.src = song.localUrl;
-  audio.__faveradioQueueItemKey = queueItemKey(song);
-  audio.__faveradioTrackSwitchToken = token;
+  audio.__favoradioQueueItemKey = queueItemKey(song);
+  audio.__favoradioTrackSwitchToken = token;
   updatePlaybackProgressUi();
   lyricSunEnergy = 0; lyricSunTarget = 0; lyricSunHold = 0; lyricSunAvg = 0; lyricSunPeak = 0.55;
   audio.onended = function () {
     if (token !== trackSwitchToken) return;
-    if (this && this.__faveradioCuefieldEndedRecoveryToken === token) return;
+    if (this && this.__favoradioCuefieldEndedRecoveryToken === token) return;
     if (typeof cuefieldAutoMixExecuting !== 'undefined' && cuefieldAutoMixExecuting) {
       if (typeof noteCuefieldAutoMixOutgoingEnded === 'function') noteCuefieldAutoMixOutgoingEnded(this, token, currentIdx);
       return;
@@ -1271,8 +1271,8 @@ async function playQueueAt(idx, opts) {
         if (opts.cuefieldAutoMix && typeof claimCuefieldPreparedAudioForPlayback === 'function') {
           claimCuefieldPreparedAudioForPlayback(audio);
         }
-        var preparedGraphGain = opts.cuefieldAutoMix && audio.__faveradioPreparedAudioGraph && audio.__faveradioPreparedAudioGraph.gainNode
-          ? Number(audio.__faveradioPreparedAudioGraph.gainNode.gain.value)
+        var preparedGraphGain = opts.cuefieldAutoMix && audio.__favoradioPreparedAudioGraph && audio.__favoradioPreparedAudioGraph.gainNode
+          ? Number(audio.__favoradioPreparedAudioGraph.gainNode.gain.value)
           : NaN;
         albumGaplessAdoptedGain = albumGaplessMixed
           ? clampRange(isFinite(preparedGraphGain) ? preparedGraphGain : (Number(audio.volume) || 0), 0, 1)
@@ -1316,12 +1316,12 @@ async function playQueueAt(idx, opts) {
         return settleExpiredSourceFallbackPlayback(idx, token, opts);
       }
       if (!albumGaplessHandoff) audio.src = proxyAudioUrl;
-      audio.__faveradioQueueItemKey = queueItemKey(song);
-      audio.__faveradioTrackSwitchToken = token;
+      audio.__favoradioQueueItemKey = queueItemKey(song);
+      audio.__favoradioTrackSwitchToken = token;
       updatePlaybackProgressUi();
       audio.onended = function () {
         if (token !== trackSwitchToken) return;
-        if (this && this.__faveradioCuefieldEndedRecoveryToken === token) return;
+        if (this && this.__favoradioCuefieldEndedRecoveryToken === token) return;
         if (typeof cuefieldAutoMixExecuting !== 'undefined' && cuefieldAutoMixExecuting) {
           if (typeof noteCuefieldAutoMixOutgoingEnded === 'function') noteCuefieldAutoMixOutgoingEnded(this, token, currentIdx);
           return;

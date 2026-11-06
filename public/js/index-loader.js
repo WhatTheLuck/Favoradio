@@ -1,6 +1,6 @@
 'use strict';
 
-(function loadFaveradioIndexModules() {
+(function loadFavoradioIndexModules() {
   const moduleCacheBust = String(Date.now());
   const modulePaths = [
     'js/modules/00-state/00-core-stores.js',
@@ -124,13 +124,13 @@
     request.send(null);
 
     if ((request.status < 200 || request.status >= 300) && request.status !== 0) {
-      throw new Error('Failed to load Faveradio module: ' + path + ' (' + request.status + ')');
+      throw new Error('Failed to load Favoradio module: ' + path + ' (' + request.status + ')');
     }
 
     return request.responseText;
   }
 
   const script = document.createElement('script');
-  script.text = modulePaths.map(readModule).join('') + '\n//# sourceURL=faveradio-index-modules.js\n';
+  script.text = modulePaths.map(readModule).join('') + '\n//# sourceURL=favoradio-index-modules.js\n';
   document.currentScript.parentNode.insertBefore(script, document.currentScript.nextSibling);
 })();

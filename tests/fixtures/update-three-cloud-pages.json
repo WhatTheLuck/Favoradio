@@ -1,8 +1,8 @@
 {
   "latestVersion": "2.1.1",
   "release": {
-    "name": "Faveradio 2.1.1 test manifest",
-    "htmlUrl": "https://github.com/WhatTheLuck/Faveradio/releases/tag/v2.1.1",
+    "name": "Favoradio 2.1.1 test manifest",
+    "htmlUrl": "https://github.com/WhatTheLuck/Favoradio/releases/tag/v2.1.1",
     "downloadPages": [
       {
         "label": "夸克盘",
@@ -14,7 +14,7 @@
       },
       {
         "label": "蓝奏云",
-        "url": "https://xxhuber.lanzout.com/s/Faveradio"
+        "url": "https://xxhuber.lanzout.com/s/Favoradio"
       }
     ],
     "notes": [

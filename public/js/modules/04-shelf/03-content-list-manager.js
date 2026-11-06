@@ -267,12 +267,12 @@ function makeContentListManager() {
   async function loadMoreContentRows(reason) {
     if (!open || contentLoadingMore || !contentHasMore || !contentSource) return false;
     var url = contentPageUrl(contentNextOffset);
-    if (!url && contentSource.provider !== 'faveradio') return false;
+    if (!url && contentSource.provider !== 'favoradio') return false;
     var token = requestToken;
     contentLoadingMore = true;
     panelDirty = true;
     try {
-      var r = contentSource.provider === 'faveradio'
+      var r = contentSource.provider === 'favoradio'
         ? await builtInPlaylistTracksPage(contentSource.id, { limit: PLAYLIST_LAZY_BATCH_SIZE, offset: contentNextOffset })
         : await apiJson(url);
       if (!open || token !== requestToken) return false;
@@ -706,10 +706,10 @@ function makeContentListManager() {
       var kugouPlaylistId = String(playlistId || '').indexOf('kugou:') === 0 ? String(playlistId).slice(6) : '';
       var qishuiPlaylistId = String(playlistId || '').indexOf('qishui:') === 0 ? String(playlistId).slice(7) : '';
       var spotifyPlaylistId = String(playlistId || '').indexOf('spotify:') === 0 ? String(playlistId).slice(8) : '';
-      var builtInPlaylistId = String(playlistId || '').indexOf('faveradio:') === 0 ? String(playlistId).slice(10) : '';
+      var builtInPlaylistId = String(playlistId || '').indexOf('favoradio:') === 0 ? String(playlistId).slice(10) : '';
       contentKind = podcastCollectionKey ? 'podcast' : 'playlist';
       contentSource = podcastCollectionKey ? null : {
-        provider: builtInPlaylistId ? 'faveradio' : (qqPlaylistId ? 'qq' : (kugouPlaylistId ? 'kugou' : (qishuiPlaylistId ? 'qishui' : (spotifyPlaylistId ? 'spotify' : 'netease')))),
+        provider: builtInPlaylistId ? 'favoradio' : (qqPlaylistId ? 'qq' : (kugouPlaylistId ? 'kugou' : (qishuiPlaylistId ? 'qishui' : (spotifyPlaylistId ? 'spotify' : 'netease')))),
         id: builtInPlaylistId || qqPlaylistId || kugouPlaylistId || qishuiPlaylistId || spotifyPlaylistId || playlistId
       };
       // 拉取歌单/播客集合

@@ -22,7 +22,7 @@ function writeProject(root, name, manifest, files) {
 }
 
 async function main() {
-  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-we-'));
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'favoradio-we-'));
   const libraryRoot = path.join(temp, 'library');
   const userData = path.join(temp, 'user-data');
   fs.mkdirSync(libraryRoot, { recursive: true });
@@ -156,7 +156,7 @@ async function main() {
       /不是有效的 Wallpaper Engine PKGV 场景包/
     );
     assert(/^[a-f0-9]{48}$/.test(snapshot.mediaToken), 'each app run should expose a random renderer media token');
-    const mediaUrl = (kind, id) => `faveradio-wallpaper://${kind}/${id}?token=${snapshot.mediaToken}`;
+    const mediaUrl = (kind, id) => `favoradio-wallpaper://${kind}/${id}?token=${snapshot.mediaToken}`;
 
     const range = await instance.mediaResponse(new Request(mediaUrl('media', video.id), {
       headers: { Range: 'bytes=2-7' },
@@ -174,9 +174,9 @@ async function main() {
 
     const missing = await instance.mediaResponse(new Request(mediaUrl('media', '000000000000000000000000')));
     assert.strictEqual(missing.status, 404);
-    const missingToken = await instance.mediaResponse(new Request(`faveradio-wallpaper://media/${video.id}`));
+    const missingToken = await instance.mediaResponse(new Request(`favoradio-wallpaper://media/${video.id}`));
     assert.strictEqual(missingToken.status, 404);
-    const malformed = await instance.mediaResponse(new Request(`faveradio-wallpaper://media/%E0%A4%A?token=${snapshot.mediaToken}`));
+    const malformed = await instance.mediaResponse(new Request(`favoradio-wallpaper://media/%E0%A4%A?token=${snapshot.mediaToken}`));
     assert.strictEqual(malformed.status, 404);
     const extraCharacters = await instance.mediaResponse(new Request(mediaUrl('media', `prefix-${video.id}`)));
     assert.strictEqual(extraCharacters.status, 404);

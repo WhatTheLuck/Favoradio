@@ -14,7 +14,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-public sealed class FaveradioDwmThumbnailProbe : Form {
+public sealed class FavoradioDwmThumbnailProbe : Form {
   [StructLayout(LayoutKind.Sequential)]
   private struct RECT {
     public int Left;
@@ -80,14 +80,14 @@ public sealed class FaveradioDwmThumbnailProbe : Form {
   private readonly Timer followTimer;
   private IntPtr thumbnail = IntPtr.Zero;
 
-  public FaveradioDwmThumbnailProbe(IntPtr host, IntPtr source) {
+  public FavoradioDwmThumbnailProbe(IntPtr host, IntPtr source) {
     hostWindow = host;
     sourceWindow = source;
     FormBorderStyle = FormBorderStyle.None;
     ShowInTaskbar = false;
     StartPosition = FormStartPosition.Manual;
     BackColor = Color.Black;
-    Text = "Faveradio WE DWM Surface Probe";
+    Text = "Favoradio WE DWM Surface Probe";
     followTimer = new Timer();
     followTimer.Interval = 33;
     followTimer.Tick += delegate { FollowHost(); };
@@ -142,9 +142,9 @@ public sealed class FaveradioDwmThumbnailProbe : Form {
     int width = Math.Max(1, hostRect.Right - hostRect.Left);
     int height = Math.Max(1, hostRect.Bottom - hostRect.Top);
 
-    // The probe is immediately behind Faveradio. The real WE source remains
+    // The probe is immediately behind Favoradio. The real WE source remains
     // aligned one z-order level further back so it receives the same global
-    // cursor geometry without ever covering or receiving Faveradio clicks.
+    // cursor geometry without ever covering or receiving Favoradio clicks.
     SetWindowPos(Handle, hostWindow, hostRect.Left, hostRect.Top, width, height,
       SWP_NOACTIVATE | SWP_SHOWWINDOW);
     SetWindowPos(sourceWindow, Handle, hostRect.Left, hostRect.Top, width, height,
@@ -168,9 +168,9 @@ public sealed class FaveradioDwmThumbnailProbe : Form {
   public static void Run(long host, long source) {
     Application.EnableVisualStyles();
     Application.SetCompatibleTextRenderingDefault(false);
-    Application.Run(new FaveradioDwmThumbnailProbe(new IntPtr(host), new IntPtr(source)));
+    Application.Run(new FavoradioDwmThumbnailProbe(new IntPtr(host), new IntPtr(source)));
   }
 }
 '@
 
-[FaveradioDwmThumbnailProbe]::Run($HostWindow, $SourceWindow)
+[FavoradioDwmThumbnailProbe]::Run($HostWindow, $SourceWindow)

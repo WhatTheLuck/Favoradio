@@ -9,7 +9,7 @@ const test = require('node:test');
 const { createQishuiQrLoginBridge, hasLoginCookie } = require('../qishui-qr-login');
 
 test('Qishui Passport QR bridge persists a confirmed official web session and clears it', async (t) => {
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-qishui-passport-'));
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'favoradio-qishui-passport-'));
   const configFile = path.join(tempDir, 'qishui-qr.json');
   let hooks = null;
   let clearCount = 0;
@@ -71,7 +71,7 @@ test('Qishui Passport QR bridge persists a confirmed official web session and cl
 });
 
 test('an old saved cookie or superseded QR poll cannot confirm a new login', async t => {
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-qishui-qr-scope-'));
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'favoradio-qishui-qr-scope-'));
   t.after(() => fs.rmSync(tempDir, { recursive: true, force: true }));
   let nextToken = 0;
   let finishPoll;
@@ -127,7 +127,7 @@ test('Qishui login product surface uses only the signed Passport QR flow', () =>
   assert.match(main, /await qishuiQrLogin\.clear\(\)/);
 
   assert.match(auth, /show:\s*false/);
-  assert.match(auth, /persist:faveradio-qishui-auth-v6/);
+  assert.match(auth, /persist:favoradio-qishui-auth-v6/);
   assert.match(auth, /a_bogus/);
   assert.match(auth, /\/passport\/web\/get_qrcode\//);
   assert.match(auth, /\/passport\/web\/check_qrconnect\//);

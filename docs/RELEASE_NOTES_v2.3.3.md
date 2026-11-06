@@ -1,4 +1,4 @@
-# Faveradio 2.3.3
+# Favoradio 2.3.3
 
 - 本地歌曲缺少节奏缓存时自动运行 MR 分析，不再弹出节奏模式选择窗口。
 - EmoMusic 可从下拉栏切换摄像头；人脸识别启动或连续推理失败时显示状态，并尝试恢复。
@@ -6,10 +6,10 @@
 
 ## 下载
 
-- [GitHub Release 下载 Faveradio 2.3.3](https://github.com/WhatTheLuck/Faveradio/releases/tag/v2.3.3)
+- [GitHub Release 下载 Favoradio 2.3.3](https://github.com/WhatTheLuck/Favoradio/releases/tag/v2.3.3)
 
-完整安装包：`Faveradio-2.3.3-Setup.exe`
+完整安装包：`Favoradio-2.3.3-Setup.exe`
 
 SHA-256：`f5afb9b1ea9b3f9d33da395ea931355c68ab2affb8202ad5dfd7e3cb3d009086`。
 
-<!-- faveradio-download-page: GitHub Release|https://github.com/WhatTheLuck/Faveradio/releases/tag/v2.3.3 -->
+<!-- favoradio-download-page: GitHub Release|https://github.com/WhatTheLuck/Favoradio/releases/tag/v2.3.3 -->

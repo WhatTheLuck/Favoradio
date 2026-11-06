@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace Faveradio.CoreAudioReadOnly {
+namespace Favoradio.CoreAudioReadOnly {
   enum EDataFlow { Render = 0, Capture = 1, All = 2 }
   enum AudioSessionState { Inactive = 0, Active = 1, Expired = 2 }
 
@@ -248,7 +248,7 @@ namespace Faveradio.CoreAudioReadOnly {
 }
 '@
 
-if (-not ([System.Management.Automation.PSTypeName]'Faveradio.CoreAudioReadOnly.AudioSessionInspector').Type) {
+if (-not ([System.Management.Automation.PSTypeName]'Favoradio.CoreAudioReadOnly.AudioSessionInspector').Type) {
   Add-Type -TypeDefinition $coreAudioSource -Language CSharp
 }
 
@@ -267,7 +267,7 @@ $deadline = [DateTime]::UtcNow.AddSeconds($DurationSeconds)
 $sampleNumber = 0
 do {
   $sampleNumber += 1
-  $sessions = @([Faveradio.CoreAudioReadOnly.AudioSessionInspector]::ReadAllRenderSessions())
+  $sessions = @([Favoradio.CoreAudioReadOnly.AudioSessionInspector]::ReadAllRenderSessions())
   foreach ($session in $sessions) {
     $normalizedName = [string]$session.ProcessName
     $normalizedName = $normalizedName.Trim().ToLowerInvariant()

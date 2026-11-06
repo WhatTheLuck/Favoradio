@@ -88,7 +88,7 @@ async function mainTarget(timeoutMs = 15000) {
     } catch (_) { }
     await sleep(100);
   }
-  throw new Error('Faveradio CDP target was not ready');
+  throw new Error('Favoradio CDP target was not ready');
 }
 
 function runPowerShell(script, failureLabel) {
@@ -139,7 +139,7 @@ Add-Type @"
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
-public static class FaveradioExplorerUntouchedProbe {
+public static class FavoradioExplorerUntouchedProbe {
   public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
   [StructLayout(LayoutKind.Sequential)] public struct RECT { public int Left; public int Top; public int Right; public int Bottom; }
   [DllImport("user32.dll")] [return: MarshalAs(UnmanagedType.Bool)] public static extern bool EnumWindows(EnumWindowsProc callback, IntPtr lParam);
@@ -183,50 +183,50 @@ public static class FaveradioExplorerUntouchedProbe {
 $previousDpi = [IntPtr]::Zero
 $region = [IntPtr]::Zero
 try {
-  try { $previousDpi = [FaveradioExplorerUntouchedProbe]::SetThreadDpiAwarenessContext([IntPtr]::new([Int64]-4)) } catch { }
+  try { $previousDpi = [FavoradioExplorerUntouchedProbe]::SetThreadDpiAwarenessContext([IntPtr]::new([Int64]-4)) } catch { }
   $desktopHost = [IntPtr]::Zero
   $view = [IntPtr]::Zero
   $list = [IntPtr]::Zero
   $expected = [IntPtr]::new([Int64]${expected})
   if ($expected -ne [IntPtr]::Zero) {
-    if (-not [FaveradioExplorerUntouchedProbe]::IsWindow($expected)) { throw 'EXPECTED_EXPLORER_LIST_NOT_FOUND' }
-    if ([FaveradioExplorerUntouchedProbe]::ClassName($expected) -ne 'SysListView32') { throw 'EXPECTED_EXPLORER_LIST_CLASS_CHANGED' }
+    if (-not [FavoradioExplorerUntouchedProbe]::IsWindow($expected)) { throw 'EXPECTED_EXPLORER_LIST_NOT_FOUND' }
+    if ([FavoradioExplorerUntouchedProbe]::ClassName($expected) -ne 'SysListView32') { throw 'EXPECTED_EXPLORER_LIST_CLASS_CHANGED' }
     $list = $expected
-    $view = [FaveradioExplorerUntouchedProbe]::GetParent($list)
-    $desktopHost = [FaveradioExplorerUntouchedProbe]::GetAncestor($list, 2)
-  } elseif (-not [FaveradioExplorerUntouchedProbe]::FindDesktop([ref]$desktopHost, [ref]$view, [ref]$list)) {
+    $view = [FavoradioExplorerUntouchedProbe]::GetParent($list)
+    $desktopHost = [FavoradioExplorerUntouchedProbe]::GetAncestor($list, 2)
+  } elseif (-not [FavoradioExplorerUntouchedProbe]::FindDesktop([ref]$desktopHost, [ref]$view, [ref]$list)) {
     throw 'EXPLORER_DESKTOP_LIST_NOT_FOUND'
   }
-  if ([FaveradioExplorerUntouchedProbe]::ClassName($list) -ne 'SysListView32') { throw 'EXPLORER_DESKTOP_LIST_INVALID' }
-  $rect = New-Object FaveradioExplorerUntouchedProbe+RECT
-  if (-not [FaveradioExplorerUntouchedProbe]::GetWindowRect($list, [ref]$rect)) { throw 'EXPLORER_DESKTOP_RECT_FAILED' }
-  $region = [FaveradioExplorerUntouchedProbe]::CreateRectRgn(0, 0, 0, 0)
+  if ([FavoradioExplorerUntouchedProbe]::ClassName($list) -ne 'SysListView32') { throw 'EXPLORER_DESKTOP_LIST_INVALID' }
+  $rect = New-Object FavoradioExplorerUntouchedProbe+RECT
+  if (-not [FavoradioExplorerUntouchedProbe]::GetWindowRect($list, [ref]$rect)) { throw 'EXPLORER_DESKTOP_RECT_FAILED' }
+  $region = [FavoradioExplorerUntouchedProbe]::CreateRectRgn(0, 0, 0, 0)
   if ($region -eq [IntPtr]::Zero) { throw 'EXPLORER_DESKTOP_REGION_ALLOC_FAILED' }
-  $regionType = [FaveradioExplorerUntouchedProbe]::GetWindowRgn($list, $region)
-  $regionBox = New-Object FaveradioExplorerUntouchedProbe+RECT
+  $regionType = [FavoradioExplorerUntouchedProbe]::GetWindowRgn($list, $region)
+  $regionBox = New-Object FavoradioExplorerUntouchedProbe+RECT
   $regionBoxType = 0
-  if ($regionType -gt 0) { $regionBoxType = [FaveradioExplorerUntouchedProbe]::GetRgnBox($region, [ref]$regionBox) }
+  if ($regionType -gt 0) { $regionBoxType = [FavoradioExplorerUntouchedProbe]::GetRgnBox($region, [ref]$regionBox) }
   [uint32]$layerColorKey = 0
   [byte]$layerAlpha = 0
   [uint32]$layerFlags = 0
-  $layerAvailable = [FaveradioExplorerUntouchedProbe]::GetLayeredWindowAttributes($list, [ref]$layerColorKey, [ref]$layerAlpha, [ref]$layerFlags)
+  $layerAvailable = [FavoradioExplorerUntouchedProbe]::GetLayeredWindowAttributes($list, [ref]$layerColorKey, [ref]$layerAlpha, [ref]$layerFlags)
   $layerError = [Runtime.InteropServices.Marshal]::GetLastWin32Error()
   [uint32]$processId = 0
-  $threadId = [FaveradioExplorerUntouchedProbe]::GetWindowThreadProcessId($list, [ref]$processId)
-  $style = [FaveradioExplorerUntouchedProbe]::GetWindowLongU32($list, -16)
-  $exStyle = [FaveradioExplorerUntouchedProbe]::GetWindowLongU32($list, -20)
+  $threadId = [FavoradioExplorerUntouchedProbe]::GetWindowThreadProcessId($list, [ref]$processId)
+  $style = [FavoradioExplorerUntouchedProbe]::GetWindowLongU32($list, -16)
+  $exStyle = [FavoradioExplorerUntouchedProbe]::GetWindowLongU32($list, -20)
   $backgroundResult = [IntPtr]::Zero
-  if ([FaveradioExplorerUntouchedProbe]::SendMessageTimeout($list, 0x1000, [IntPtr]::Zero, [IntPtr]::Zero, 0x0002, 500, [ref]$backgroundResult) -eq [IntPtr]::Zero) {
+  if ([FavoradioExplorerUntouchedProbe]::SendMessageTimeout($list, 0x1000, [IntPtr]::Zero, [IntPtr]::Zero, 0x0002, 500, [ref]$backgroundResult) -eq [IntPtr]::Zero) {
     throw 'EXPLORER_DESKTOP_BACKGROUND_TIMEOUT'
   }
-  $background = [FaveradioExplorerUntouchedProbe]::IntPtrU32($backgroundResult)
+  $background = [FavoradioExplorerUntouchedProbe]::IntPtrU32($backgroundResult)
   [pscustomobject]@{
     handle = $list.ToInt64().ToString()
-    className = [FaveradioExplorerUntouchedProbe]::ClassName($list)
+    className = [FavoradioExplorerUntouchedProbe]::ClassName($list)
     parentWindowId = $view.ToInt64().ToString()
-    parentClassName = [FaveradioExplorerUntouchedProbe]::ClassName($view)
+    parentClassName = [FavoradioExplorerUntouchedProbe]::ClassName($view)
     rootWindowId = $desktopHost.ToInt64().ToString()
-    rootClassName = [FaveradioExplorerUntouchedProbe]::ClassName($desktopHost)
+    rootClassName = [FavoradioExplorerUntouchedProbe]::ClassName($desktopHost)
     processId = [int64]$processId
     threadId = [int64]$threadId
     style = $style.ToString()
@@ -234,8 +234,8 @@ try {
     regionType = $regionType
     regionBoxType = $regionBoxType
     regionBox = [pscustomobject]@{ left = $regionBox.Left; top = $regionBox.Top; right = $regionBox.Right; bottom = $regionBox.Bottom }
-    enabled = [FaveradioExplorerUntouchedProbe]::IsWindowEnabled($list)
-    visible = [FaveradioExplorerUntouchedProbe]::IsWindowVisible($list)
+    enabled = [FavoradioExplorerUntouchedProbe]::IsWindowEnabled($list)
+    visible = [FavoradioExplorerUntouchedProbe]::IsWindowVisible($list)
     layeredAttributesAvailable = $layerAvailable
     layeredColorKey = $layerColorKey.ToString()
     layeredAlpha = [int]$layerAlpha
@@ -245,8 +245,8 @@ try {
     windowRect = [pscustomobject]@{ left = $rect.Left; top = $rect.Top; right = $rect.Right; bottom = $rect.Bottom }
   } | ConvertTo-Json -Compress
 } finally {
-  if ($region -ne [IntPtr]::Zero) { [FaveradioExplorerUntouchedProbe]::DeleteObject($region) | Out-Null }
-  if ($previousDpi -ne [IntPtr]::Zero) { try { [FaveradioExplorerUntouchedProbe]::SetThreadDpiAwarenessContext($previousDpi) | Out-Null } catch { } }
+  if ($region -ne [IntPtr]::Zero) { [FavoradioExplorerUntouchedProbe]::DeleteObject($region) | Out-Null }
+  if ($previousDpi -ne [IntPtr]::Zero) { try { [FavoradioExplorerUntouchedProbe]::SetThreadDpiAwarenessContext($previousDpi) | Out-Null } catch { } }
 }`;
   return runPowerShell(script, 'Explorer native-state probe failed');
 }
@@ -258,7 +258,7 @@ Add-Type @"
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
-public static class FaveradioDesktopRouteHitTest {
+public static class FavoradioDesktopRouteHitTest {
   [StructLayout(LayoutKind.Sequential)] public struct POINT { public int X; public int Y; }
   [DllImport("user32.dll")] public static extern IntPtr ChildWindowFromPointEx(IntPtr parent, POINT point, uint flags);
   [DllImport("user32.dll")] [return: MarshalAs(UnmanagedType.Bool)] public static extern bool ScreenToClient(IntPtr hwnd, ref POINT point);
@@ -269,28 +269,28 @@ public static class FaveradioDesktopRouteHitTest {
 "@
 $previousDpi = [IntPtr]::Zero
 try {
-  try { $previousDpi = [FaveradioDesktopRouteHitTest]::SetThreadDpiAwarenessContext([IntPtr]::new([Int64]-4)) } catch { }
+  try { $previousDpi = [FavoradioDesktopRouteHitTest]::SetThreadDpiAwarenessContext([IntPtr]::new([Int64]-4)) } catch { }
   $current = [IntPtr]::new([Int64]${String(rootHandle || '0')})
   $chain = @()
   for ($depth = 0; $current -ne [IntPtr]::Zero -and $depth -lt 12; $depth++) {
     $className = New-Object System.Text.StringBuilder 160
     $title = New-Object System.Text.StringBuilder 260
-    [FaveradioDesktopRouteHitTest]::GetClassName($current, $className, $className.Capacity) | Out-Null
-    [FaveradioDesktopRouteHitTest]::GetWindowText($current, $title, $title.Capacity) | Out-Null
+    [FavoradioDesktopRouteHitTest]::GetClassName($current, $className, $className.Capacity) | Out-Null
+    [FavoradioDesktopRouteHitTest]::GetWindowText($current, $title, $title.Capacity) | Out-Null
     $chain += [pscustomobject]@{ handle = $current.ToInt64().ToString(); className = $className.ToString(); title = $title.ToString() }
-    $point = New-Object FaveradioDesktopRouteHitTest+POINT
+    $point = New-Object FavoradioDesktopRouteHitTest+POINT
     $point.X = ${Math.round(x)}
     $point.Y = ${Math.round(y)}
-    if (-not [FaveradioDesktopRouteHitTest]::ScreenToClient($current, [ref]$point)) { break }
+    if (-not [FavoradioDesktopRouteHitTest]::ScreenToClient($current, [ref]$point)) { break }
     # CWP_SKIPINVISIBLE | CWP_SKIPDISABLED | CWP_SKIPTRANSPARENT. This checks
     # the native pass-through plumbing without synthesizing mouse input.
-    $child = [FaveradioDesktopRouteHitTest]::ChildWindowFromPointEx($current, $point, 0x0007)
+    $child = [FavoradioDesktopRouteHitTest]::ChildWindowFromPointEx($current, $point, 0x0007)
     if ($child -eq [IntPtr]::Zero -or $child -eq $current) { break }
     $current = $child
   }
   $chain | ConvertTo-Json -Compress
 } finally {
-  if ($previousDpi -ne [IntPtr]::Zero) { try { [FaveradioDesktopRouteHitTest]::SetThreadDpiAwarenessContext($previousDpi) | Out-Null } catch { } }
+  if ($previousDpi -ne [IntPtr]::Zero) { try { [FavoradioDesktopRouteHitTest]::SetThreadDpiAwarenessContext($previousDpi) | Out-Null } catch { } }
 }`;
   const parsed = runPowerShell(script, 'Desktop route hit-test failed');
   return Array.isArray(parsed) ? parsed : [parsed];
@@ -636,7 +636,7 @@ async function main() {
       'direct Escape shortcut is not registered');
     assert.equal(enabled.status && enabled.status.softwareInteractionLocked, false);
     assert.equal(enabled.status && enabled.status.ignoreMouseEvents, false,
-      'unlocked complete Faveradio surface is still globally click-through');
+      'unlocked complete Favoradio surface is still globally click-through');
     assert.equal(enabled.status && enabled.status.desktopIconsVisible, baseline.visible,
       'entering desktop mode did not adopt the original Explorer icon visibility');
     assert.equal(enabled.naturalHud.immersive, false,
@@ -646,7 +646,7 @@ async function main() {
     assert.equal(enabled.naturalHud.preload, false,
       `full desktop remained behind the preload mask: ${JSON.stringify(enabled.naturalHud)}`);
     assert(enabled.naturalHud.bottomVisible || enabled.naturalHud.homeVisible,
-      `full desktop started without a natural Faveradio HUD: ${JSON.stringify(enabled.naturalHud)}`);
+      `full desktop started without a natural Favoradio HUD: ${JSON.stringify(enabled.naturalHud)}`);
     enabledSuccessfully = true;
 
     const postEnableTargets = await listCdpTargets();
@@ -823,12 +823,12 @@ async function main() {
     }, enabled.status, enabled.viewport);
     const iconHit = windowChainAt(iconPhysical.x, iconPhysical.y, enabled.status.parentWindowId);
     assert(iconHit.some((item) => item.className === 'SysListView32'),
-      `real Explorer icon did not remain above Faveradio: ${JSON.stringify(iconHit)}`);
+      `real Explorer icon did not remain above Favoradio: ${JSON.stringify(iconHit)}`);
 
     const naturalInputStatus = await setPointerRoute(client, { overSoftwareUi: false, overDesktopControls: false });
     assert.deepEqual(naturalInputStatus.pointerRoute, { overSoftwareUi: false, overDesktopControls: false });
     assert.equal(naturalInputStatus.ignoreMouseEvents, false,
-      'unlocked blank area incorrectly disabled the complete Faveradio input surface');
+      'unlocked blank area incorrectly disabled the complete Favoradio input surface');
     const naturalInputHit = windowChainAt(blankPhysical.x, blankPhysical.y, enabled.status.parentWindowId);
     const controllerStatus = await setPointerRoute(client, { overSoftwareUi: false, overDesktopControls: true });
     assert.deepEqual(controllerStatus.pointerRoute, { overSoftwareUi: false, overDesktopControls: true });
@@ -847,7 +847,7 @@ async function main() {
       assert.deepEqual(status.pointerRoute, route);
       assert.equal(status.softwareInteractionLocked, false);
       assert.equal(status.ignoreMouseEvents, false,
-        `desktop pointer route unexpectedly disabled Faveradio input: ${JSON.stringify(route)}`);
+        `desktop pointer route unexpectedly disabled Favoradio input: ${JSON.stringify(route)}`);
       routeMatrix.push({ route, ignoreMouseEvents: status.ignoreMouseEvents });
     }
     await setPointerRoute(client, { overSoftwareUi: false, overDesktopControls: false });
@@ -902,7 +902,7 @@ async function main() {
     assert.equal(unlockedSoftware.bodyLocked, false);
     const unlockedBlank = await setPointerRoute(client, { overSoftwareUi: false, overDesktopControls: false });
     assert.equal(unlockedBlank.ignoreMouseEvents, false,
-      'unlock did not restore natural Faveradio input outside the controller');
+      'unlock did not restore natural Favoradio input outside the controller');
     const softwareLockCycle = { lockedSoftware, lockedController, unlockedSoftware, unlockedBlank };
 
     const hidden = await client.evaluate(`(async () => {
@@ -979,7 +979,7 @@ async function main() {
       };
     })()`);
     assert(persistentHud.bottomVisible || persistentHud.homeVisible,
-      `full desktop lost its complete Faveradio HUD after the ordinary auto-hide path: ${JSON.stringify(persistentHud)}`);
+      `full desktop lost its complete Favoradio HUD after the ordinary auto-hide path: ${JSON.stringify(persistentHud)}`);
 
     console.log(JSON.stringify({
       ok: true,
@@ -1021,7 +1021,7 @@ async function main() {
       legacyCanvasTargetCount,
       manualHardwareChecksStillRequired: [
         'Use the real mouse to open, collapse, and reopen the top-right desktop controller.',
-        'Lock Faveradio, move back into the top-right reveal corridor, and use the same switch to unlock it.',
+        'Lock Favoradio, move back into the top-right reveal corridor, and use the same switch to unlock it.',
         'Open the controller and click another desktop area to verify the panel closes immediately.',
         'Use the real mouse to toggle desktop icon visibility and verify the player stays operable.',
         'Use the real mouse to verify wallpaper parallax and the unchanged Windows cursor.',

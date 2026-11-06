@@ -3,7 +3,7 @@ const path = require('path');
 const crypto = require('crypto');
 const { Readable } = require('stream');
 
-const LOCAL_MUSIC_SCHEME = 'faveradio-local';
+const LOCAL_MUSIC_SCHEME = 'favoradio-local';
 const LOCAL_LIBRARY_VERSION = 1;
 const LOCAL_LIBRARY_FILE = 'local-music-library.json';
 const LOCAL_LIBRARY_DIRECTORY = 'local-music-library';

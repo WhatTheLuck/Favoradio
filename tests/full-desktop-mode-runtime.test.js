@@ -165,7 +165,7 @@ function makeRuntime(options = {}) {
   const runtime = new FullDesktopModeRuntime({
     screen,
     platform: 'win32',
-    nativeTempPath: 'D:\\FaveradioCache\\native-helper-temp',
+    nativeTempPath: 'D:\\FavoradioCache\\native-helper-temp',
     requestReconcile: typeof options.requestReconcile === 'function'
       ? options.requestReconcile
       : null,
@@ -276,7 +276,7 @@ function makeRuntime(options = {}) {
   return { runtime, calls };
 }
 
-test('enable defaults to a fully interactive Faveradio desktop', async () => {
+test('enable defaults to a fully interactive Favoradio desktop', async () => {
   const win = new FakeBrowserWindow();
   const { runtime, calls } = makeRuntime();
 
@@ -310,13 +310,13 @@ test('enable defaults to a fully interactive Faveradio desktop', async () => {
   assert.equal(win.webContents.backgroundThrottling, false);
   assert.equal(win.shadowEnabled, false, 'desktop child must not retain a top-level native shadow');
   assert.equal(calls.attach.length, 0, 'interactive enable must not enter the passive wallpaper WorkerW');
-  assert.equal(calls.coexist.length, 1, 'interactive enable must attach the complete Faveradio surface below the real desktop icons');
+  assert.equal(calls.coexist.length, 1, 'interactive enable must attach the complete Favoradio surface below the real desktop icons');
   assert.equal(calls.detach.length, 0, 'initial top-level window must not make an unnecessary detach round trip');
   assert.equal(win.calls.some((call) => call[0] === 'hide'), true, 'coexistence attach must stay hidden until native color-key ACK');
   assert.equal(win.calls.some((call) => call[0] === 'focus'), false, 'interactive desktop must not steal focus');
   const routeCall = win.calls.filter((call) => call[0] === 'setIgnoreMouseEvents').at(-1);
   assert.deepEqual(routeCall, ['setIgnoreMouseEvents', false, undefined]);
-  assert.deepEqual(win.shape, [], 'continuous Faveradio surface must not contain desktop icon holes');
+  assert.deepEqual(win.shape, [], 'continuous Favoradio surface must not contain desktop icon holes');
 });
 
 test('toggling to passive mode attaches the same main window to WorkerW', async () => {
@@ -368,7 +368,7 @@ test('passive preparation is serialized before hiding or attaching the main wind
   assert.equal(win.ignoreMouse, true);
 });
 
-test('passive preparation failure leaves the full Faveradio window interactive', async () => {
+test('passive preparation failure leaves the full Favoradio window interactive', async () => {
   const win = new FakeBrowserWindow();
   const { runtime, calls } = makeRuntime({
     beforePassive: async () => ({ ok: false, error: 'SYNTHETIC_PREVIEW_PREPARE_FAILURE' }),
@@ -488,7 +488,7 @@ test('software lock passes normal areas through while the controller remains an 
   assert.equal(unlockedStatus.softwareInteractionLocked, false);
   assert.equal(unlockedStatus.ignoreMouseEvents, false);
   assert.equal(unlockedStatus.iconInteractionLocked, false);
-  assert.equal(win.ignoreMouse, false, 'unlock from the controller must immediately restore natural Faveradio input');
+  assert.equal(win.ignoreMouse, false, 'unlock from the controller must immediately restore natural Favoradio input');
   runtime.updatePointerRoute({ overSoftwareUi: true, overDesktopControls: false });
   assert.equal(win.ignoreMouse, false, 'unlocked software UI must receive natural pointer input');
   assert.deepEqual(win.shape, []);
@@ -736,7 +736,7 @@ test('native attach failure fails closed and restores the normal window', async 
   assert.equal(win.webContents.backgroundThrottling, true);
 });
 
-test('coexist attach places the complete Faveradio surface below SysListView without mouse synthesis', () => {
+test('coexist attach places the complete Favoradio surface below SysListView without mouse synthesis', () => {
   const script = desktopWindowCoexistAttachScript({
     hwnd: '424242',
     x: 0,
@@ -1109,7 +1109,7 @@ test('host-change rebind waits for a restored terminal ACK and restore failure c
   assert.equal(restored.runtime.getStatus('host-restored').nativeStateKnown, true);
 });
 
-test('unexpected watcher exit with confirmed restoration queues recovery without hiding Faveradio', async () => {
+test('unexpected watcher exit with confirmed restoration queues recovery without hiding Favoradio', async () => {
   const win = new FakeBrowserWindow();
   const reconcileReasons = [];
   let callbacks = null;
@@ -1162,7 +1162,7 @@ test('repeated unexpected watcher exits open a recovery circuit instead of flick
   assert.equal(status.enabled, false);
   assert.equal(status.interactive, false);
   assert.equal(status.lastError, 'DESKTOP_ICON_RECOVERY_CIRCUIT_OPEN');
-  assert.equal(win.visible, true, 'circuit fallback must restore the ordinary Faveradio window');
+  assert.equal(win.visible, true, 'circuit fallback must restore the ordinary Favoradio window');
   assert.equal(calls.status.some((entry) => /circuit-open/.test(entry.reason)), true);
 });
 

@@ -10,10 +10,10 @@ EmoMusic 复用现有 MediaPipe Face Mesh 的 478 点输出，从左右虹膜中
 4. 正对摄像头、自然睁眼并注视屏幕中央，然后点击“注视中央并校准”。
 5. 需要在画面中检查结果时，开启“显示双眼瞳孔标记”。画面不会在两眼中间绘制额外的方向线或靶标。
 
-识别结果也会通过浏览器事件 `faveradio-gaze-update` 发出：
+识别结果也会通过浏览器事件 `favoradio-gaze-update` 发出：
 
 ```js
-window.addEventListener('faveradio-gaze-update', (event) => {
+window.addEventListener('favoradio-gaze-update', (event) => {
   console.log(event.detail);
   // { x, y, confidence, direction, pupilRatio }
 });

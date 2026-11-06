@@ -2,7 +2,7 @@
 (function () {
   'use strict';
 
-  var STORE_KEY = 'faveradio-ui-language';
+  var STORE_KEY = 'favoradio-ui-language';
   var language = 'zh-CN';
   try { if (localStorage.getItem(STORE_KEY) === 'en') language = 'en'; } catch (e) { }
 
@@ -167,7 +167,7 @@
     try { localStorage.setItem(STORE_KEY, language); } catch (e) { }
     updateButtons();
     scan(document.body);
-    window.dispatchEvent(new CustomEvent('faveradio-language-change', { detail: { language: language } }));
+    window.dispatchEvent(new CustomEvent('favoradio-language-change', { detail: { language: language } }));
   }
 
   document.addEventListener('click', function (event) {
@@ -195,5 +195,5 @@
     }).observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: attrs });
   }).catch(function (error) { console.warn('[i18n]', error.message); });
 
-  window.FaveradioI18n = { getLanguage: function () { return language; }, setLanguage: setLanguage };
+  window.FavoradioI18n = { getLanguage: function () { return language; }, setLanguage: setLanguage };
 })();

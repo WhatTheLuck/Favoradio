@@ -26,7 +26,7 @@ function playlistSearchPruneSelection() {
 
 function playlistSearchDeleteReason() {
   var st = playlistPanelDetailState, provider = st.key.split(':')[0], pl = st.playlist || {};
-  if (provider === 'faveradio') return '';
+  if (provider === 'favoradio') return '';
   if (pl.subscribed || pl.virtual) return '此歌单只读，不能删除歌曲';
   if (provider === 'netease') return isSongAccountLoggedIn(provider) ? '' : '登录网易云后可删除歌曲';
   return '当前平台尚不支持删除歌单歌曲';
@@ -36,7 +36,7 @@ function playlistSearchTargets() {
   var s = playlistSearchState();
   var tracks = Array.from(s.selected).map(function (i) { return playlistPanelDetailState.tracks[i]; }).filter(Boolean);
   return (userPlaylists || []).filter(function (pl) {
-    if (pl.provider === 'faveradio') return true;
+    if (pl.provider === 'favoradio') return true;
     var provider = playlistAccountProvider(pl), adapter = songAccountAdapter(provider);
     return tracks.length && !pl.subscribed && !pl.virtual && adapter && adapter.collect && adapter.playlistAddUrl && isSongAccountLoggedIn(provider) &&
       tracks.every(function (track) { return songAccountProvider(track) === provider; });
@@ -150,7 +150,7 @@ async function playlistSearchBatch(action) {
   try {
     if (st.pageRequest) await st.pageRequest;
     if (action === 'delete') {
-      if (provider === 'faveradio') result = await window.desktopWindow.removeBuiltInPlaylistTracks(id, tracks);
+      if (provider === 'favoradio') result = await window.desktopWindow.removeBuiltInPlaylistTracks(id, tracks);
       else result = await apiJson('/api/playlist/remove-songs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pid: id, ids: tracks.map(function (track) { return songAccountId(track, provider); }) }) });
       if (!result || result.error || result.ok === false || result.success === false) throw new Error('删除失败，请检查歌单权限后重试');
       var removed = new Set(indices), scores = {}, nextIndex = 0;
@@ -159,9 +159,9 @@ async function playlistSearchBatch(action) {
       st.total = Math.max(st.tracks.length, st.total - tracks.length);
       st.nextOffset = Math.max(0, st.nextOffset - tracks.length);
       s.scores = scores; s.selected.clear(); done = tracks.length;
-      if (provider === 'faveradio') applyBuiltInPlaylistSnapshot(result, { preserveScroll: true });
+      if (provider === 'favoradio') applyBuiltInPlaylistSnapshot(result, { preserveScroll: true });
       else refreshUserPlaylists(true);
-    } else if (target.provider === 'faveradio') {
+    } else if (target.provider === 'favoradio') {
       result = await window.desktopWindow.addBuiltInPlaylistTracks(target.id, tracks);
       if (!result || !result.ok) throw new Error(builtInPlaylistErrorMessage(result, '收藏失败'));
       done = tracks.length; s.selected.clear(); applyBuiltInPlaylistSnapshot(result, { preserveScroll: true });

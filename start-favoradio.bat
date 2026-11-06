@@ -1,7 +1,7 @@
 @echo off
 setlocal
 chcp 65001 >nul
-title Start Faveradio
+title Start Favoradio
 
 set "APP_DIR=%~dp0"
 set "ELECTRON_EXE=%APP_DIR%node_modules\electron\dist\electron.exe"
@@ -16,9 +16,9 @@ if not exist "%ELECTRON_EXE%" (
   goto :fail
 )
 
-echo Starting Faveradio...
+echo Starting Favoradio...
 echo App: %APP_DIR%
-start "Faveradio" "%ELECTRON_EXE%" .
+start "Favoradio" "%ELECTRON_EXE%" .
 exit /b 0
 
 :fail

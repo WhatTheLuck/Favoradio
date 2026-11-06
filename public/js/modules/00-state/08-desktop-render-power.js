@@ -324,12 +324,12 @@ function collectRuntimePerfSnapshot(now) {
       ? collectFrameGateSnapshot(mainFrameGates)
       : null,
     deepSleep: isDeepBackgroundMode(),
-    probe: (window.__faveradioPerf && window.__faveradioPerf.summary)
-      ? window.__faveradioPerf.summary()
+    probe: (window.__favoradioPerf && window.__favoradioPerf.summary)
+      ? window.__favoradioPerf.summary()
       : null
   };
 }
-window.__faveradioPerfSnapshot = collectRuntimePerfSnapshot;
+window.__favoradioPerfSnapshot = collectRuntimePerfSnapshot;
 
 function requestBackgroundAppMemoryTrim(reason, delayMs) {
   if (!window.desktopWindow || typeof window.desktopWindow.trimAppMemory !== 'function') return;

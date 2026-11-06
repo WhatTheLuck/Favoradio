@@ -1,4 +1,4 @@
-# Faveradio 2.3.0
+# Favoradio 2.3.0
 
 - 新增 Smart Favorites：支持合并收藏、AI 标签分析与按偏好自动播放。
 - 新增 CyberRibbon、SpaceVenom 与 EmoMusic 视觉预设及实时参数控制。
@@ -8,10 +8,10 @@
 
 ## 下载
 
-- [GitHub Release 下载 Faveradio 2.3.0](https://github.com/WhatTheLuck/Faveradio/releases/tag/v2.3.0)
+- [GitHub Release 下载 Favoradio 2.3.0](https://github.com/WhatTheLuck/Favoradio/releases/tag/v2.3.0)
 
-完整安装包：`Faveradio-2.3.0-Setup.exe`
+完整安装包：`Favoradio-2.3.0-Setup.exe`
 
 SHA-256：`05b22ad12e1ff381f127aa43738c4fbfc67cb017be024ba5a570d473a6453fe2`。
 
-<!-- faveradio-download-page: GitHub Release|https://github.com/WhatTheLuck/Faveradio/releases/tag/v2.3.0 -->
+<!-- favoradio-download-page: GitHub Release|https://github.com/WhatTheLuck/Favoradio/releases/tag/v2.3.0 -->

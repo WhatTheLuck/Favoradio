@@ -115,18 +115,18 @@ function bindMiniQueueLazyRender() {
   }, { passive: true });
 }
 function normalizePlaylistProvider(provider) {
-  if (provider === 'faveradio') return 'faveradio';
+  if (provider === 'favoradio') return 'favoradio';
   if (provider === 'qq' || provider === 'kugou' || provider === 'qishui' || provider === 'spotify') return provider;
   return 'netease';
 }
 function playlistProviderLabel(provider) {
   provider = normalizePlaylistProvider(provider);
-  if (provider === 'faveradio') return 'MR';
+  if (provider === 'favoradio') return 'MR';
   return provider === 'qq' ? 'QQ' : (provider === 'kugou' ? 'KG' : (provider === 'qishui' ? 'QS' : (provider === 'spotify' ? 'SP' : 'NE')));
 }
 function playlistProviderName(provider) {
   provider = normalizePlaylistProvider(provider);
-  if (provider === 'faveradio') return 'Faveradio 内置歌单';
+  if (provider === 'favoradio') return 'Favoradio 内置歌单';
   if (provider === 'spotify') return 'Spotify';
   return provider === 'qq' ? 'QQ 音乐' : (provider === 'kugou' ? '酷狗音乐' : (provider === 'qishui' ? '汽水音乐' : '网易云音乐'));
 }
@@ -136,7 +136,7 @@ function playlistPanelKey(provider, id) {
 }
 function playlistPanelProviderId(provider, id) {
   provider = normalizePlaylistProvider(provider);
-  if (provider === 'faveradio') return 'faveradio:' + id;
+  if (provider === 'favoradio') return 'favoradio:' + id;
   if (provider === 'qq') return 'qq:' + id;
   if (provider === 'kugou') return 'kugou:' + id;
   if (provider === 'qishui') return 'qishui:' + id;
@@ -184,7 +184,7 @@ function playlistPanelDetailRowsHtml(options) {
     var i = entry.index;
     var thumb = songCoverSrc(song, 60);
     var imgTag = thumb ? '<img src="' + escHtml(thumb) + '" alt="" loading="lazy" decoding="async" onerror="this.style.opacity=0.2">' : '<div style="width:34px;height:34px;border-radius:7px;background:rgba(255,255,255,.06);flex:0 0 auto"></div>';
-    var removeButton = !search.busy && !search.actionBusy && normalizePlaylistProvider((st.key || '').split(':')[0]) === 'faveradio'
+    var removeButton = !search.busy && !search.actionBusy && normalizePlaylistProvider((st.key || '').split(':')[0]) === 'favoradio'
       ? '<button type="button" class="pl-detail-remove" data-pl-detail-remove="' + i + '" title="从内置歌单移除" aria-label="从内置歌单移除">×</button>'
       : '';
     return '<div class="pl-detail-row" data-pl-detail-row="' + i + '">' +
@@ -206,7 +206,7 @@ function playlistPanelDetailRowsHtml(options) {
   }
   return rows;
 }
-var PLAYLIST_REORDER_STORE_KEY = 'faveradio-playlist-reorder-v1';
+var PLAYLIST_REORDER_STORE_KEY = 'favoradio-playlist-reorder-v1';
 function playlistReorderKey(pl) {
   if (!pl) return '';
   return playlistPanelKey(normalizePlaylistProvider(pl.provider), pl.id);
@@ -281,7 +281,7 @@ function playlistTracksEndpoint(provider, id, params) {
 }
 function fetchPlaylistTracksPage(provider, id, params, requestOptions) {
   provider = normalizePlaylistProvider(provider);
-  if (provider === 'faveradio') return builtInPlaylistTracksPage(id, params || {});
+  if (provider === 'favoradio') return builtInPlaylistTracksPage(id, params || {});
   return apiJson(playlistTracksEndpoint(provider, id, params), requestOptions || {});
 }
 function playlistPanelDetailHtml(pl, provider, detailWindow) {
@@ -298,10 +298,10 @@ function playlistPanelDetailHtml(pl, provider, detailWindow) {
   var collectionButton = canUncollect
     ? '<button class="fx-mini-btn ghost pl-detail-top-btn" type="button" data-pl-detail-collection="0">取消收藏</button>'
     : '';
-  var builtInActions = provider === 'faveradio'
+  var builtInActions = provider === 'favoradio'
     ? '<button class="fx-mini-btn ghost pl-detail-top-btn" type="button" data-pl-detail-rename="1">重命名</button><button class="fx-mini-btn ghost pl-detail-top-btn danger" type="button" data-pl-detail-delete="1">删除</button>'
     : '';
-  var topButton = provider === 'faveradio' ? '' : '<button class="fx-mini-btn ghost pl-detail-top-btn" type="button" data-pl-detail-top="1">回到顶部</button>';
+  var topButton = provider === 'favoradio' ? '' : '<button class="fx-mini-btn ghost pl-detail-top-btn" type="button" data-pl-detail-top="1">回到顶部</button>';
   return '<div class="pl-inline-detail" data-pl-detail="' + escHtml(key) + '" style="height:' + playlistPanelDetailShellHeight() + 'px">' +
     '<div class="pl-detail-sticky">' +
     '<div class="pl-detail-head">' + img + '<div style="flex:1;min-width:0"><div class="pl-detail-title">' + escHtml(pl.name || '歌单详情') + '</div><div class="pl-detail-sub">' + escHtml((expectedTotal || tracks.length || 0) + ' 首 · ' + (pl.creator || playlistProviderName(provider))) + '</div></div><div class="pl-detail-count">' + (loading && !tracks.length ? '载入中' : (tracks.length + (expectedTotal > tracks.length ? '/' + expectedTotal : ''))) + '</div></div>' +
@@ -570,9 +570,9 @@ function playlistPanelBuildVirtualEntries() {
   if (playlistPanelVirtualCache.revision === playlistCatalogRevision &&
       playlistPanelVirtualCache.detailKey === playlistPanelDetailState.key &&
       playlistPanelVirtualCache.detailSig === detailSig) return playlistPanelVirtualCache;
-  var labels = { faveradio: 'Faveradio 内置歌单', netease: '网易云歌单', qq: 'QQ 音乐歌单', kugou: '酷狗音乐歌单', qishui: '汽水音乐歌单', spotify: 'Spotify 歌单' };
-  var order = ['faveradio', 'netease', 'qq', 'kugou', 'qishui', 'spotify'];
-  var groups = { faveradio: [], netease: [], qq: [], kugou: [], qishui: [], spotify: [] };
+  var labels = { favoradio: 'Favoradio 内置歌单', netease: '网易云歌单', qq: 'QQ 音乐歌单', kugou: '酷狗音乐歌单', qishui: '汽水音乐歌单', spotify: 'Spotify 歌单' };
+  var order = ['favoradio', 'netease', 'qq', 'kugou', 'qishui', 'spotify'];
+  var groups = { favoradio: [], netease: [], qq: [], kugou: [], qishui: [], spotify: [] };
   userPlaylists.forEach(function (pl, sourceIndex) {
     var key = playlistPanelGroupKey(pl);
     if (!groups[key]) groups[key] = [];
@@ -672,7 +672,7 @@ function renderUserPlaylistsList(opts) {
     var provider = normalizePlaylistProvider(pl.provider);
     var providerLabel = playlistProviderLabel(provider);
     var thumb = pl.cover ? (provider === 'netease' ? (pl.cover + '?param=88y88') : pl.cover) : '';
-    var imgTag = thumb ? '<img src="' + thumb + '" alt="" loading="lazy" decoding="async" onerror="this.style.opacity=0.2">' : (provider === 'faveradio' ? '<div class="pl-built-in-placeholder">MR</div>' : '<div style="width:44px;height:44px;border-radius:8px;background:rgba(255,255,255,.06);flex-shrink:0"></div>');
+    var imgTag = thumb ? '<img src="' + thumb + '" alt="" loading="lazy" decoding="async" onerror="this.style.opacity=0.2">' : (provider === 'favoradio' ? '<div class="pl-built-in-placeholder">MR</div>' : '<div style="width:44px;height:44px;border-radius:8px;background:rgba(255,255,255,.06);flex-shrink:0"></div>');
     var key = playlistPanelKey(provider, pl.id);
     var isExpanded = playlistPanelDetailState.key === key;
     var expanded = isExpanded ? ' expanded' : '';
@@ -798,7 +798,7 @@ document.getElementById('pl-list').addEventListener('click', function (e) {
     e.preventDefault();
     e.stopPropagation();
     var detailParts = String(playlistPanelDetailState.key || '').split(':');
-    if (normalizePlaylistProvider(detailParts[0]) === 'faveradio') removeTrackFromBuiltInPlaylist(detailParts.slice(1).join(':'), Number(removeTrack.getAttribute('data-pl-detail-remove')));
+    if (normalizePlaylistProvider(detailParts[0]) === 'favoradio') removeTrackFromBuiltInPlaylist(detailParts.slice(1).join(':'), Number(removeTrack.getAttribute('data-pl-detail-remove')));
     return;
   }
   var artist = e.target && e.target.closest ? e.target.closest('[data-pl-detail-artist]') : null;

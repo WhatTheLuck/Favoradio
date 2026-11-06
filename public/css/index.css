@@ -259,8 +259,8 @@ body.desktop-mode-controls-open.desktop-shell.desktop-wallpaper-mode.desktop-wal
   }
 }
 
-/* Faveradio 内置跨平台歌单：仅扩展歌单面板与收藏弹窗，不触碰播放器玻璃层。 */
-.tag-source.faveradio {
+/* Favoradio 内置跨平台歌单：仅扩展歌单面板与收藏弹窗，不触碰播放器玻璃层。 */
+.tag-source.favoradio {
   color: #fff1bb;
   border-color: rgba(244, 210, 138, .42);
   background: rgba(244, 210, 138, .11);
@@ -409,12 +409,12 @@ html.desktop-shell-root body {
 :root {
   --saved-panel-glass-bg: rgba(0, 0, 0, .10);
   --saved-panel-glass-filter: blur(12px) saturate(1.8) brightness(1.16);
-  --saved-panel-glass-svg-filter: url(#faveradio-control-glass-filter) saturate(1);
+  --saved-panel-glass-svg-filter: url(#favoradio-control-glass-filter) saturate(1);
   --saved-panel-glass-shadow: inset 0 0 2px 1px rgba(255, 255, 255, .35), inset 0 0 10px 4px rgba(255, 255, 255, .15), 0 4px 16px rgba(17, 17, 26, .05), 0 8px 24px rgba(17, 17, 26, .05), 0 16px 56px rgba(17, 17, 26, .05), inset 0 4px 16px rgba(17, 17, 26, .05), inset 0 8px 24px rgba(17, 17, 26, .05), inset 0 16px 56px rgba(17, 17, 26, .05);
   --saved-panel-glass-radius: 50px;
   --saved-button-glass-bg: rgba(0, 0, 0, .10);
   --saved-button-glass-filter: blur(12px) saturate(1.8) brightness(1.16);
-  --saved-button-glass-svg-filter: url(#faveradio-control-glass-filter) saturate(1);
+  --saved-button-glass-svg-filter: url(#favoradio-control-glass-filter) saturate(1);
   --saved-button-glass-shadow: inset 0 0 2px 1px rgba(255, 255, 255, .34), inset 0 0 10px 4px rgba(255, 255, 255, .13), 0 10px 30px rgba(0, 0, 0, .18);
   --saved-button-glass-hover-bg: rgba(255, 255, 255, .055);
   --saved-button-glass-hover-shadow: inset 0 0 2px 1px rgba(255, 255, 255, .42), inset 0 0 12px 5px rgba(255, 255, 255, .17), 0 12px 34px rgba(0, 0, 0, .22), 0 0 18px rgba(255, 255, 255, .06)
@@ -1164,7 +1164,7 @@ body.sonic-workshop-active #custom-bg {
 }
 
 /* In layered-colorkey desktop composition Explorer keys only its own icon
-   surface. Faveradio keeps the same renderer-owned album, particle, custom,
+   surface. Favoradio keeps the same renderer-owned album, particle, custom,
    Wallpaper Engine, and Sonic Workshop backgrounds as the normal player. */
 
 #canvas-container {
@@ -1418,7 +1418,7 @@ body.idle-guide-dragging #canvas-container {
   filter: drop-shadow(0 0 22px rgba(244, 210, 138, .075))
 }
 
-.splash-word-fave,
+.splash-word-favo,
 .splash-word-radio {
   position: relative;
   flex: 0 0 auto;
@@ -1426,9 +1426,9 @@ body.idle-guide-dragging #canvas-container {
   will-change: opacity, transform, letter-spacing
 }
 
-.splash-word-fave {
+.splash-word-favo {
   opacity: 0;
-  animation: splash-fave-in 5200ms cubic-bezier(.22, 1, .36, 1) forwards;
+  animation: splash-favo-in 5200ms cubic-bezier(.22, 1, .36, 1) forwards;
   text-shadow: -2px 0 0 rgba(255, 83, 103, .24), 2px 0 0 rgba(122, 215, 194, .18), 0 22px 72px rgba(0, 0, 0, .58), 0 0 34px rgba(244, 210, 138, .10)
 }
 
@@ -1558,7 +1558,7 @@ body.idle-guide-dragging #canvas-container {
   }
 }
 
-@keyframes splash-fave-in {
+@keyframes splash-favo-in {
   0% {
     opacity: 0;
     clip-path: inset(48% 0 49% 0);
@@ -5206,8 +5206,8 @@ html.control-glass-svg-ok #bottom-bar {
 
 html.control-glass-svg-ok #bottom-bar.visible {
   background: rgba(0, 0, 0, .10);
-  backdrop-filter: url(#faveradio-control-glass-filter) saturate(1);
-  -webkit-backdrop-filter: url(#faveradio-control-glass-filter) saturate(1)
+  backdrop-filter: url(#favoradio-control-glass-filter) saturate(1);
+  -webkit-backdrop-filter: url(#favoradio-control-glass-filter) saturate(1)
 }
 
 #bottom-bar.soft-hidden {
@@ -14731,8 +14731,8 @@ body.desktop-shell.diy-mode #bottom-bar.stage-mode {
 /*  歌单/队列面板                                                 */
 /* ============================================================ */
 #playlist-panel {
-  --playlist-panel-open-ms: var(--faveradio-playlist-panel-open-ms, 280ms);
-  --playlist-panel-close-ms: var(--faveradio-playlist-panel-close-ms, 180ms);
+  --playlist-panel-open-ms: var(--favoradio-playlist-panel-open-ms, 280ms);
+  --playlist-panel-close-ms: var(--favoradio-playlist-panel-close-ms, 180ms);
   --playlist-panel-motion-ms: var(--playlist-panel-open-ms);
   --playlist-sticky-blur: 38px;
   --playlist-toolbar-blur: 28px;
@@ -14956,10 +14956,10 @@ html:fullscreen body.desktop-shell #playlist-panel {
 }
 
 .queue-hydration-spinner.spinning {
-  animation: faveradio-queue-loading-spin .72s linear infinite
+  animation: favoradio-queue-loading-spin .72s linear infinite
 }
 
-@keyframes faveradio-queue-loading-spin {
+@keyframes favoradio-queue-loading-spin {
   to { transform: rotate(360deg) }
 }
 
@@ -16474,8 +16474,8 @@ html.control-glass-svg-ok #top-right #user-btn.multi-account:hover {
 }
 
 html.control-glass-svg-ok .top-account-pill::before {
-  backdrop-filter: url(#faveradio-account-pill-glass-filter) saturate(1) !important;
-  -webkit-backdrop-filter: url(#faveradio-account-pill-glass-filter) saturate(1) !important;
+  backdrop-filter: url(#favoradio-account-pill-glass-filter) saturate(1) !important;
+  -webkit-backdrop-filter: url(#favoradio-account-pill-glass-filter) saturate(1) !important;
 }
 
 html.control-glass-svg-ok .search-mode-tabs button,
@@ -16484,8 +16484,8 @@ html.control-glass-svg-ok .search-history-chip {
   border-color: transparent !important;
   color: rgba(var(--fc-accent-rgb), .78) !important;
   box-shadow: var(--saved-button-glass-shadow) !important;
-  backdrop-filter: url(#faveradio-search-pill-glass-filter) saturate(1) !important;
-  -webkit-backdrop-filter: url(#faveradio-search-pill-glass-filter) saturate(1) !important;
+  backdrop-filter: url(#favoradio-search-pill-glass-filter) saturate(1) !important;
+  -webkit-backdrop-filter: url(#favoradio-search-pill-glass-filter) saturate(1) !important;
   overflow: visible !important;
 }
 
@@ -16524,8 +16524,8 @@ html.control-glass-svg-ok #search-area .search-mode-tabs {
 }
 
 html.control-glass-svg-ok #search-area.peek #search-box {
-  backdrop-filter: url(#faveradio-search-box-glass-filter) saturate(1) !important;
-  -webkit-backdrop-filter: url(#faveradio-search-box-glass-filter) saturate(1) !important;
+  backdrop-filter: url(#favoradio-search-box-glass-filter) saturate(1) !important;
+  -webkit-backdrop-filter: url(#favoradio-search-box-glass-filter) saturate(1) !important;
 }
 
 html.control-glass-svg-ok #search-box::before {

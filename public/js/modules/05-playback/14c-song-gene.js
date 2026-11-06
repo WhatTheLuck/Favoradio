@@ -10,7 +10,7 @@ var songGeneRows = [];
 var songGeneState = 'idle';
 var songGeneError = '';
 
-function songGeneEnglish() { return window.FaveradioI18n && window.FaveradioI18n.getLanguage() === 'en'; }
+function songGeneEnglish() { return window.FavoradioI18n && window.FavoradioI18n.getLanguage() === 'en'; }
 function songGeneCopy(zh, en) { return songGeneEnglish() ? en : zh; }
 
 async function ensureSongGeneTexts() {
@@ -121,7 +121,7 @@ function toggleSongGene(force) {
   }
 }
 
-window.addEventListener('faveradio-language-change', renderSongGene);
+window.addEventListener('favoradio-language-change', renderSongGene);
 document.addEventListener('keydown', function (event) {
   if (event.key === 'Escape' && songGeneEnabled) toggleSongGene(false);
 });

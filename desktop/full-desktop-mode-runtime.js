@@ -57,11 +57,11 @@ function desktopWindowDetachScript(input = {}) {
   const height = Math.max(1, Math.round(Number(input.height) || 1));
   return `
 $ErrorActionPreference = "Stop"
-if (-not ("FaveradioFullDesktopNative" -as [type])) {
+if (-not ("FavoradioFullDesktopNative" -as [type])) {
 Add-Type @"
 using System;
 using System.Runtime.InteropServices;
-public static class FaveradioFullDesktopNative {
+public static class FavoradioFullDesktopNative {
   [StructLayout(LayoutKind.Sequential)] public struct RECT { public int Left; public int Top; public int Right; public int Bottom; }
   [DllImport("user32.dll", SetLastError=true)] [return: MarshalAs(UnmanagedType.Bool)] public static extern bool IsWindow(IntPtr hWnd);
   [DllImport("user32.dll", SetLastError=true)] public static extern IntPtr SetParent(IntPtr child, IntPtr parent);
@@ -80,25 +80,25 @@ public static class FaveradioFullDesktopNative {
 }
 $previousDpiContext = [IntPtr]::Zero
 try {
-  try { $previousDpiContext = [FaveradioFullDesktopNative]::SetThreadDpiAwarenessContext([IntPtr]::new([Int64]-4)) } catch { }
+  try { $previousDpiContext = [FavoradioFullDesktopNative]::SetThreadDpiAwarenessContext([IntPtr]::new([Int64]-4)) } catch { }
   $target = [IntPtr]::new([Int64]${hwnd})
-  if (-not [FaveradioFullDesktopNative]::IsWindow($target)) { throw "FULL_DESKTOP_TARGET_NOT_FOUND" }
-  [FaveradioFullDesktopNative]::SetParent($target, [IntPtr]::Zero) | Out-Null
+  if (-not [FavoradioFullDesktopNative]::IsWindow($target)) { throw "FULL_DESKTOP_TARGET_NOT_FOUND" }
+  [FavoradioFullDesktopNative]::SetParent($target, [IntPtr]::Zero) | Out-Null
   $GWL_STYLE = -16
   $WS_POPUP = [Int64]0x80000000
   $WS_CHILD = [Int64]0x40000000
-  $style = [FaveradioFullDesktopNative]::GetWindowLongPtr($target, $GWL_STYLE).ToInt64()
+  $style = [FavoradioFullDesktopNative]::GetWindowLongPtr($target, $GWL_STYLE).ToInt64()
   $topLevelStyle = ($style -band (-bnot $WS_CHILD)) -bor $WS_POPUP
-  [FaveradioFullDesktopNative]::SetWindowLongPtr($target, $GWL_STYLE, [IntPtr]::new([Int64]$topLevelStyle)) | Out-Null
-  $verifiedStyle = [FaveradioFullDesktopNative]::GetWindowLongPtr($target, $GWL_STYLE).ToInt64()
+  [FavoradioFullDesktopNative]::SetWindowLongPtr($target, $GWL_STYLE, [IntPtr]::new([Int64]$topLevelStyle)) | Out-Null
+  $verifiedStyle = [FavoradioFullDesktopNative]::GetWindowLongPtr($target, $GWL_STYLE).ToInt64()
   if (($verifiedStyle -band $WS_CHILD) -ne 0 -or ($verifiedStyle -band $WS_POPUP) -eq 0) { throw "FULL_DESKTOP_TOPLEVEL_STYLE_FAILED" }
   # SetParent(NULL) temporarily reports the desktop HWND while WS_CHILD is
   # still set. Validate the parent only after converting to WS_POPUP.
-  $parent = [FaveradioFullDesktopNative]::GetParent($target)
+  $parent = [FavoradioFullDesktopNative]::GetParent($target)
   if ($parent -ne [IntPtr]::Zero) { throw "FULL_DESKTOP_DETACH_FAILED" }
-  if (-not [FaveradioFullDesktopNative]::SetWindowPos($target, [IntPtr]::Zero, ${x}, ${y}, ${width}, ${height}, 0x0030)) { throw "FULL_DESKTOP_POSITION_FAILED" }
-  $rect = New-Object FaveradioFullDesktopNative+RECT
-  if (-not [FaveradioFullDesktopNative]::GetWindowRect($target, [ref]$rect)) { throw "FULL_DESKTOP_BOUNDS_ACK_FAILED" }
+  if (-not [FavoradioFullDesktopNative]::SetWindowPos($target, [IntPtr]::Zero, ${x}, ${y}, ${width}, ${height}, 0x0030)) { throw "FULL_DESKTOP_POSITION_FAILED" }
+  $rect = New-Object FavoradioFullDesktopNative+RECT
+  if (-not [FavoradioFullDesktopNative]::GetWindowRect($target, [ref]$rect)) { throw "FULL_DESKTOP_BOUNDS_ACK_FAILED" }
   $actualWidth = $rect.Right - $rect.Left
   $actualHeight = $rect.Bottom - $rect.Top
   if ($actualWidth -le 0 -or $actualHeight -le 0) { throw "FULL_DESKTOP_BOUNDS_ACK_FAILED" }
@@ -119,7 +119,7 @@ try {
   } | ConvertTo-Json -Compress
 } finally {
   if ($previousDpiContext -ne [IntPtr]::Zero) {
-    try { [FaveradioFullDesktopNative]::SetThreadDpiAwarenessContext($previousDpiContext) | Out-Null } catch { }
+    try { [FavoradioFullDesktopNative]::SetThreadDpiAwarenessContext($previousDpiContext) | Out-Null } catch { }
   }
 }
 `;
@@ -134,12 +134,12 @@ function desktopWindowCoexistAttachScript(input = {}) {
   const height = Math.max(1, Math.round(Number(input.height) || 1));
   return `
 $ErrorActionPreference = "Stop"
-if (-not ("FaveradioDesktopCoexistNative" -as [type])) {
+if (-not ("FavoradioDesktopCoexistNative" -as [type])) {
 Add-Type @"
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
-public static class FaveradioDesktopCoexistNative {
+public static class FavoradioDesktopCoexistNative {
   public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
   [StructLayout(LayoutKind.Sequential)] public struct RECT { public int Left; public int Top; public int Right; public int Bottom; }
   [DllImport("user32.dll", SetLastError=true)] [return: MarshalAs(UnmanagedType.Bool)] public static extern bool IsWindow(IntPtr hWnd);
@@ -186,38 +186,38 @@ public static class FaveradioDesktopCoexistNative {
 }
 $previousDpiContext = [IntPtr]::Zero
 try {
-  try { $previousDpiContext = [FaveradioDesktopCoexistNative]::SetThreadDpiAwarenessContext([IntPtr]::new([Int64]-4)) } catch { }
+  try { $previousDpiContext = [FavoradioDesktopCoexistNative]::SetThreadDpiAwarenessContext([IntPtr]::new([Int64]-4)) } catch { }
   $target = [IntPtr]::new([Int64]${hwnd})
-  if (-not [FaveradioDesktopCoexistNative]::IsWindow($target)) { throw "FULL_DESKTOP_TARGET_NOT_FOUND" }
+  if (-not [FavoradioDesktopCoexistNative]::IsWindow($target)) { throw "FULL_DESKTOP_TARGET_NOT_FOUND" }
   $iconHost = [IntPtr]::Zero
   $defView = [IntPtr]::Zero
   $listView = [IntPtr]::Zero
   $hostClass = ""
-  if (-not [FaveradioDesktopCoexistNative]::FindDesktopIconHost([ref]$iconHost, [ref]$defView, [ref]$listView, [ref]$hostClass)) {
+  if (-not [FavoradioDesktopCoexistNative]::FindDesktopIconHost([ref]$iconHost, [ref]$defView, [ref]$listView, [ref]$hostClass)) {
     throw "FULL_DESKTOP_ICON_HOST_NOT_FOUND"
   }
-  $parentRect = New-Object FaveradioDesktopCoexistNative+RECT
-  if (-not [FaveradioDesktopCoexistNative]::GetWindowRect($defView, [ref]$parentRect)) { throw "FULL_DESKTOP_ICON_HOST_BOUNDS_FAILED" }
+  $parentRect = New-Object FavoradioDesktopCoexistNative+RECT
+  if (-not [FavoradioDesktopCoexistNative]::GetWindowRect($defView, [ref]$parentRect)) { throw "FULL_DESKTOP_ICON_HOST_BOUNDS_FAILED" }
   $GWL_STYLE = -16
   $WS_POPUP = [Int64]0x80000000
   $WS_CHILD = [Int64]0x40000000
-  $style = [FaveradioDesktopCoexistNative]::GetWindowLongPtr($target, $GWL_STYLE).ToInt64()
+  $style = [FavoradioDesktopCoexistNative]::GetWindowLongPtr($target, $GWL_STYLE).ToInt64()
   $childStyle = ($style -band (-bnot $WS_POPUP)) -bor $WS_CHILD
-  [FaveradioDesktopCoexistNative]::SetWindowLongPtr($target, $GWL_STYLE, [IntPtr]::new([Int64]$childStyle)) | Out-Null
-  [FaveradioDesktopCoexistNative]::SetParent($target, $defView) | Out-Null
-  $verifiedStyle = [FaveradioDesktopCoexistNative]::GetWindowLongPtr($target, $GWL_STYLE).ToInt64()
+  [FavoradioDesktopCoexistNative]::SetWindowLongPtr($target, $GWL_STYLE, [IntPtr]::new([Int64]$childStyle)) | Out-Null
+  [FavoradioDesktopCoexistNative]::SetParent($target, $defView) | Out-Null
+  $verifiedStyle = [FavoradioDesktopCoexistNative]::GetWindowLongPtr($target, $GWL_STYLE).ToInt64()
   if (($verifiedStyle -band $WS_CHILD) -eq 0 -or ($verifiedStyle -band $WS_POPUP) -ne 0) { throw "FULL_DESKTOP_ICON_HOST_STYLE_FAILED" }
-  if ([FaveradioDesktopCoexistNative]::GetParent($target) -ne $defView) { throw "FULL_DESKTOP_ICON_HOST_ATTACH_FAILED" }
+  if ([FavoradioDesktopCoexistNative]::GetParent($target) -ne $defView) { throw "FULL_DESKTOP_ICON_HOST_ATTACH_FAILED" }
   $localX = ${x} - $parentRect.Left
   $localY = ${y} - $parentRect.Top
-  # Keep the one complete Faveradio surface below Explorer's real SysListView32.
+  # Keep the one complete Favoradio surface below Explorer's real SysListView32.
   # The native icon layer makes Explorer's black background transparent while
-  # retaining the real icon pixels and their native hit testing above Faveradio.
-  if (-not [FaveradioDesktopCoexistNative]::SetWindowPos($target, [IntPtr]::new(1), $localX, $localY, ${width}, ${height}, 0x0030)) {
+  # retaining the real icon pixels and their native hit testing above Favoradio.
+  if (-not [FavoradioDesktopCoexistNative]::SetWindowPos($target, [IntPtr]::new(1), $localX, $localY, ${width}, ${height}, 0x0030)) {
     throw "FULL_DESKTOP_ICON_HOST_POSITION_FAILED"
   }
-  $rect = New-Object FaveradioDesktopCoexistNative+RECT
-  if (-not [FaveradioDesktopCoexistNative]::GetWindowRect($target, [ref]$rect)) { throw "FULL_DESKTOP_ICON_HOST_BOUNDS_ACK_FAILED" }
+  $rect = New-Object FavoradioDesktopCoexistNative+RECT
+  if (-not [FavoradioDesktopCoexistNative]::GetWindowRect($target, [ref]$rect)) { throw "FULL_DESKTOP_ICON_HOST_BOUNDS_ACK_FAILED" }
   $actualWidth = $rect.Right - $rect.Left
   $actualHeight = $rect.Bottom - $rect.Top
   if ([Math]::Abs($rect.Left - ${x}) -gt 16 -or [Math]::Abs($rect.Top - ${y}) -gt 16 -or [Math]::Abs($actualWidth - ${width}) -gt 16 -or [Math]::Abs($actualHeight - ${height}) -gt 16) {
@@ -239,7 +239,7 @@ try {
   } | ConvertTo-Json -Compress
 } finally {
   if ($previousDpiContext -ne [IntPtr]::Zero) {
-    try { [FaveradioDesktopCoexistNative]::SetThreadDpiAwarenessContext($previousDpiContext) | Out-Null } catch { }
+    try { [FavoradioDesktopCoexistNative]::SetThreadDpiAwarenessContext($previousDpiContext) | Out-Null } catch { }
   }
 }
 `;
@@ -1034,7 +1034,7 @@ class FullDesktopModeRuntime {
           this.lastError = this.iconShapeError;
           this.phase = 'recovering-icon-layer';
           // Do not leave enabled=true/interative=true paired with a hidden
-          // Faveradio HWND. Explorer has confirmed restoration, so keep the
+          // Favoradio HWND. Explorer has confirmed restoration, so keep the
           // existing renderer visible while the serialized rebind is queued.
           if (this.isWindowAlive()) safeCall(this.window, 'showInactive', null);
           this.generation += 1;
@@ -1154,7 +1154,7 @@ class FullDesktopModeRuntime {
 
   applyInteractivePointerRoute(win = this.window, options = {}) {
     if (!this.isWindowAlive(win)) return null;
-    // A locked desktop surface passes normal Faveradio areas through to
+    // A locked desktop surface passes normal Favoradio areas through to
     // Explorer, but forwarded move events keep the renderer informed. The
     // right-top controller is the permanent recovery island: entering its
     // reveal corridor immediately restores native input so the same switch can
@@ -1613,7 +1613,7 @@ class FullDesktopModeRuntime {
 
   prepareWindow(win, bounds, options = {}) {
     if (options.hide !== false) safeCall(win, 'hide', null);
-    // The visual HWND remains one continuous Faveradio surface below Explorer's
+    // The visual HWND remains one continuous Favoradio surface below Explorer's
     // color-keyed icon layer. Clear legacy BrowserWindow holes before reparenting.
     safeCall(win, 'setShape', null, []);
     safeCall(win, 'setHasShadow', null, false);
@@ -1813,7 +1813,7 @@ class FullDesktopModeRuntime {
       return { ok: true, enabled: true, interactive: true, status: this.emitStatus(reason) };
     } catch (error) {
       // A failed repair must restore a normal visible window; never leave the
-      // WE base alive behind enabled=true plus a hidden Faveradio HWND.
+      // WE base alive behind enabled=true plus a hidden Favoradio HWND.
       return this.disableInternal(reason + '-failed', error);
     }
   }

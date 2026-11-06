@@ -33,7 +33,7 @@ function normalizeRect(value) {
 
 function nativeIconLayerGuardCSharpSource() {
   return String.raw`
-public static class FaveradioDesktopNativeIconLayerGuard {
+public static class FavoradioDesktopNativeIconLayerGuard {
   [StructLayout(LayoutKind.Sequential)] private struct MSG {
     public IntPtr hwnd;
     public uint message;
@@ -515,12 +515,12 @@ public static class FaveradioDesktopNativeIconLayerGuard {
     return key.ToString();
   }
 
-  private static string LayoutKey(FaveradioDesktopIconShapeNative.ProbeResult result) {
+  private static string LayoutKey(FavoradioDesktopIconShapeNative.ProbeResult result) {
     System.Text.StringBuilder key = new System.Text.StringBuilder();
     key.Append(result.topLevelHostWindowId).Append('|').Append(result.iconHostWindowId)
       .Append('|').Append(result.listViewWindowId).Append('|').Append(ControlKey());
     if (result.icons != null) {
-      foreach (FaveradioDesktopIconShapeNative.IconRect icon in result.icons) {
+      foreach (FavoradioDesktopIconShapeNative.IconRect icon in result.icons) {
         key.Append('|').Append(icon.x).Append(',').Append(icon.y).Append(',')
           .Append(icon.width).Append(',').Append(icon.height);
       }
@@ -566,7 +566,7 @@ public static class FaveradioDesktopNativeIconLayerGuard {
     }
   }
 
-  private static void Emit(FaveradioDesktopIconShapeNative.ProbeResult result, bool force) {
+  private static void Emit(FavoradioDesktopIconShapeNative.ProbeResult result, bool force) {
     string key = LayoutKey(result);
     if (!force && key == _lastEmittedKey) return;
     _lastEmittedKey = key;
@@ -596,7 +596,7 @@ public static class FaveradioDesktopNativeIconLayerGuard {
     if (result.icons != null) {
       for (int index = 0; index < result.icons.Length; index++) {
         if (index > 0) json.Append(',');
-        FaveradioDesktopIconShapeNative.IconRect icon = result.icons[index];
+        FavoradioDesktopIconShapeNative.IconRect icon = result.icons[index];
         json.Append("{\"x\":").Append(icon.x).Append(",\"y\":").Append(icon.y)
           .Append(",\"width\":").Append(icon.width).Append(",\"height\":").Append(icon.height).Append('}');
       }
@@ -623,7 +623,7 @@ public static class FaveradioDesktopNativeIconLayerGuard {
 
   private static void ApplyAndEmit(bool force) {
     ApplyPendingControls();
-    FaveradioDesktopIconShapeNative.ProbeResult result = FaveradioDesktopIconShapeNative.Probe();
+    FavoradioDesktopIconShapeNative.ProbeResult result = FavoradioDesktopIconShapeNative.Probe();
     if (String.IsNullOrEmpty(result.iconHostWindowId) || String.IsNullOrEmpty(result.listViewWindowId)
         || result.topLevelHostWindowId != _topLevelHost.ToInt64().ToString()
         || result.iconHostWindowId != _iconHost.ToInt64().ToString()
@@ -729,7 +729,7 @@ public static class FaveradioDesktopNativeIconLayerGuard {
 
     System.Threading.Thread inputThread = new System.Threading.Thread(ReadCommands);
     inputThread.IsBackground = true;
-    inputThread.Name = "Faveradio native desktop icon layer input";
+    inputThread.Name = "Favoradio native desktop icon layer input";
     inputThread.Start();
 
     UIntPtr timerId = UIntPtr.Zero;
@@ -818,13 +818,13 @@ function nativeIconLayerGuardScript(options = {}) {
   const inputExpression = options.namedPipeIo === true ? '$reader' : '[Console]::In';
   const outputExpression = options.namedPipeIo === true ? '$writer' : '[Console]::Out';
   return `${desktopIconProbeScript({ invoke: false, extraCSharp: nativeIconLayerGuardCSharpSource() })}
-[FaveradioDesktopNativeIconLayerGuard]::Run(${debounceMs}, ${rebindMs}, ${ownerProcessId}, [Int64]${iconHostWindowId}, [Int64]${listViewWindowId}, [Int64]${mainWindowId}, ${bounds.x}, ${bounds.y}, ${bounds.width}, ${bounds.height}, ${inputExpression}, ${outputExpression})
+[FavoradioDesktopNativeIconLayerGuard]::Run(${debounceMs}, ${rebindMs}, ${ownerProcessId}, [Int64]${iconHostWindowId}, [Int64]${listViewWindowId}, [Int64]${mainWindowId}, ${bounds.x}, ${bounds.y}, ${bounds.width}, ${bounds.height}, ${inputExpression}, ${outputExpression})
 `;
 }
 
 function nativeIconLayerNamedPipeScript(options = {}) {
   const rawBody = nativeIconLayerGuardScript({ ...options, namedPipeIo: true });
-  const invocationMarker = '\n[FaveradioDesktopNativeIconLayerGuard]::Run(';
+  const invocationMarker = '\n[FavoradioDesktopNativeIconLayerGuard]::Run(';
   const invocationIndex = rawBody.lastIndexOf(invocationMarker);
   if (invocationIndex < 0) throw new Error('DESKTOP_ICON_LAYER_GUARD_SCRIPT_INVALID');
   const compileBody = rawBody.slice(0, invocationIndex);
@@ -885,7 +885,7 @@ function externalGuardTransport(options = {}) {
   let bootstrapOutput = '';
   const connectTimeoutMs = Math.max(2000, Math.min(20000, finiteNumber(options.connectTimeoutMs, 12000)));
   let connectTimer = null;
-  const pipeBase = `FaveradioNativeIconLayer-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  const pipeBase = `FavoradioNativeIconLayer-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
   const inputPipeName = `${pipeBase}-input`;
   const outputPipeName = `${pipeBase}-output`;
   const inputPipePath = `\\\\.\\pipe\\${inputPipeName}`;
@@ -1054,7 +1054,7 @@ function startNativeDesktopIconLayer(options = {}) {
   fs.mkdirSync(scriptDirectory, { recursive: true });
   const scriptPath = path.join(
     scriptDirectory,
-    `faveradio-native-icon-layer-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}.ps1`
+    `favoradio-native-icon-layer-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}.ps1`
   );
   const useExternalGuard = typeof spawnImpl !== 'function';
   fs.writeFileSync(scriptPath, useExternalGuard

@@ -75,7 +75,7 @@ async function mainTarget(timeoutMs = 15000) {
     } catch (_) { }
     await sleep(100);
   }
-  throw new Error('Faveradio CDP target was not ready');
+  throw new Error('Favoradio CDP target was not ready');
 }
 
 async function run() {
@@ -108,15 +108,15 @@ async function run() {
       searchArea.classList.add('peek');
       await new Promise((resolve) => setTimeout(resolve, 520));
       const rect = input.getBoundingClientRect();
-      window.__faveradioKeyboardProbe = { trustedPointerDown: false, pointerTarget: '', f13: 0 };
+      window.__favoradioKeyboardProbe = { trustedPointerDown: false, pointerTarget: '', f13: 0 };
       document.addEventListener('pointerdown', (event) => {
-        window.__faveradioKeyboardProbe.trustedPointerDown = event.isTrusted === true;
-        window.__faveradioKeyboardProbe.pointerTarget = event.target && event.target.id || '';
+        window.__favoradioKeyboardProbe.trustedPointerDown = event.isTrusted === true;
+        window.__favoradioKeyboardProbe.pointerTarget = event.target && event.target.id || '';
       }, { once: true, capture: true });
-      window.__faveradioKeyboardProbeKeyListener = (event) => {
-        if (event.code === 'F13') window.__faveradioKeyboardProbe.f13 += 1;
+      window.__favoradioKeyboardProbeKeyListener = (event) => {
+        if (event.code === 'F13') window.__favoradioKeyboardProbe.f13 += 1;
       };
-      document.addEventListener('keydown', window.__faveradioKeyboardProbeKeyListener, { capture: true });
+      document.addEventListener('keydown', window.__favoradioKeyboardProbeKeyListener, { capture: true });
       return {
         status,
         originalValue: input.value,
@@ -189,7 +189,7 @@ async function run() {
     });
     await sleep(140);
 
-    const marker = `FaveradioKeyboardFocus-${Date.now()}`;
+    const marker = `FavoradioKeyboardFocus-${Date.now()}`;
     await client.call('Input.insertText', { text: marker });
     await client.call('Input.dispatchKeyEvent', {
       type: 'keyDown',
@@ -209,7 +209,7 @@ async function run() {
 
     const restored = await client.evaluate(`(() => {
       const input = document.getElementById('search-input');
-      const probe = window.__faveradioKeyboardProbe || {};
+      const probe = window.__favoradioKeyboardProbe || {};
       const snapshot = {
         documentFocused: document.hasFocus(),
         activeId: document.activeElement && document.activeElement.id || '',
@@ -225,7 +225,7 @@ async function run() {
     assert.equal(restored.trustedPointerDown, true,
       'CDP pointer plumbing did not reach the renderer as a trusted pointer event');
     assert.equal(restored.documentFocused, true,
-      'trusted Faveradio pointerdown did not restore renderer keyboard focus');
+      'trusted Favoradio pointerdown did not restore renderer keyboard focus');
     assert.equal(restored.activeId, 'search-input');
     assert.equal(restored.inserted, true, 'focused search input did not accept text');
     assert.equal(restored.f13 > 0, true, 'renderer did not receive a keydown after focus restoration');
@@ -248,7 +248,7 @@ async function run() {
       manualHardwareChecksStillRequired: [
         'Click the search field with the real mouse and type English text.',
         'Use the real Chinese IME and confirm composition/candidate input works.',
-        'After clicking a real desktop icon, click Faveradio again and test Space, arrows, and configured local hotkeys.',
+        'After clicking a real desktop icon, click Favoradio again and test Space, arrows, and configured local hotkeys.',
       ],
       leftEnabled: leaveEnabled,
     }, null, 2));
@@ -262,11 +262,11 @@ async function run() {
         }
         const searchArea = document.getElementById('search-area');
         if (searchArea && !${originalSearchPeek}) searchArea.classList.remove('peek');
-        if (window.__faveradioKeyboardProbeKeyListener) {
-          document.removeEventListener('keydown', window.__faveradioKeyboardProbeKeyListener, true);
-          delete window.__faveradioKeyboardProbeKeyListener;
+        if (window.__favoradioKeyboardProbeKeyListener) {
+          document.removeEventListener('keydown', window.__favoradioKeyboardProbeKeyListener, true);
+          delete window.__favoradioKeyboardProbeKeyListener;
         }
-        delete window.__faveradioKeyboardProbe;
+        delete window.__favoradioKeyboardProbe;
         try { await desktopWindow.setDesktopSoftwareLocked(false); } catch (_) { }
         if (!${leaveEnabled}) {
           fx.wallpaperMode = false;

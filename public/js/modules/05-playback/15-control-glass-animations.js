@@ -39,7 +39,7 @@ function applyControlGlassChromaticOffset() {
   if (!fx) return;
   fx.controlGlassChromaticOffset = normalizeControlGlassChromaticOffset(fx.controlGlassChromaticOffset);
   applyControlGlassChromaticOffsetToFilter(
-    document.getElementById('faveradio-control-glass-filter'),
+    document.getElementById('favoradio-control-glass-filter'),
     CONTROL_GLASS_BASE_SHIFT_X,
     CONTROL_GLASS_CHROMA_MAX_SPREAD,
     0.08
@@ -50,7 +50,7 @@ function supportsControlGlassSvgFilter() {
     var ua = navigator.userAgent || '';
     if ((/Safari/.test(ua) && !/Chrome/.test(ua)) || /Firefox/.test(ua)) return false;
     var div = document.createElement('div');
-    div.style.backdropFilter = 'url(#faveradio-control-glass-filter)';
+    div.style.backdropFilter = 'url(#favoradio-control-glass-filter)';
     return div.style.backdropFilter !== '';
   } catch (e) {
     return false;

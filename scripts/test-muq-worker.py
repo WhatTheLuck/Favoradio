@@ -14,7 +14,7 @@ command = [worker, model_dir]
 if worker.lower().endswith('.py'):
     command.insert(0, sys.executable)
 environment = dict(os.environ)
-environment.setdefault('FAVERADIO_MUQ_EXPANDED_ROOT', os.path.join(tempfile.gettempdir(), 'faveradio-muq-smoke-v6'))
+environment.setdefault('FAVORADIO_MUQ_EXPANDED_ROOT', os.path.join(tempfile.gettempdir(), 'favoradio-muq-smoke-v6'))
 process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=environment)
 samples = [0.05 * math.sin(2 * math.pi * 440 * i / 24000) for i in range(240000)]
 payload = base64.b64encode(struct.pack('<240000f', *samples)).decode('ascii')

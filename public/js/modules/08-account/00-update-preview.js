@@ -1,6 +1,6 @@
 // ============================================================
 // Update preview: external download page only.
-// Faveradio no longer downloads installers or applies resource patches.
+// Favoradio no longer downloads installers or applies resource patches.
 // ============================================================
 function isSafeUpdatePageUrl(value) {
   var raw = String(value || '').trim();

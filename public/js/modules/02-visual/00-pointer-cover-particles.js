@@ -120,8 +120,8 @@ window.addEventListener('mousemove', function (e) {
     markRenderInteraction('canvas-drag', 900);
     unlockCenteredView();
     var dx = e.clientX - orbit.last.x, dy = e.clientY - orbit.last.y;
-    if (window.FaveradioExternalVisuals) FaveradioExternalVisuals.rotate(dx, dy);
-    if (window.FaveradioEmoMusic) FaveradioEmoMusic.rotate(dx, dy);
+    if (window.FavoradioExternalVisuals) FavoradioExternalVisuals.rotate(dx, dy);
+    if (window.FavoradioEmoMusic) FavoradioEmoMusic.rotate(dx, dy);
     if (particlePointerSpin.active) {
       var nowSpin = performance.now();
       var spinDt = Math.max(1 / 120, Math.min(0.08, (nowSpin - particlePointerSpin.lastT) / 1000 || 1 / 60));
@@ -142,12 +142,12 @@ window.addEventListener('mouseup', function (e) {
   orbit.rotating = false;
   particlePointerSpin.active = false;
   idleGuidePointerUp();
-  if (window.FaveradioSonicTopography && FaveradioSonicTopography.isActive(fx) && !mouseDownAt.hadDrag && !isPointerOverUi(e)) {
+  if (window.FavoradioSonicTopography && FavoradioSonicTopography.isActive(fx) && !mouseDownAt.hadDrag && !isPointerOverUi(e)) {
     var pressMs = Math.max(0, performance.now() - (mouseDownAt.t || 0));
     var strength = Math.min(0.25 + (pressMs / 1000) * 2.6, 3.0);
     var nx = (e.clientX / Math.max(1, innerWidth) - 0.5) * 34;
     var nz = (0.5 - e.clientY / Math.max(1, innerHeight)) * 34;
-    FaveradioSonicTopography.pointerRipple(nx, nz, strength);
+    FavoradioSonicTopography.pointerRipple(nx, nz, strength);
   }
 });
 renderer.domElement.addEventListener('mouseleave', function () {
@@ -1161,8 +1161,8 @@ scene.add(backgroundStarRiverParticles);
 
 function backgroundStarRiverTargetAlpha() {
   if (!fx || fx.backgroundStarRiver === false) return 0;
-  if (Number(fx.preset) === 15 && window.FaveradioEmoMusic && typeof FaveradioEmoMusic.galaxyState === 'function') {
-    var emomusicGalaxy = FaveradioEmoMusic.galaxyState(fx);
+  if (Number(fx.preset) === 15 && window.FavoradioEmoMusic && typeof FavoradioEmoMusic.galaxyState === 'function') {
+    var emomusicGalaxy = FavoradioEmoMusic.galaxyState(fx);
     return emomusicGalaxy.active ? 0.34 * Math.max(0.2, Number(emomusicGalaxy.strength) || 1) : 0;
   }
   if (Number(fx.preset) === 5) return 0;

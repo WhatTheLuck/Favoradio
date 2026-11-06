@@ -4,7 +4,7 @@
 
 `docs/update/latest.yml` 只记录版本号和发布时间，不填写 `files`、`path`、`url` 或 `sha512` 等安装包下载字段。将它以 `latest.yml` 名称上传到对应 Release；不使用打包工具生成的安装更新清单。blockmap、补丁和校验文本仍不作为 Release 附件。
 
-主检测接口成功时，软件显示 Release 正文前四条说明与 `faveradio-download-page` 标记中的网盘线路。2.1.0 的备用检测只能显示通用更新提示，点击后打开对应版本的发布页，用户再选择网盘入口。
+主检测接口成功时，软件显示 Release 正文前四条说明与 `favoradio-download-page` 标记中的网盘线路。2.1.0 的备用检测只能显示通用更新提示，点击后打开对应版本的发布页，用户再选择网盘入口。
 
 ## 2.1.0 的入口限制
 

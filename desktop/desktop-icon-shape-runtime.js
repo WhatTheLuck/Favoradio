@@ -59,16 +59,16 @@ function desktopIconProbeScript(options = {}) {
   const extraCSharp = String(options.extraCSharp || '');
   const invocation = options.invoke === false
     ? ''
-    : '[FaveradioDesktopIconShapeNative]::Probe() | ConvertTo-Json -Compress -Depth 5';
+    : '[FavoradioDesktopIconShapeNative]::Probe() | ConvertTo-Json -Compress -Depth 5';
   return `
 $ErrorActionPreference = "Stop"
-if (-not ("FaveradioDesktopIconShapeNative" -as [type])) {
+if (-not ("FavoradioDesktopIconShapeNative" -as [type])) {
 Add-Type @"
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-public static class FaveradioDesktopIconShapeNative {
+public static class FavoradioDesktopIconShapeNative {
   public sealed class IconRect {
     public int x;
     public int y;
@@ -271,7 +271,7 @@ ${invocation}
 
 function desktopIconWatcherCSharpSource() {
   return `
-public static class FaveradioDesktopIconShapeWatcherNative {
+public static class FavoradioDesktopIconShapeWatcherNative {
   [StructLayout(LayoutKind.Sequential)] private struct MSG {
     public IntPtr hwnd;
     public uint message;
@@ -376,12 +376,12 @@ public static class FaveradioDesktopIconShapeWatcherNative {
     }
   }
 
-  private static string LayoutKey(FaveradioDesktopIconShapeNative.ProbeResult result) {
+  private static string LayoutKey(FavoradioDesktopIconShapeNative.ProbeResult result) {
     System.Text.StringBuilder key = new System.Text.StringBuilder();
     key.Append(result.topLevelHostWindowId).Append('|').Append(result.iconHostWindowId)
       .Append('|').Append(result.listViewWindowId);
     if (result.icons != null) {
-      foreach (FaveradioDesktopIconShapeNative.IconRect icon in result.icons) {
+      foreach (FavoradioDesktopIconShapeNative.IconRect icon in result.icons) {
         key.Append('|').Append(icon.x).Append(',').Append(icon.y).Append(',')
           .Append(icon.width).Append(',').Append(icon.height);
       }
@@ -389,7 +389,7 @@ public static class FaveradioDesktopIconShapeWatcherNative {
     return key.ToString();
   }
 
-  private static void Emit(FaveradioDesktopIconShapeNative.ProbeResult result, bool force) {
+  private static void Emit(FavoradioDesktopIconShapeNative.ProbeResult result, bool force) {
     string key = LayoutKey(result);
     if (!force && key == _lastLayoutKey) return;
     _lastLayoutKey = key;
@@ -403,7 +403,7 @@ public static class FaveradioDesktopIconShapeWatcherNative {
     if (result.icons != null) {
       for (int index = 0; index < result.icons.Length; index++) {
         if (index > 0) json.Append(',');
-        FaveradioDesktopIconShapeNative.IconRect icon = result.icons[index];
+        FavoradioDesktopIconShapeNative.IconRect icon = result.icons[index];
         json.Append("{\\\"x\\\":").Append(icon.x).Append(",\\\"y\\\":").Append(icon.y)
           .Append(",\\\"width\\\":").Append(icon.width).Append(",\\\"height\\\":").Append(icon.height).Append('}');
       }
@@ -422,7 +422,7 @@ public static class FaveradioDesktopIconShapeWatcherNative {
 
   private static bool FindTarget(out IntPtr topLevelHost, out IntPtr iconHost, out IntPtr listView,
       out uint processId, out uint threadId) {
-    FaveradioDesktopIconShapeNative.FindDesktopListView(out topLevelHost, out iconHost, out listView);
+    FavoradioDesktopIconShapeNative.FindDesktopListView(out topLevelHost, out iconHost, out listView);
     processId = 0;
     threadId = 0;
     if (listView == IntPtr.Zero) return false;
@@ -466,7 +466,7 @@ public static class FaveradioDesktopIconShapeWatcherNative {
       }
     }
     if (changed || forceSnapshot) {
-      try { Emit(FaveradioDesktopIconShapeNative.Probe(), changed || forceSnapshot); }
+      try { Emit(FavoradioDesktopIconShapeNative.Probe(), changed || forceSnapshot); }
       catch { EmitError("DESKTOP_ICON_PROBE_FAILED"); }
     }
   }
@@ -480,7 +480,7 @@ public static class FaveradioDesktopIconShapeWatcherNative {
       }
     }
     if (!ready) return;
-    try { Emit(FaveradioDesktopIconShapeNative.Probe(), false); }
+    try { Emit(FavoradioDesktopIconShapeNative.Probe(), false); }
     catch { EmitError("DESKTOP_ICON_PROBE_FAILED"); }
   }
 
@@ -504,7 +504,7 @@ public static class FaveradioDesktopIconShapeWatcherNative {
       }
     });
     inputThread.IsBackground = true;
-    inputThread.Name = "Faveradio desktop icon watcher input";
+    inputThread.Name = "Favoradio desktop icon watcher input";
     inputThread.Start();
 
     UIntPtr timerId = UIntPtr.Zero;
@@ -542,7 +542,7 @@ function desktopIconWatcherScript(options = {}) {
   const debounceMs = Math.max(100, Math.min(180, Math.round(finiteNumber(options.debounceMs, 140))));
   const rebindMs = Math.max(1000, Math.min(10000, Math.round(finiteNumber(options.rebindMs, 2000))));
   return `${desktopIconProbeScript({ invoke: false, extraCSharp: desktopIconWatcherCSharpSource() })}
-[FaveradioDesktopIconShapeWatcherNative]::Run(${debounceMs}, ${rebindMs})
+[FavoradioDesktopIconShapeWatcherNative]::Run(${debounceMs}, ${rebindMs})
 `;
 }
 

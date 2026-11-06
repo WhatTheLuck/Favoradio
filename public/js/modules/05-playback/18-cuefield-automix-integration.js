@@ -1,4 +1,4 @@
-var CUEFIELD_AUTOMIX_STORE_KEY = 'faveradio-cuefield-automix-v1';
+var CUEFIELD_AUTOMIX_STORE_KEY = 'favoradio-cuefield-automix-v1';
 var cuefieldAutoMixEnabled = false;
 var cuefieldAutoMix = null;
 var cuefieldAutoMixPrepareTimer = 0;
@@ -224,26 +224,26 @@ function cancelCuefieldMediaFade() {
 function claimCuefieldPreparedAudioForPlayback(media) {
   if (!media) return false;
   cancelCuefieldMediaFade();
-  if (media.__faveradioPreparedAudioGraph) media.__faveradioPreparedAudioGraph.adopted = true;
+  if (media.__favoradioPreparedAudioGraph) media.__favoradioPreparedAudioGraph.adopted = true;
   if (media === cuefieldAutoMixPreparedAudio) cuefieldAutoMixPreparedAudio = null;
   return true;
 }
 
 function disposeCuefieldPreparedAudioGraph(media) {
-  var graph = media && media.__faveradioPreparedAudioGraph;
+  var graph = media && media.__favoradioPreparedAudioGraph;
   if (!graph || graph.adopted) return;
   [graph.source, graph.filterNode, graph.bassNode, graph.midNode, graph.highNode,
     graph.analyser, graph.beatAnalyser, graph.gainNode, graph.echoSendNode,
     graph.echoDelayNode, graph.echoFeedbackNode, graph.echoWetNode].forEach(function (node) {
     try { if (node) node.disconnect(); } catch (_) { }
   });
-  try { delete media.__faveradioPreparedAudioGraph; } catch (_) { }
+  try { delete media.__favoradioPreparedAudioGraph; } catch (_) { }
 }
 
 function stopCuefieldPreparedAudio(media) {
   media = media || cuefieldAutoMixPreparedAudio;
   if (!media) return;
-  // Once the preloaded B deck has become Faveradio's active deck it no longer
+  // Once the preloaded B deck has become Favoradio's active deck it no longer
   // belongs to Cuefield. A later C-deck preparation must never pause or unload it.
   if (typeof audio !== 'undefined' && media === audio) {
     claimCuefieldPreparedAudioForPlayback(media);
@@ -399,7 +399,7 @@ function cuefieldSetMediaTime(media, seconds) {
 }
 
 function cuefieldCreatePreparedAudioGraph(media) {
-  if (!media || media.__faveradioPreparedAudioGraph) return media && media.__faveradioPreparedAudioGraph || null;
+  if (!media || media.__favoradioPreparedAudioGraph) return media && media.__favoradioPreparedAudioGraph || null;
   var graph = null;
   try {
     if ((!audioCtx || audioCtx.state === 'closed') && typeof initAudio === 'function') initAudio();
@@ -413,7 +413,7 @@ function cuefieldCreatePreparedAudioGraph(media) {
     // A media element cannot be safely returned to direct-output mode after a
     // MediaElementSource has been created for it. Mark it immediately so a
     // later graph-construction failure can discard this element completely.
-    media.__faveradioMediaSourceBound = true;
+    media.__favoradioMediaSourceBound = true;
     graph.analyser = audioCtx.createAnalyser();
     graph.beatAnalyser = audioCtx.createAnalyser();
     graph.gainNode = audioCtx.createGain();
@@ -463,7 +463,7 @@ function cuefieldCreatePreparedAudioGraph(media) {
       graph.echoDelayNode.connect(graph.echoWetNode);
       graph.echoWetNode.connect(audioCtx.destination);
     }
-    media.__faveradioPreparedAudioGraph = graph;
+    media.__favoradioPreparedAudioGraph = graph;
     return graph;
   } catch (error) {
     if (graph) {
@@ -473,8 +473,8 @@ function cuefieldCreatePreparedAudioGraph(media) {
         try { if (node) node.disconnect(); } catch (_) { }
       });
     }
-    if (media && media.__faveradioMediaSourceBound) media.__faveradioPreparedGraphFailed = true;
-    try { delete media.__faveradioPreparedAudioGraph; } catch (_) { }
+    if (media && media.__favoradioMediaSourceBound) media.__favoradioPreparedGraphFailed = true;
+    try { delete media.__favoradioPreparedAudioGraph; } catch (_) { }
     console.warn('[CuefieldAutoMix] prepared audio graph fallback:', error && error.message || error);
     return null;
   }
@@ -482,7 +482,7 @@ function cuefieldCreatePreparedAudioGraph(media) {
 
 function cuefieldWriteIncomingGain(media, value) {
   value = Math.max(0, Math.min(1, Number(value) || 0));
-  var graph = media && media.__faveradioPreparedAudioGraph;
+  var graph = media && media.__favoradioPreparedAudioGraph;
   if (graph && graph.gainNode) {
     try { graph.gainNode.gain.value = value; } catch (_) { }
     try { media.volume = 1; media.muted = false; } catch (_) { }
@@ -504,7 +504,7 @@ function prepareCuefieldPendingAudio(pending) {
   media.volume = 1;
   media.muted = false;
   cuefieldCreatePreparedAudioGraph(media);
-  if (media.__faveradioPreparedGraphFailed) {
+  if (media.__favoradioPreparedGraphFailed) {
     try { media.pause(); media.removeAttribute('src'); media.load(); } catch (_) { }
     // The first element is permanently tied to a failed WebAudio source.
     // Recreate a clean element for the direct-volume fallback instead of
@@ -660,7 +660,7 @@ function cuefieldAnimateDeckVolume(deck, media, target, durationMs, curve, pendi
   var serial = ++cuefieldDeckVolumeSerial[deck];
   durationMs = Math.max(0, Number(durationMs) || 0);
   target = Math.max(0, Math.min(1, Number(target) || 0));
-  var graph = media && media.__faveradioPreparedAudioGraph;
+  var graph = media && media.__favoradioPreparedAudioGraph;
   var start = deck === 'A'
     ? (typeof currentAudioOutputGain === 'function' ? currentAudioOutputGain() : Number(targetVolume) || 0)
     : (graph && graph.gainNode ? Number(graph.gainNode.gain.value) || 0 : Number(media && media.volume) || 0);
@@ -752,7 +752,7 @@ function cuefieldInitBridge() {
 
 function cuefieldApplyTimelineAction(action, pending, nextMedia, context) {
   action = action || {};
-  var graph = nextMedia && nextMedia.__faveradioPreparedAudioGraph;
+  var graph = nextMedia && nextMedia.__favoradioPreparedAudioGraph;
   var deckMedia = action.deck === 'A' ? context.outgoingMedia : nextMedia;
   if (action.op === 'handoff') return Promise.resolve(true);
   if (action.op === 'play' && action.deck !== 'A') {
@@ -803,7 +803,7 @@ async function runCuefieldTimeline(pending, nextMedia, context) {
   if (!execution) return false;
   pending.timelineExecution = execution;
   clearCuefieldTimelineTimers();
-  pending.executionFallback = nextMedia.__faveradioPreparedAudioGraph ? 'cuefield-timeline-graph' : 'volume-only-fallback';
+  pending.executionFallback = nextMedia.__favoradioPreparedAudioGraph ? 'cuefield-timeline-graph' : 'volume-only-fallback';
   pending.actualMixStart = Number(context.outgoingMedia && context.outgoingMedia.currentTime) || 0;
   var actions = Array.isArray(execution.actions) ? execution.actions.slice() : [];
   var elapsedMs = 0;
@@ -821,7 +821,7 @@ async function runCuefieldTimeline(pending, nextMedia, context) {
   if (!cuefieldTransitionStillCurrent(pending, context) || nextMedia.paused || nextMedia.ended) return false;
   cuefieldWriteIncomingGain(nextMedia, Math.max(0, Math.min(1, Number(targetVolume) || 0)));
   if (typeof writeAudioOutputGain === 'function') writeAudioOutputGain(0);
-  var finalGraph = nextMedia && nextMedia.__faveradioPreparedAudioGraph;
+  var finalGraph = nextMedia && nextMedia.__favoradioPreparedAudioGraph;
   if (finalGraph) {
     cuefieldRampParam(finalGraph.filterNode && finalGraph.filterNode.frequency, 20, 160);
     cuefieldRampParam(finalGraph.bassNode && finalGraph.bassNode.gain, 0, 160);
@@ -906,8 +906,8 @@ function tickCuefieldAutoMix() {
 
 function noteCuefieldAutoMixOutgoingEnded(media, token, index) {
   if (!media) return false;
-  media.__faveradioCuefieldEndedDeferredToken = Number(token);
-  media.__faveradioCuefieldEndedDeferredIndex = Number(index);
+  media.__favoradioCuefieldEndedDeferredToken = Number(token);
+  media.__favoradioCuefieldEndedDeferredIndex = Number(index);
   return true;
 }
 
@@ -924,8 +924,8 @@ function recoverCuefieldAutoMixEndedOutgoing(pending, context, reason) {
     || currentIdx !== index
     || audio !== outgoing
   ) return false;
-  if (outgoing.__faveradioCuefieldEndedRecoveryToken === token) return true;
-  outgoing.__faveradioCuefieldEndedRecoveryToken = token;
+  if (outgoing.__favoradioCuefieldEndedRecoveryToken === token) return true;
+  outgoing.__favoradioCuefieldEndedRecoveryToken = token;
   cuefieldAutoMixExecuting = false;
   if (cuefieldActiveTransitionContext === context) cuefieldActiveTransitionContext = null;
   updateCuefieldAutoMixUi(reason || 'fallback');

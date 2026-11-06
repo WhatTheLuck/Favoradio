@@ -2,7 +2,7 @@
 
 (function (global) {
   var INDEX = 8;
-  var BRIDGE_SRC = 'vendor/sonic-workshop/faveradio-bridge.html';
+  var BRIDGE_SRC = 'vendor/sonic-workshop/favoradio-bridge.html';
   var MOUNT_ID = 'sonic-workshop-layer';
   var AUDIO_PUSH_INTERVAL_MS = 33;
   var MEDIA_PUSH_INTERVAL_MS = 250;
@@ -18,7 +18,7 @@
   var WORKSHOP_DEFAULT_PROPERTIES = {
     schemecolor: '0.3333333333333333 0.0196078431372549 0.3333333333333333',
     theme: 'coral-mirage',
-    faveradioCustomTheme: null,
+    favoradioCustomTheme: null,
     themeCycleInterval: 50,
     peakColorEnabled: true,
     peakColorIntensity: 0.62,
@@ -331,8 +331,8 @@
     var peak = rgbToHexLocal(peakRgb.r, peakRgb.g, peakRgb.b);
     var glow = clamp(0.62 + hsl.s * 0.20 + hsl.l * 0.10, 0.62, 0.98);
     return {
-      name: 'Faveradio Custom',
-      id: 'faveradio-custom',
+      name: 'Favoradio Custom',
+      id: 'favoradio-custom',
       __primaryColor: hex,
       uBaseColor1: mixHex('#000000', hex, 0.075),
       uBaseColor2: mixHex('#000000', hex, 0.18),
@@ -379,8 +379,8 @@
     var peakInfo = workshopHexInfo(peak);
     var glow = clamp(0.62 + info.chroma * 0.10 + Math.max(coolInfo.chroma, peakInfo.chroma) * 0.08 + Math.max(0, info.lum - 0.38) * 0.06, 0.62, 0.96);
     return {
-      name: 'Faveradio Region Palette',
-      id: 'faveradio-custom',
+      name: 'Favoradio Region Palette',
+      id: 'favoradio-custom',
       __primaryColor: primary,
       uBaseColor1: mixHex('#000000', base, 0.20),
       uBaseColor2: mixHex(base, primary, 0.22),
@@ -430,8 +430,8 @@
   function cloneWorkshopTheme(theme) {
     theme = theme || workshopCustomThemeForColor('#cb6c89');
     var out = {
-      name: theme.name || 'Faveradio Region Palette',
-      id: theme.id || 'faveradio-custom',
+      name: theme.name || 'Favoradio Region Palette',
+      id: theme.id || 'favoradio-custom',
       __primaryColor: normalizeHex(theme.__primaryColor || '#cb6c89', '#cb6c89'),
       uGlowIntensity: Number(theme.uGlowIntensity) || 1
     };
@@ -446,8 +446,8 @@
     to = cloneWorkshopTheme(to);
     t = clamp01(t);
     var out = {
-      name: to.name || from.name || 'Faveradio Region Palette',
-      id: to.id || from.id || 'faveradio-custom',
+      name: to.name || from.name || 'Favoradio Region Palette',
+      id: to.id || from.id || 'favoradio-custom',
       __primaryColor: mixHex(from.__primaryColor, to.__primaryColor, t),
       uGlowIntensity: Number((from.uGlowIntensity + (to.uGlowIntensity - from.uGlowIntensity) * t).toFixed(3))
     };
@@ -472,11 +472,11 @@
   }
 
   function applyWorkshopThemeTransition(props) {
-    if (!props || !props.faveradioCustomTheme) return props;
-    var target = cloneWorkshopTheme(props.faveradioCustomTheme);
+    if (!props || !props.favoradioCustomTheme) return props;
+    var target = cloneWorkshopTheme(props.favoradioCustomTheme);
     state.displayedTheme = target;
     state.themeTransition = null;
-    props.faveradioCustomTheme = target;
+    props.favoradioCustomTheme = target;
     props.schemecolor = hexToSchemeColor(target.__primaryColor);
     return props;
   }
@@ -507,16 +507,16 @@
     var frame = state.iframe && state.iframe.contentWindow;
     if (!frame) return;
     try {
-      if (type === 'faveradio-sonic-workshop-audio' && typeof frame.__faveradioApplyAudio === 'function') {
-        frame.__faveradioApplyAudio(payload.samples);
+      if (type === 'favoradio-sonic-workshop-audio' && typeof frame.__favoradioApplyAudio === 'function') {
+        frame.__favoradioApplyAudio(payload.samples);
         return;
       }
-      if (type === 'faveradio-sonic-workshop-media' && typeof frame.__faveradioApplyMedia === 'function') {
-        frame.__faveradioApplyMedia(payload.media);
+      if (type === 'favoradio-sonic-workshop-media' && typeof frame.__favoradioApplyMedia === 'function') {
+        frame.__favoradioApplyMedia(payload.media);
         return;
       }
-      if (type === 'faveradio-sonic-workshop-properties' && typeof frame.__faveradioApplyProperties === 'function') {
-        frame.__faveradioApplyProperties(payload.properties);
+      if (type === 'favoradio-sonic-workshop-properties' && typeof frame.__favoradioApplyProperties === 'function') {
+        frame.__favoradioApplyProperties(payload.properties);
         return;
       }
     } catch (e) {}
@@ -619,12 +619,12 @@
       }
       paletteHexes.push(hex);
     });
-    props.theme = 'faveradio-custom';
-    props.faveradioCustomTheme = workshopCustomThemeForRegions(regions);
+    props.theme = 'favoradio-custom';
+    props.favoradioCustomTheme = workshopCustomThemeForRegions(regions);
     props.schemecolor = hexToSchemeColor(colorHex);
-    props.__faveradioColorHex = colorHex;
-    props.__faveradioPaletteHexes = paletteHexes.join(',');
-    props.__faveradioNearestTheme = fx.sonicWorkshopColorMode === 'custom' ? customTheme : workshopThemeForColor(colorHex);
+    props.__favoradioColorHex = colorHex;
+    props.__favoradioPaletteHexes = paletteHexes.join(',');
+    props.__favoradioNearestTheme = fx.sonicWorkshopColorMode === 'custom' ? customTheme : workshopThemeForColor(colorHex);
     return props;
   }
 
@@ -636,7 +636,7 @@
     if (!force && key === state.lastPropertiesKey && now - state.lastPropertiesAt < PROPERTIES_PUSH_INTERVAL_MS) return;
     state.lastPropertiesKey = key;
     state.lastPropertiesAt = now;
-    postMessage('faveradio-sonic-workshop-properties', { properties: props });
+    postMessage('favoradio-sonic-workshop-properties', { properties: props });
   }
 
   function pushMedia(force) {
@@ -657,7 +657,7 @@
     state.lastMediaKey = key;
     state.lastMediaAt = now;
     state.media = media;
-    postMessage('faveradio-sonic-workshop-media', { media: media });
+    postMessage('favoradio-sonic-workshop-media', { media: media });
   }
 
   function rawAudioArray() {
@@ -753,7 +753,7 @@
     var now = nowMs();
     if (!force && now - state.lastAudioAt < AUDIO_PUSH_INTERVAL_MS) return;
     state.lastAudioAt = now;
-    postMessage('faveradio-sonic-workshop-audio', { samples: buildAudioSamples(audioFrame || {}) });
+    postMessage('favoradio-sonic-workshop-audio', { samples: buildAudioSamples(audioFrame || {}) });
   }
 
   function update(dt, ctx) {
@@ -799,7 +799,7 @@
 
   global.addEventListener && global.addEventListener('message', function (event) {
     var data = event && event.data || {};
-    if (data.type === 'faveradio-sonic-workshop-ready') {
+    if (data.type === 'favoradio-sonic-workshop-ready') {
       state.ready = true;
       pushProperties(true);
       pushMedia(true);
@@ -807,7 +807,7 @@
     }
   });
 
-  global.FaveradioSonicWorkshop = {
+  global.FavoradioSonicWorkshop = {
     INDEX: INDEX,
     isActive: isActive,
     update: update,

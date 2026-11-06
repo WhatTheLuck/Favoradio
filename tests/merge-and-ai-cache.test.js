@@ -32,7 +32,7 @@ test('changing a tag to required during pending analysis affects the next select
 });
 
 test('merged folder is an ordinary persisted playlist retaining provider identity and annotations',async t=>{
- const directory=fs.mkdtempSync(path.join(os.tmpdir(),'faveradio-merge-'));
+ const directory=fs.mkdtempSync(path.join(os.tmpdir(),'favoradio-merge-'));
  t.after(()=>fs.rmSync(directory,{recursive:true,force:true}));
  const library=new BuiltInPlaylistLibrary({userDataPath:directory});
  const tracks=core.dedupeSmartFavoriteTracks([
@@ -54,7 +54,7 @@ test('merged folder is an ordinary persisted playlist retaining provider identit
 });
 
 test('LLM caches requested tag semantics across restarts and preserves concurrent user edits',async t=>{
- const directory=fs.mkdtempSync(path.join(os.tmpdir(),'faveradio-llm-'));
+ const directory=fs.mkdtempSync(path.join(os.tmpdir(),'favoradio-llm-'));
  const oldFetch=global.fetch;let calls=0;
  t.after(()=>{global.fetch=oldFetch;fs.rmSync(directory,{recursive:true,force:true});});
  const safeStorage={isEncryptionAvailable:()=>true,encryptString:s=>Buffer.from(s),decryptString:b=>b.toString()};

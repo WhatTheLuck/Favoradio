@@ -6,7 +6,7 @@ const test = require('node:test');
 const root = path.resolve(__dirname, '..');
 const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 
-test('loads Cuefield helpers before the Faveradio integration module', () => {
+test('loads Cuefield helpers before the Favoradio integration module', () => {
   const loader = read('public/js/index-loader.js');
   const automix = loader.indexOf('16-cuefield-automix-core.js');
   const timeline = loader.indexOf('17-cuefield-timeline-executor.js');

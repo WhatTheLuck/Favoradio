@@ -1,9 +1,9 @@
 {
-  "name": "faveradio",
-  "productName": "Faveradio",
+  "name": "favoradio",
+  "productName": "Favoradio",
   "version": "2.3.6",
   "description": "Windows 沉浸式音乐播放器，融合桌面模式、歌词舞台、粒子视觉和 3D 歌单架。",
-  "author": "Faveradio",
+  "author": "Favoradio",
   "license": "GPL-3.0-only",
   "main": "desktop/main.js",
   "private": true,
@@ -15,8 +15,8 @@
   },
   "build": {
     "compression": "maximum",
-    "appId": "com.faveradio.desktop",
-    "productName": "Faveradio",
+    "appId": "com.favoradio.desktop",
+    "productName": "Favoradio",
     "directories": {
       "output": "dist",
       "buildResources": "build"
@@ -76,7 +76,7 @@
     ],
     "asar": false,
     "win": {
-      "executableName": "Faveradio",
+      "executableName": "Favoradio",
       "icon": "build/icon.ico",
       "signAndEditExecutable": false,
       "target": [
@@ -95,28 +95,28 @@
       "allowToChangeInstallationDirectory": false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Faveradio",
+      "shortcutName": "Favoradio",
       "installerIcon": "build/icon.ico",
       "uninstallerIcon": "build/icon.ico",
       "installerSidebar": "build/installerSidebar.bmp",
       "uninstallerSidebar": "build/installerSidebar.bmp",
       "installerHeader": "build/installerHeader.bmp",
       "include": "build/installer.nsh",
-      "artifactName": "Faveradio-${version}-Setup.${ext}"
+      "artifactName": "Favoradio-${version}-Setup.${ext}"
     },
     "publish": [
       {
         "provider": "github",
         "owner": "WhatTheLuck",
-        "repo": "Faveradio"
+        "repo": "Favoradio"
       }
     ]
   },
-  "faveradio": {
+  "favoradio": {
     "update": {
       "provider": "github",
       "owner": "WhatTheLuck",
-      "repo": "Faveradio",
+      "repo": "Favoradio",
       "preview": false,
       "preferMirrors": true,
       "mirrors": [

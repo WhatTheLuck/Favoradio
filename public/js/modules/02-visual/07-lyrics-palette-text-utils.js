@@ -512,7 +512,7 @@ function updateLyricPaletteFromCover(coverCanvas) {
     if (fx.lyricColorMode !== 'custom') setStageLyricPalette(stageLyrics.coverPalette);
     if (typeof updateSonicGroundColorControls === 'function') updateSonicGroundColorControls();
     if (typeof updateSonicWorkshopColorControls === 'function') updateSonicWorkshopColorControls();
-    if (window.FaveradioSonicWorkshop && typeof FaveradioSonicWorkshop.pushProperties === 'function') FaveradioSonicWorkshop.pushProperties(true);
+    if (window.FavoradioSonicWorkshop && typeof FavoradioSonicWorkshop.pushProperties === 'function') FavoradioSonicWorkshop.pushProperties(true);
   } catch (e) { }
 }
 

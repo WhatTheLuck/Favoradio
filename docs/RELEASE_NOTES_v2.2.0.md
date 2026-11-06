@@ -5,14 +5,14 @@
 
 ## 下载
 
-通过本次公告中的网盘入口下载，也是在支持 Faveradio 的持续更新。感谢支持。
+通过本次公告中的网盘入口下载，也是在支持 Favoradio 的持续更新。感谢支持。
 
-- [夸克盘下载 Faveradio 2.2.0](https://pan.quark.cn/s/4b124d3e81d3)
-- [百度云下载 Faveradio 2.2.0](https://pan.baidu.com/s/17CwpHUza67w_Grgc3s5nOw?pwd=SJHP)（提取码：`SJHP`）
+- [夸克盘下载 Favoradio 2.2.0](https://pan.quark.cn/s/4b124d3e81d3)
+- [百度云下载 Favoradio 2.2.0](https://pan.baidu.com/s/17CwpHUza67w_Grgc3s5nOw?pwd=SJHP)（提取码：`SJHP`）
 
-完整安装包：`Faveradio-2.2.0-Setup.exe`
+完整安装包：`Favoradio-2.2.0-Setup.exe`
 
 SHA-256：`8fd318283bab2fe98190f7b879ede423dd8274a0aeec8d321570b8d022d4f989`。
 
-<!-- faveradio-download-page: 夸克盘|https://pan.quark.cn/s/4b124d3e81d3 -->
-<!-- faveradio-download-page: 百度云|https://pan.baidu.com/s/17CwpHUza67w_Grgc3s5nOw?pwd=SJHP -->
+<!-- favoradio-download-page: 夸克盘|https://pan.quark.cn/s/4b124d3e81d3 -->
+<!-- favoradio-download-page: 百度云|https://pan.baidu.com/s/17CwpHUza67w_Grgc3s5nOw?pwd=SJHP -->

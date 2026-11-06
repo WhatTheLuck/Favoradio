@@ -13,22 +13,22 @@ if (!fs.existsSync(electron)) {
   process.exit(0);
 }
 
-const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-spotify-setup-'));
+const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'favoradio-spotify-setup-'));
 const qaScript = path.join(tempDir, 'spotify-setup-qa.js');
 const preload = path.join(tempDir, 'spotify-setup-preload.js');
 
 fs.writeFileSync(preload, `
-try { window.localStorage.setItem('faveradio-startup-fast-skip-v1', 'true'); } catch (_) {}
+try { window.localStorage.setItem('favoradio-startup-fast-skip-v1', 'true'); } catch (_) {}
 `, 'utf8');
 
 fs.writeFileSync(qaScript, `
 const path = require('path');
 const { app, BrowserWindow } = require('electron');
-const appRoot = process.env.FAVERADIO_QA_APP_ROOT;
-const preload = process.env.FAVERADIO_QA_PRELOAD;
+const appRoot = process.env.FAVORADIO_QA_APP_ROOT;
+const preload = process.env.FAVORADIO_QA_PRELOAD;
 
 function finish(code, payload) {
-  console.log('FAVERADIO_SPOTIFY_SETUP_QA:' + JSON.stringify(payload));
+  console.log('FAVORADIO_SPOTIFY_SETUP_QA:' + JSON.stringify(payload));
   setTimeout(() => app.exit(code), 60);
 }
 
@@ -83,12 +83,12 @@ app.whenReady().then(async () => {
 try {
   const result = spawnSync(electron, [qaScript], {
     cwd: appRoot,
-    env: { ...process.env, FAVERADIO_QA_APP_ROOT: appRoot, FAVERADIO_QA_PRELOAD: preload },
+    env: { ...process.env, FAVORADIO_QA_APP_ROOT: appRoot, FAVORADIO_QA_PRELOAD: preload },
     encoding: 'utf8',
     timeout: 30000,
   });
   const stdout = String(result.stdout || '');
-  const match = stdout.match(/FAVERADIO_SPOTIFY_SETUP_QA:(\{.*\})/);
+  const match = stdout.match(/FAVORADIO_SPOTIFY_SETUP_QA:(\{.*\})/);
   const payload = match ? JSON.parse(match[1]) : null;
   if (result.error || result.status !== 0 || !payload || payload.ok !== true) {
     process.stdout.write(stdout);

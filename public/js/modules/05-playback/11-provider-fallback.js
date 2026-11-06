@@ -556,8 +556,8 @@ function settleSourceFallbackTerminal(idx, token, message, opts) {
       audio.onended = null;
       audio.pause();
       audio.removeAttribute('src');
-      audio.__faveradioQueueItemKey = '';
-      audio.__faveradioTrackSwitchToken = 0;
+      audio.__favoradioQueueItemKey = '';
+      audio.__favoradioTrackSwitchToken = 0;
       audio.load();
     } catch (e) { }
   }

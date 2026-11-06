@@ -1,10 +1,10 @@
 function normalizeBuiltInPlaylistRows(rows) {
   return (Array.isArray(rows) ? rows : []).map(function (playlist) {
     return Object.assign({}, playlist, {
-      provider: 'faveradio',
-      source: 'faveradio',
+      provider: 'favoradio',
+      source: 'favoradio',
       builtin: true,
-      creator: playlist.creator || 'Faveradio',
+      creator: playlist.creator || 'Favoradio',
       shelfPane: 'mine',
       subscribed: false
     });
@@ -91,7 +91,7 @@ async function createBuiltInPlaylist(name, initialTrack) {
 }
 
 function promptCreateBuiltInPlaylist() {
-  var name = window.prompt('新建 Faveradio 内置歌单', '我的歌单');
+  var name = window.prompt('新建 Favoradio 内置歌单', '我的歌单');
   if (name == null) return;
   createBuiltInPlaylist(name).catch(function (error) {
     console.warn('[BuiltInPlaylistCreate]', error);
@@ -119,7 +119,7 @@ async function removeTrackFromBuiltInPlaylist(id, index) {
     if (typeof showToast === 'function') showToast(builtInPlaylistErrorMessage(result, '移除歌曲失败'));
     return false;
   }
-  if (playlistPanelDetailState && playlistPanelDetailState.key === 'faveradio:' + String(id || '')) {
+  if (playlistPanelDetailState && playlistPanelDetailState.key === 'favoradio:' + String(id || '')) {
     playlistPanelDetailState.tracks.splice(Number(index), 1);
     if (typeof playlistSearchReset === 'function') playlistSearchReset(false);
     playlistPanelDetailState.total = Math.max(0, playlistPanelDetailState.tracks.length);
@@ -139,7 +139,7 @@ async function renameBuiltInPlaylist(id, currentName) {
     if (typeof showToast === 'function') showToast(builtInPlaylistErrorMessage(result, '重命名失败'));
     return false;
   }
-  if (playlistPanelDetailState && playlistPanelDetailState.key === 'faveradio:' + String(id || '') && playlistPanelDetailState.playlist) {
+  if (playlistPanelDetailState && playlistPanelDetailState.key === 'favoradio:' + String(id || '') && playlistPanelDetailState.playlist) {
     playlistPanelDetailState.playlist.name = String(name).trim();
   }
   applyBuiltInPlaylistSnapshot(result, { preserveScroll: true, reason: 'built-in-playlist-rename' });
@@ -154,7 +154,7 @@ async function deleteBuiltInPlaylist(id, currentName) {
     if (typeof showToast === 'function') showToast(builtInPlaylistErrorMessage(result, '删除内置歌单失败'));
     return false;
   }
-  if (playlistPanelDetailState && playlistPanelDetailState.key === 'faveradio:' + String(id || '')) {
+  if (playlistPanelDetailState && playlistPanelDetailState.key === 'favoradio:' + String(id || '')) {
     cancelPlaylistPanelDetailRequest();
     playlistPanelDetailState.key = '';
     playlistPanelDetailState.tracks = [];

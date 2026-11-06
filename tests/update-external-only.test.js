@@ -27,11 +27,11 @@ function serverFunctionSource(name, nextName) {
 
 test('release update metadata accepts only a bounded HTTPS external page', () => {
   assert.match(packageData.version, /^\d+\.\d+\.\d+$/);
-  assert.equal(packageData.faveradio.update.preview, false);
+  assert.equal(packageData.favoradio.update.preview, false);
   assert.match(serverText, /function safeExternalUpdateUrl\(value\)/);
   assert.match(serverText, /raw\.length > 2048/);
   assert.match(serverText, /parsed\.protocol !== 'https:'/);
-  assert.match(serverText, /faveradio-download-page/);
+  assert.match(serverText, /favoradio-download-page/);
   assert.match(serverText, /function extractReleaseDownloadPages\(body\)/);
   assert.match(serverText, /const downloadPages = extractReleaseDownloadPages\(data\.body\)/);
   assert.match(serverText, /const downloadPageUrl = externalUrl \|\| htmlUrl/);
@@ -64,15 +64,15 @@ test('release body preserves all three labelled HTTPS download pages', () => {
     serverFunctionSource('extractReleaseDownloadPages', 'extractReleaseDownloadPage'),
   ].join('\n'), sandbox);
   const pages = sandbox.extractReleaseDownloadPages([
-    '<!-- faveradio-download-page: 夸克盘|https://pan.quark.cn/s/df00d9520835 -->',
-    '<!-- faveradio-download-page: 百度云|https://pan.baidu.com/s/1UAAyvXHNJjxVXAHIPtl4Ow?pwd=SJHP -->',
-    '<!-- faveradio-download-page: 蓝奏云|https://xxhuber.lanzout.com/s/Faveradio -->',
-    '<!-- faveradio-download-page: 不安全|http://example.com/file -->',
+    '<!-- favoradio-download-page: 夸克盘|https://pan.quark.cn/s/df00d9520835 -->',
+    '<!-- favoradio-download-page: 百度云|https://pan.baidu.com/s/1UAAyvXHNJjxVXAHIPtl4Ow?pwd=SJHP -->',
+    '<!-- favoradio-download-page: 蓝奏云|https://xxhuber.lanzout.com/s/Favoradio -->',
+    '<!-- favoradio-download-page: 不安全|http://example.com/file -->',
   ].join('\n'));
   assert.deepEqual(JSON.parse(JSON.stringify(pages)), [
     { label: '夸克盘', url: 'https://pan.quark.cn/s/df00d9520835' },
     { label: '百度云', url: 'https://pan.baidu.com/s/1UAAyvXHNJjxVXAHIPtl4Ow?pwd=SJHP' },
-    { label: '蓝奏云', url: 'https://xxhuber.lanzout.com/s/Faveradio' },
+    { label: '蓝奏云', url: 'https://xxhuber.lanzout.com/s/Favoradio' },
   ]);
 });
 

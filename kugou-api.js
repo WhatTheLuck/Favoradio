@@ -627,7 +627,7 @@ function extractKugouAuth(cookie) {
   ).replace(/\D/g, '');
   const token = String(obj.token || obj.Token || obj.t || obj.T || kugoo.t || kugoo.token || '').trim();
   const fallbackMid = crypto.createHash('md5')
-    .update('faveradio-kugou:' + String(userid || token || obj.KuGoo || obj.kugou || 'guest'))
+    .update('favoradio-kugou:' + String(userid || token || obj.KuGoo || obj.kugou || 'guest'))
     .digest('hex');
   const mid = String(obj.kg_mid || obj.KG_MID || obj.KUGOU_API_MID || obj.mid || fallbackMid).trim();
   const dfid = String(obj.kg_dfid || obj.KG_DFID || obj.dfid || obj.DFID || '-').trim();

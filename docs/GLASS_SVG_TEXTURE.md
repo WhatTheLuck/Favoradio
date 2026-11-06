@@ -1,4 +1,4 @@
-# Faveradio SVG Glass Texture
+# Favoradio SVG Glass Texture
 
 这是用户明确要求保存的播放器 SVG 玻璃质感基线。后续可以修补偏移、缺角、套用范围和响应式问题，但不要随意重写核心质感。
 
@@ -22,12 +22,12 @@
 :root{
   --saved-panel-glass-bg:rgba(0,0,0,.10);
   --saved-panel-glass-filter:blur(12px) saturate(1.8) brightness(1.16);
-  --saved-panel-glass-svg-filter:url(#faveradio-control-glass-filter) saturate(1);
+  --saved-panel-glass-svg-filter:url(#favoradio-control-glass-filter) saturate(1);
   --saved-panel-glass-shadow:inset 0 0 2px 1px rgba(255,255,255,.35),inset 0 0 10px 4px rgba(255,255,255,.15),0 4px 16px rgba(17,17,26,.05),0 8px 24px rgba(17,17,26,.05),0 16px 56px rgba(17,17,26,.05),inset 0 4px 16px rgba(17,17,26,.05),inset 0 8px 24px rgba(17,17,26,.05),inset 0 16px 56px rgba(17,17,26,.05);
   --saved-panel-glass-radius:50px;
   --saved-button-glass-bg:rgba(0,0,0,.10);
   --saved-button-glass-filter:blur(12px) saturate(1.8) brightness(1.16);
-  --saved-button-glass-svg-filter:url(#faveradio-control-glass-filter) saturate(1);
+  --saved-button-glass-svg-filter:url(#favoradio-control-glass-filter) saturate(1);
   --saved-button-glass-shadow:inset 0 0 2px 1px rgba(255,255,255,.34),inset 0 0 10px 4px rgba(255,255,255,.13),0 10px 30px rgba(0,0,0,.18);
   --saved-button-glass-hover-bg:rgba(255,255,255,.055);
   --saved-button-glass-hover-shadow:inset 0 0 2px 1px rgba(255,255,255,.42),inset 0 0 12px 5px rgba(255,255,255,.17),0 12px 34px rgba(0,0,0,.22),0 0 18px rgba(255,255,255,.06);
@@ -49,8 +49,8 @@
 }
 html.control-glass-svg-ok #bottom-bar{
   background:rgba(0,0,0,.10);
-  backdrop-filter:url(#faveradio-control-glass-filter) saturate(1);
-  -webkit-backdrop-filter:url(#faveradio-control-glass-filter) saturate(1);
+  backdrop-filter:url(#favoradio-control-glass-filter) saturate(1);
+  -webkit-backdrop-filter:url(#favoradio-control-glass-filter) saturate(1);
 }
 #bottom-bar::before{content:none}
 #bottom-bar::after{content:none}
@@ -63,7 +63,7 @@ html.control-glass-svg-ok #bottom-bar{
 关键点：
 
 - `color-interpolation-filters="sRGB"`
-- 主 filter：`id="faveradio-control-glass-filter"`
+- 主 filter：`id="favoradio-control-glass-filter"`
 - filter 区域：`x="-12%" y="-28%" width="124%" height="156%"`
 - RGB 三通道 displacement scale：Red `180`、Green `170`、Blue `160`
 - RGB 共同对齐中心：`dx="-90" dy="0"`；`controlGlassChromaticOffset` 只能围绕该中心做 Red/Green/Blue 相对分离，不要再整体平移所有通道；UI 下限为 `30`，这是保留最低可见色差的底线。
@@ -106,24 +106,24 @@ var edge = Math.min(width, height) * (borderWidth * 0.5);
 - 如果搜索栏还处在 `search-glass-priming`，不要立刻添加 `peek`；等 `search-glass-ready` / `search-glass-fallback` 出现，或最多等约 140ms 兜底后再显示。
 - `updateSearchBoxGlassDisplacementMap()` 不能在 `search-glass-priming` 期间因为二次调用直接把状态切成 ready，否则会绕过预热帧，造成首帧无 SVG 质感。
 - `.search-mode-tabs` 容器不能再盖一层 `rgba(0,0,0,.90)` 的普通 blur 黑底；外层 rail 保持透明，SVG 质感只放在每个 tab 胶囊按钮上。
-- quick-check 的 `Search glass entrance guard` 必须验证首帧没有提前 `peek`，下一帧后才带着 `url(#faveradio-search-box-glass-filter)` 出现。
+- quick-check 的 `Search glass entrance guard` 必须验证首帧没有提前 `peek`，下一帧后才带着 `url(#favoradio-search-box-glass-filter)` 出现。
 
-Search reveal surface rule: search must mirror the bottom bar reveal. Hidden `#search-box` stays transparent with `backdrop-filter:none`; visible `#search-area.peek #search-box` carries the saved panel background/shadow and, when SVG is available, directly uses `url(#faveradio-search-box-glass-filter) saturate(1)`. Do not put the search box SVG glass on `#search-box::before`; that creates a separate layer from the reveal state and can make the popup feel like the SVG arrives late.
+Search reveal surface rule: search must mirror the bottom bar reveal. Hidden `#search-box` stays transparent with `backdrop-filter:none`; visible `#search-area.peek #search-box` carries the saved panel background/shadow and, when SVG is available, directly uses `url(#favoradio-search-box-glass-filter) saturate(1)`. Do not put the search box SVG glass on `#search-box::before`; that creates a separate layer from the reveal state and can make the popup feel like the SVG arrives late.
 
 ## Wallpaper Engine Single-Surface Rule
 
-2026-07-18 用户明确否定了额外的“可直接透明”玻璃层。旧方案 `Faveradio WE Glass Refraction`、第二个圆角 DWM 面、`DwmQueryThumbnailSourceSize` 局部取样与 `1.105` 放大/错位全部失效，禁止恢复。
+2026-07-18 用户明确否定了额外的“可直接透明”玻璃层。旧方案 `Favoradio WE Glass Refraction`、第二个圆角 DWM 面、`DwmQueryThumbnailSourceSize` 局部取样与 `1.105` 放大/错位全部失效，禁止恢复。
 
 当前唯一允许的实现：
 
-- 原生层只有一个全窗 `Faveradio WE DWM Surface`；精确 WE 源窗仍在它下面保持真实 Windows 鼠标视差。
+- 原生层只有一个全窗 `Favoradio WE DWM Surface`；精确 WE 源窗仍在它下面保持真实 Windows 鼠标视差。
 - `#wallpaper-engine-glass-sampler` 只裁切真实 `#bottom-bar`；内部视频保持完整视口 1:1 对齐，不做缩放镜片或二次折射。
 - 采样源 HWND 必须与唯一基础 DWM HWND 相同。运行时兼容字段 `dwmGlassSurfaceWindowId` 只是该 HWND 的别名，不代表第二个窗口。
 - 采样流必须在 DWM 缩略图激活前对普通基础 HWND 建立；捕获首帧后再激活同一 HWND 的 DWM 缩略图，并在预热黑帧变成真实壁纸像素后才添加 `wallpaper-engine-glass-sampler-ready`。
-- 最终扭曲和 RGB 色散只由既有 `#faveradio-control-glass-filter` 产生。Red `180`、Green `170`、Blue `160`、共同中心 `-90`、`screen` 混合、`stdDeviation=0.5` 等冻结参数不因 WE 接入改变。
+- 最终扭曲和 RGB 色散只由既有 `#favoradio-control-glass-filter` 产生。Red `180`、Green `170`、Blue `160`、共同中心 `-90`、`screen` 混合、`stdDeviation=0.5` 等冻结参数不因 WE 接入改变。
 - 采样 HWND 本身没有光标画面；不得用读取/隐藏/替换系统光标或 DOM 假光标处理捕获。Scene 停止、切换、隐藏或退出时必须停止该 MediaStream。
 
-验收时同时检查：`Faveradio WE Glass Refraction` 窗口数为 `0`、基础 HWND 与采样源 HWND 相等、采样视频轨为 `live` 且无音频、采样器矩形与控制台矩形一致、最大化/还原后仍对齐。
+验收时同时检查：`Favoradio WE Glass Refraction` 窗口数为 `0`、基础 HWND 与采样源 HWND 相等、采样视频轨为 `live` 且无音频、采样器矩形与控制台矩形一致、最大化/还原后仍对齐。
 
 ## Safe Change Rules
 

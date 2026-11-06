@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-  [string]$TitlePrefix = 'Faveradio',
+  [string]$TitlePrefix = 'Favoradio',
   [switch]$Move,
   [int]$X = 192,
   [int]$Y = 132,
@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-public static class FaveradioWeQaWindowList {
+public static class FavoradioWeQaWindowList {
   [StructLayout(LayoutKind.Sequential)]
   private struct RECT {
     public int Left;
@@ -82,6 +82,6 @@ public static class FaveradioWeQaWindowList {
 '@
 
 if ($Move) {
-  [FaveradioWeQaWindowList]::Move($TitlePrefix, $X, $Y, $Width, $Height) | Out-Null
+  [FavoradioWeQaWindowList]::Move($TitlePrefix, $X, $Y, $Width, $Height) | Out-Null
 }
-@([FaveradioWeQaWindowList]::Run($TitlePrefix)) | ConvertTo-Json -Depth 4
+@([FavoradioWeQaWindowList]::Run($TitlePrefix)) | ConvertTo-Json -Depth 4

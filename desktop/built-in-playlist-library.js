@@ -4,7 +4,7 @@ const path = require('path');
 
 const BUILT_IN_PLAYLIST_VERSION = 1;
 const BUILT_IN_PLAYLIST_FILE = 'built-in-playlists.json';
-const BUNDLED_MUSIC_PLAYLIST_ID = crypto.createHash('sha256').update('faveradio-bundled-local-music').digest('hex').slice(0, 24);
+const BUNDLED_MUSIC_PLAYLIST_ID = crypto.createHash('sha256').update('favoradio-bundled-local-music').digest('hex').slice(0, 24);
 const MAX_PLAYLISTS = 100;
 const MAX_TRACKS_PER_PLAYLIST = 5000;
 const MAX_INDEX_BYTES = 32 * 1024 * 1024;
@@ -148,11 +148,11 @@ class BuiltInPlaylistLibrary {
     const first = playlist.tracks[0] || {};
     return {
       id: playlist.id,
-      provider: 'faveradio',
-      source: 'faveradio',
+      provider: 'favoradio',
+      source: 'favoradio',
       builtin: true,
       name: playlist.name,
-      creator: 'Faveradio',
+      creator: 'Favoradio',
       trackCount: playlist.tracks.length,
       cover: cleanText(first.cover, '', 4096),
       createdAt: playlist.createdAt,

@@ -1,13 +1,13 @@
-# Faveradio 2.3.6 发布流程
+# Favoradio 2.3.6 发布流程
 
 ## 发布边界
 
 - 正式版本：`2.3.6`
 - Git tag：`v2.3.6`
-- Release 标题：`Faveradio 2.3.6`
-- 安装包：`Faveradio-2.3.6-Setup.exe`
+- Release 标题：`Favoradio 2.3.6`
+- 安装包：`Favoradio-2.3.6-Setup.exe`
 - 仅从当前可信源码完整构建，不复用旧安装包或旧 `dist/`。
-- 正式 Release 不混入 Faveradio_Beat 产物。
+- 正式 Release 不混入 Favoradio_Beat 产物。
 - GitHub Release 只附带完整安装包和最小版本说明 `latest.yml`；不上传 blockmap、构建清单或内部测试产物。
 
 ## 公开更新说明
@@ -19,13 +19,13 @@
 
 ## 下载入口
 
-- GitHub Release：[下载 Faveradio 2.3.6](https://github.com/WhatTheLuck/Faveradio/releases/tag/v2.3.6)
+- GitHub Release：[下载 Favoradio 2.3.6](https://github.com/WhatTheLuck/Favoradio/releases/tag/v2.3.6)
 
-<!-- faveradio-download-page: GitHub Release|https://github.com/WhatTheLuck/Faveradio/releases/tag/v2.3.6 -->
+<!-- favoradio-download-page: GitHub Release|https://github.com/WhatTheLuck/Favoradio/releases/tag/v2.3.6 -->
 
 ## 发布资产
 
-GitHub Release 上传 `Faveradio-2.3.6-Setup.exe` 和 `docs/update/latest.yml`。版本说明仅包含 `version/releaseDate`，不得使用带安装包下载字段的构建工具清单。
+GitHub Release 上传 `Favoradio-2.3.6-Setup.exe` 和 `docs/update/latest.yml`。版本说明仅包含 `version/releaseDate`，不得使用带安装包下载字段的构建工具清单。
 
 采用 `compression: maximum`、`nsis.differentialPackage: false`，让完整安装包使用合并文件压缩，避免增量更新专用的 1 MB 字典和逐文件压缩限制。排除 MuQ 测试样例、展开权重缓存及运行日志；保留模型精度、依赖和全部 28 首离线歌曲。
 

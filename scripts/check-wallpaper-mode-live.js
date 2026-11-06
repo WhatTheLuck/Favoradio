@@ -84,7 +84,7 @@ async function waitForMainTarget(timeoutMs = 20000) {
     }
     await sleep(100);
   }
-  throw new Error(`Faveradio CDP page was not ready: ${lastError && lastError.message || 'no target'}`);
+  throw new Error(`Favoradio CDP page was not ready: ${lastError && lastError.message || 'no target'}`);
 }
 
 function readWindowTree(title) {
@@ -135,7 +135,7 @@ async function main() {
   await client.call('Runtime.enable');
 
   let nativeWindowId = '';
-  let title = 'Faveradio';
+  let title = 'Favoradio';
   let closeBehaviorBefore = 'exit';
   let activatedWallpaperEngineForQa = false;
   let wallpaperEngineSelectionStoreBeforeQa;
@@ -214,12 +214,12 @@ async function main() {
       };
     })()`);
 
-    title = String(reset.title || 'Faveradio');
+    title = String(reset.title || 'Favoradio');
     wallpaperEngineSelectionStoreBeforeQa = reset.selectionStoreBeforeQa;
     activatedWallpaperEngineForQa = reset.activatedForQa === true;
     const originalCandidates = readWindowTree(title).filter((item) => item.parentHandle === '0'
       && item.childStyle === false && item.visible === true);
-    assert(originalCandidates.length > 0, 'the top-level Faveradio HWND was not found before desktop mode');
+    assert(originalCandidates.length > 0, 'the top-level Favoradio HWND was not found before desktop mode');
     const originalWindow = originalCandidates[0];
     nativeWindowId = String(originalWindow.handle || '');
     assert.deepStrictEqual(reset.ui, {
@@ -428,8 +428,8 @@ async function main() {
     const restoredWindow = await waitForNativeWindow(title, nativeWindowId, (item) => item.parentHandle === '0'
       && item.childStyle === false && item.visible === true);
     assert(rectNear(restoredWindow.rect, originalWindow.rect), 'main window bounds were not restored after desktop mode');
-    assert.strictEqual(readWindowTree('Faveradio Desktop Wallpaper').length, 0, 'legacy overlay wallpaper window was created');
-    assert.strictEqual(readWindowTree('Faveradio WE Glass Refraction').length, 0, 'forbidden second WE glass window was created');
+    assert.strictEqual(readWindowTree('Favoradio Desktop Wallpaper').length, 0, 'legacy overlay wallpaper window was created');
+    assert.strictEqual(readWindowTree('Favoradio WE Glass Refraction').length, 0, 'forbidden second WE glass window was created');
 
     console.log(JSON.stringify({
       ok: true,

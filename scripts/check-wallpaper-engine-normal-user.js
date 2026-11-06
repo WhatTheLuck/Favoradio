@@ -14,7 +14,7 @@ const requestedWorkshopId = workshopArgument ? workshopArgument.split('=')[1] : 
 const repeat = Math.max(1, Math.min(10, Number(repeatArgument && repeatArgument.split('=')[1]) || 3));
 const closeApp = process.argv.includes('--close-app');
 const runId = `${new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14)}-${process.pid}-${Math.random().toString(16).slice(2, 10)}`;
-const outputRoot = path.join('D:\\FaveradioCache\\we-normal-user-qa', runId);
+const outputRoot = path.join('D:\\FavoradioCache\\we-normal-user-qa', runId);
 const resultPath = path.join(outputRoot, 'result.json');
 const windowListScript = path.join(__dirname, 'check-wallpaper-engine-window-list.ps1');
 
@@ -116,7 +116,7 @@ async function waitForCdpTarget(timeoutMs = 60000) {
     }
     await sleep(250);
   }
-  throw new Error(`Timed out waiting for Faveradio CDP on ${port}: ${lastError && lastError.message || 'no page target'}`);
+  throw new Error(`Timed out waiting for Favoradio CDP on ${port}: ${lastError && lastError.message || 'no page target'}`);
 }
 
 const STATE_EXPRESSION = `(async () => {
@@ -238,11 +238,11 @@ function listWindows(titlePrefix) {
 }
 
 function listExactSourceWindows() {
-  return listWindows('Faveradio Wallpaper ');
+  return listWindows('Favoradio Wallpaper ');
 }
 
 function listDwmSurfaceWindows() {
-  return listWindows('Faveradio WE ');
+  return listWindows('Favoradio WE ');
 }
 
 async function waitForExactSourceWindowCount(expected, timeoutMs = 20000) {
@@ -253,7 +253,7 @@ async function waitForExactSourceWindowCount(expected, timeoutMs = 20000) {
     if (windows.length === expected) return windows;
     await sleep(250);
   }
-  throw new Error(`Exact Faveradio Wallpaper window count stayed ${windows.length}, expected ${expected}`);
+  throw new Error(`Exact Favoradio Wallpaper window count stayed ${windows.length}, expected ${expected}`);
 }
 
 function numberNear(actual, expected, tolerance, label) {
@@ -283,7 +283,7 @@ function assertControlGlassGeometry(state, nativeWindows, round) {
   assert.strictEqual(sampler.audioTrackCount, 0, `round ${round}: SVG wallpaper sampler contains audio`);
   assert(sampler.videoWidth >= 2 && sampler.videoHeight >= 2,
     `round ${round}: SVG wallpaper sampler has no decoded frame`);
-  assert(/url\(["']?#faveradio-control-glass-filter["']?\)/.test(bar.backdropFilter),
+  assert(/url\(["']?#favoradio-control-glass-filter["']?\)/.test(bar.backdropFilter),
     `round ${round}: the saved control-console SVG filter is not active`);
   assert(geometry, `round ${round}: SVG sampler geometry is missing`);
   if (Object.prototype.hasOwnProperty.call(geometry, 'active')) {
@@ -302,9 +302,9 @@ function assertControlGlassGeometry(state, nativeWindows, round) {
   numberNear(sampler.videoCssWidth, state.innerWidth, 1.5, `round ${round}: full-frame sampler video width`);
   numberNear(sampler.videoCssHeight, state.innerHeight, 1.5, `round ${round}: full-frame sampler video height`);
 
-  const base = nativeWindows.find((item) => item.title === 'Faveradio WE DWM Surface');
+  const base = nativeWindows.find((item) => item.title === 'Favoradio WE DWM Surface');
   assert(base && base.rect && base.visible, `round ${round}: base DWM window is missing or hidden`);
-  assert(!nativeWindows.some((item) => item.title === 'Faveradio WE Glass Refraction'),
+  assert(!nativeWindows.some((item) => item.title === 'Favoradio WE Glass Refraction'),
     `round ${round}: the removed second transparent native layer is still present`);
 }
 
@@ -351,14 +351,14 @@ function assertNativeWindows(state, round) {
   const exactWindows = listExactSourceWindows();
   assert.strictEqual(exactWindows.length, 1,
     `round ${round}: expected one exact source window, found ${exactWindows.length}`);
-  assert.strictEqual(exactWindows[0].title, `Faveradio Wallpaper ${state.sessionId}`,
+  assert.strictEqual(exactWindows[0].title, `Favoradio Wallpaper ${state.sessionId}`,
     `round ${round}: old source window survived replacement`);
   assert(exactWindows[0].visible && exactWindows[0].rect,
     `round ${round}: exact Wallpaper Engine source is missing or hidden`);
 
   const dwmWindows = listDwmSurfaceWindows();
-  const baseWindows = dwmWindows.filter((item) => item.title === 'Faveradio WE DWM Surface');
-  const glassWindows = dwmWindows.filter((item) => item.title === 'Faveradio WE Glass Refraction');
+  const baseWindows = dwmWindows.filter((item) => item.title === 'Favoradio WE DWM Surface');
+  const glassWindows = dwmWindows.filter((item) => item.title === 'Favoradio WE Glass Refraction');
   assert.strictEqual(baseWindows.length, 1, `round ${round}: expected one base DWM surface, found ${baseWindows.length}`);
   assert.strictEqual(glassWindows.length, 0, `round ${round}: removed transparent native layer count is ${glassWindows.length}`);
   const base = baseWindows[0];

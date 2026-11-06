@@ -6,28 +6,28 @@ const { app, safeStorage } = require('electron');
 const { SmartFavoritesStore } = require('../desktop/smart-favorites-store');
 
 // safeStorage is tied to Chromium's user-data directory. Point this helper at
-// the same directory as Faveradio before Electron becomes ready, otherwise a
+// the same directory as Favoradio before Electron becomes ready, otherwise a
 // valid saved key looks undecryptable and the diagnostic reports a false
 // LLM_NOT_CONFIGURED result.
-app.setName('Faveradio');
-const faveradioUserDataPath = path.join(app.getPath('appData'), 'Faveradio');
-app.setPath('userData', faveradioUserDataPath);
-let cacheRoot = fs.existsSync('D:\\') ? 'D:\\FaveradioCache' : path.join(faveradioUserDataPath, 'cache');
+app.setName('Favoradio');
+const favoradioUserDataPath = path.join(app.getPath('appData'), 'Favoradio');
+app.setPath('userData', favoradioUserDataPath);
+let cacheRoot = fs.existsSync('D:\\') ? 'D:\\FavoradioCache' : path.join(favoradioUserDataPath, 'cache');
 try {
-  const saved = JSON.parse(fs.readFileSync(path.join(faveradioUserDataPath, 'cache-settings.json'), 'utf8'));
+  const saved = JSON.parse(fs.readFileSync(path.join(favoradioUserDataPath, 'cache-settings.json'), 'utf8'));
   if (saved && path.isAbsolute(saved.rootPath)) cacheRoot = saved.rootPath;
 } catch (_) { }
-app.setPath('sessionData', path.join(cacheRoot, 'chromium', 'Faveradio'));
+app.setPath('sessionData', path.join(cacheRoot, 'chromium', 'Favoradio'));
 
 app.whenReady().then(async () => {
   const store = new SmartFavoritesStore({
-    userDataPath: faveradioUserDataPath,
+    userDataPath: favoradioUserDataPath,
     safeStorage,
   });
   let result;
-  if (process.env.FAVERADIO_LLM_SAVE_MODEL) {
-    result = store.configureLlm({ model: process.env.FAVERADIO_LLM_SAVE_MODEL });
-  } else if (process.env.FAVERADIO_LLM_TEST_LIST_MODELS === '1') {
+  if (process.env.FAVORADIO_LLM_SAVE_MODEL) {
+    result = store.configureLlm({ model: process.env.FAVORADIO_LLM_SAVE_MODEL });
+  } else if (process.env.FAVORADIO_LLM_TEST_LIST_MODELS === '1') {
     const config = store.readCredential();
     if (!config.apiKey || !config.baseUrl) {
       result = { ok: false, error: 'LLM_NOT_CONFIGURED' };
@@ -39,10 +39,10 @@ app.whenReady().then(async () => {
       const ids = Array.isArray(body && body.data) ? body.data.map(item => String(item && item.id || '')) : [];
       result = { ok: response.ok, status: response.status, models: ids.filter(id => /qwen|deepseek|glm/i.test(id)).slice(0, 80) };
     }
-  } else if (process.env.FAVERADIO_LLM_TEST_ANALYZE === '1') {
+  } else if (process.env.FAVORADIO_LLM_TEST_ANALYZE === '1') {
     const snapshot = store.readSnapshot();
     const tracks = snapshot && snapshot.state && Array.isArray(snapshot.state.tracks)
-      ? snapshot.state.tracks.slice(0, Math.max(1, Math.min(8, Number(process.env.FAVERADIO_LLM_TEST_TRACKS) || 1)))
+      ? snapshot.state.tracks.slice(0, Math.max(1, Math.min(8, Number(process.env.FAVORADIO_LLM_TEST_TRACKS) || 1)))
       : [];
     const requestedTags = snapshot && snapshot.state && Array.isArray(snapshot.state.tags)
       ? snapshot.state.tags.map(tag => String(tag && tag.value || '').trim()).filter(Boolean)
@@ -61,7 +61,7 @@ app.whenReady().then(async () => {
       description: track.description || '',
     })), requestedTags);
   } else {
-    result = await store.testLlmConnection({ timeoutMs: Number(process.env.FAVERADIO_LLM_TEST_TIMEOUT_MS) || 20000 });
+    result = await store.testLlmConnection({ timeoutMs: Number(process.env.FAVORADIO_LLM_TEST_TIMEOUT_MS) || 20000 });
   }
   process.stdout.write(JSON.stringify(result, null, 2) + '\n');
   app.quit();

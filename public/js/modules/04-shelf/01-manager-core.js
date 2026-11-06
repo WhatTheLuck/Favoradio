@@ -68,12 +68,12 @@ function makeShelfManager() {
     if (userPlaylists.length || (hasAnyPlatformLogin() && myPodcastCollections.length)) {
       var source = activePlaylists();
       var items = source.map(function (pl) {
-        var provider = pl.provider === 'faveradio' ? 'faveradio' : (pl.provider === 'qq' ? 'qq' : (pl.provider === 'kugou' ? 'kugou' : (pl.provider === 'qishui' ? 'qishui' : (pl.provider === 'spotify' ? 'spotify' : 'netease'))));
-        var sourceLabel = provider === 'faveradio' ? 'MR' : (provider === 'qq' ? 'QQ' : (provider === 'kugou' ? 'KG' : (provider === 'qishui' ? 'QS' : (provider === 'spotify' ? 'SP' : 'NE'))));
+        var provider = pl.provider === 'favoradio' ? 'favoradio' : (pl.provider === 'qq' ? 'qq' : (pl.provider === 'kugou' ? 'kugou' : (pl.provider === 'qishui' ? 'qishui' : (pl.provider === 'spotify' ? 'spotify' : 'netease'))));
+        var sourceLabel = provider === 'favoradio' ? 'MR' : (provider === 'qq' ? 'QQ' : (provider === 'kugou' ? 'KG' : (provider === 'qishui' ? 'QS' : (provider === 'spotify' ? 'SP' : 'NE'))));
         if (provider === 'spotify' && String(pl.id || '').indexOf('spotify:') !== 0) pl = Object.assign({}, pl, { id: 'spotify:' + pl.id });
         return {
           type: 'playlist', title: pl.name, sub: sourceLabel + ' · ' + (pl.trackCount || 0) + ' 首 · 播放 ' + compactCount(pl.playCount || 0),
-          cover: pl.cover || '', tag: provider === 'faveradio' ? '内置歌单' : ((pl.shelfPane || pl.shelf_pane) === 'fav' || (!(pl.shelfPane || pl.shelf_pane) && pl.subscribed) ? '收藏歌单' : (provider === 'qishui' ? '汽水歌单' : '我的歌单')), playlistId: (provider === 'faveradio' ? 'faveradio:' : (provider === 'qq' ? 'qq:' : (provider === 'kugou' ? 'kugou:' : (provider === 'qishui' ? 'qishui:' : '')))) + pl.id, provider: provider
+          cover: pl.cover || '', tag: provider === 'favoradio' ? '内置歌单' : ((pl.shelfPane || pl.shelf_pane) === 'fav' || (!(pl.shelfPane || pl.shelf_pane) && pl.subscribed) ? '收藏歌单' : (provider === 'qishui' ? '汽水歌单' : '我的歌单')), playlistId: (provider === 'favoradio' ? 'favoradio:' : (provider === 'qq' ? 'qq:' : (provider === 'kugou' ? 'kugou:' : (provider === 'qishui' ? 'qishui:' : '')))) + pl.id, provider: provider
         };
       });
       if (shelfShowsPodcasts() && (shelfPane === 'mine' || shelfMergesCollections()) && myPodcastCollections.length) {

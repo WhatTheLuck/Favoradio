@@ -64,7 +64,7 @@ test('the latest Release body supplies two new pages and the announcement withou
     '## 更新内容',
     '- ' + notice,
     '- 修复音乐接口与播放稳定性。',
-    ...pages.map(page => '<!-- faveradio-download-page: ' + page.label + '|' + page.url + ' -->'),
+    ...pages.map(page => '<!-- favoradio-download-page: ' + page.label + '|' + page.url + ' -->'),
     '网盘：' + oldUrl,
   ].join('\n');
   server.fetch = async () => ({ ok: true, json: async () => ({ tag_name: 'v2.2.0', html_url: releaseUrl, body }) });

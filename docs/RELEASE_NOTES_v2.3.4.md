@@ -1,4 +1,4 @@
-# Faveradio 2.3.4
+# Favoradio 2.3.4
 
 - 修复 MuQ 文本编码遇到无效 Unicode 字符时的 SentencePiece 类型转换异常。
 - AI 推荐歌曲列表改用与播放器一致的样式，切歌保持即时响应，并展示标签相关度。
@@ -10,10 +10,10 @@ MuQ 模型权重采用 CC BY-NC 4.0；商业分发需另行取得授权。
 
 ## 下载
 
-- [GitHub Release 下载 Faveradio 2.3.4](https://github.com/WhatTheLuck/Faveradio/releases/tag/v2.3.4)
+- [GitHub Release 下载 Favoradio 2.3.4](https://github.com/WhatTheLuck/Favoradio/releases/tag/v2.3.4)
 
-完整安装包：`Faveradio-2.3.4-Setup.exe`
+完整安装包：`Favoradio-2.3.4-Setup.exe`
 
 SHA-256：`9bfa2532b7d05b840681c1abe6d61419f6ab3d33e2674731df9dfd549502c965`。
 
-<!-- faveradio-download-page: GitHub Release|https://github.com/WhatTheLuck/Faveradio/releases/tag/v2.3.4 -->
+<!-- favoradio-download-page: GitHub Release|https://github.com/WhatTheLuck/Favoradio/releases/tag/v2.3.4 -->

@@ -127,7 +127,7 @@ function makeHarness(options = {}) {
     paused: false,
     onended: initialEndedHandler,
     onloadedmetadata: initialMetadataHandler,
-    __faveradioQueueItemKey: 'queue-alpha',
+    __favoradioQueueItemKey: 'queue-alpha',
   });
   const mediaElementBindings = new WeakSet();
   const audioContext = {
@@ -257,19 +257,19 @@ function testCaptureTrackSwitchCreatesFreshAudioLifetime() {
   const oldMetadataHandler = audio.onloadedmetadata;
 
   assert.equal(context.initAudio(), true);
-  assert.equal(context.source.__faveradioUsesCapture, false);
-  assert.equal(audio.__faveradioMediaSourceBound, true);
+  assert.equal(context.source.__favoradioUsesCapture, false);
+  assert.equal(audio.__favoradioMediaSourceBound, true);
   assert.equal(calls.createMediaElementSource, 1);
 
   context.disconnectAudioGraphNodes(false);
   context.source = context.audioCtx.createMediaStreamSource(audio.captureStream());
-  context.source.__faveradioUsesCapture = true;
+  context.source.__favoradioUsesCapture = true;
   context.audioSourceMedia = audio;
   context.audioReady = true;
-  assert.equal(context.source.__faveradioUsesCapture, true, 'test did not establish the legacy capture-backed state');
+  assert.equal(context.source.__favoradioUsesCapture, true, 'test did not establish the legacy capture-backed state');
   assert.equal(calls.createMediaStreamSource, 1);
   assert.strictEqual(context.audio, originalAudio, 'capture recovery replaced the Audio element');
-  assert.equal(audio.__faveradioMediaSourceBound, true, 'lifetime MediaElementSource marker was cleared');
+  assert.equal(audio.__favoradioMediaSourceBound, true, 'lifetime MediaElementSource marker was cleared');
 
   context.resetPlaybackAudioGraphForSourceSwitch('test-capture-track-switch');
   const freshAudio = context.audio;
@@ -283,7 +283,7 @@ function testCaptureTrackSwitchCreatesFreshAudioLifetime() {
   assert.equal(originalAudio.src, oldSrc, 'replacement unexpectedly rewrote the old media URL');
   assert.strictEqual(originalAudio.onended, oldEndedHandler);
   assert.strictEqual(originalAudio.onloadedmetadata, oldMetadataHandler);
-  assert.equal(freshAudio.__faveradioQueueItemKey, 'queue-alpha', 'fresh Audio lost queue identity');
+  assert.equal(freshAudio.__favoradioQueueItemKey, 'queue-alpha', 'fresh Audio lost queue identity');
   assert.equal(freshAudio.src, '', 'fresh Audio inherited the old track URL');
   assert.equal(freshAudio.currentSrc, '', 'fresh Audio inherited the old currentSrc');
   assert.equal(freshAudio.onended, null, 'fresh Audio inherited the old ended handler');
@@ -291,14 +291,14 @@ function testCaptureTrackSwitchCreatesFreshAudioLifetime() {
 
   freshAudio.readyState = 4;
   assert.equal(context.initAudio(), true);
-  assert.equal(context.source.__faveradioUsesCapture, false, 'fresh Audio did not establish MediaElementSource');
+  assert.equal(context.source.__favoradioUsesCapture, false, 'fresh Audio did not establish MediaElementSource');
   assert.equal(calls.createMediaElementSource, 2, 'fresh Audio did not get its own lifetime MediaElementSource');
   assert.equal(calls.createMediaStreamSource, 1, 'fresh Audio unexpectedly retained the old capture graph');
   assert.equal(calls.replace, 1, 'fresh Audio init fell into media-source-rebind replacement');
   assert.equal(calls.pause, 1, 'fresh Audio init paused media again');
   assert.strictEqual(context.audio, freshAudio);
-  assert.equal(freshAudio.__faveradioMediaSourceBound, true);
-  assert.equal(freshAudio.__faveradioQueueItemKey, 'queue-alpha');
+  assert.equal(freshAudio.__favoradioMediaSourceBound, true);
+  assert.equal(freshAudio.__favoradioQueueItemKey, 'queue-alpha');
 }
 
 function testFrozenClockDoesNotTriggerCaptureRebuild() {
@@ -311,7 +311,7 @@ function testFrozenClockDoesNotTriggerCaptureRebuild() {
   runNextTimer(0.66);
 
   assert.equal(calls.createMediaStreamSource, 0, 'one advance followed by a frozen media clock rebuilt capture');
-  assert.equal(context.source.__faveradioUsesCapture, false);
+  assert.equal(context.source.__favoradioUsesCapture, false);
 }
 
 function testTwoAdvancingSilentSamplesTriggerCaptureRebuild() {
@@ -326,7 +326,7 @@ function testTwoAdvancingSilentSamplesTriggerCaptureRebuild() {
   runNextTimer(0.82);
 
   assert.strictEqual(context.source, lifetimeMediaSource, 'silent analyser recovery replaced the lifetime MediaElementSource');
-  assert.equal(context.source.__faveradioUsesCapture, false, 'bound media was incorrectly moved to captureStream');
+  assert.equal(context.source.__favoradioUsesCapture, false, 'bound media was incorrectly moved to captureStream');
   assert.equal(calls.createMediaElementSource, 1, 'silent analyser recovery rebound MediaElementSource');
   assert.equal(calls.createMediaStreamSource, 0, 'silent analyser recovery created a capture source for bound media');
   assert.equal(calls.captureStream, 0, 'silent analyser recovery called captureStream for bound media');
@@ -339,34 +339,34 @@ function testTwoAdvancingSilentSamplesTriggerCaptureRebuild() {
 function testTransientCaptureSourceFailureRetainsForcedCaptureRetry() {
   const { context, audio, calls } = makeHarness({ failFirstCapture: true });
   const originalAudio = audio;
-  audio.__faveradioForceCaptureSource = true;
+  audio.__favoradioForceCaptureSource = true;
 
   assert.equal(
     context.initAudio(),
     false,
     'transient createMediaStreamSource failure must be reported without replacing media',
   );
-  assert.equal(audio.__faveradioForceCaptureSource, true, 'failed capture attempt consumed the forced-capture retry');
+  assert.equal(audio.__favoradioForceCaptureSource, true, 'failed capture attempt consumed the forced-capture retry');
   assert.equal(calls.createMediaElementSource, 0, 'failed fresh capture attempt unexpectedly bound MediaElementSource');
   assert.equal(calls.replace, 0);
   assert.equal(calls.pause, 0);
   assert.strictEqual(context.audio, originalAudio);
 
   assert.equal(context.initAudio(), true, 'second capture attempt did not recover after the track became ready');
-  assert.equal(context.source.__faveradioUsesCapture, true);
+  assert.equal(context.source.__favoradioUsesCapture, true);
   assert.equal(calls.createMediaStreamSource, 2);
   assert.equal(calls.createMediaElementSource, 0, 'fresh capture retry fell back to MediaElementSource');
   assert.equal(calls.replace, 0, 'capture retry replaced the Audio element');
   assert.equal(calls.pause, 0, 'capture retry paused the Audio element');
   assert.strictEqual(context.audio, originalAudio);
-  assert.equal(!!audio.__faveradioMediaSourceBound, false);
-  assert.equal(audio.__faveradioQueueItemKey, 'queue-alpha');
+  assert.equal(!!audio.__favoradioMediaSourceBound, false);
+  assert.equal(audio.__favoradioQueueItemKey, 'queue-alpha');
 }
 
 function testForcedCaptureWaitsForMediaReadyState() {
   const { context, audio, calls } = makeHarness({ readyState: 0 });
   const originalAudio = audio;
-  audio.__faveradioForceCaptureSource = true;
+  audio.__favoradioForceCaptureSource = true;
 
   assert.equal(context.initAudio(), false, 'force-capture init must wait while media has no decoded data');
   assert.equal(calls.captureStream, 0, 'captureStream was called before media reached HAVE_CURRENT_DATA');
@@ -374,7 +374,7 @@ function testForcedCaptureWaitsForMediaReadyState() {
   assert.equal(calls.createMediaElementSource, 0, 'ready-state wait fell back to a forbidden MediaElementSource rebind');
   assert.equal(calls.replace, 0, 'ready-state wait replaced the Audio element');
   assert.equal(calls.pause, 0, 'ready-state wait paused the Audio element');
-  assert.equal(audio.__faveradioForceCaptureSource, true, 'ready-state wait consumed the forced-capture marker');
+  assert.equal(audio.__favoradioForceCaptureSource, true, 'ready-state wait consumed the forced-capture marker');
   assert.strictEqual(context.audio, originalAudio);
 
   audio.readyState = 4;
@@ -382,12 +382,12 @@ function testForcedCaptureWaitsForMediaReadyState() {
   assert.equal(calls.captureStream, 1);
   assert.equal(calls.createMediaStreamSource, 1);
   assert.equal(calls.createMediaElementSource, 0);
-  assert.equal(context.source.__faveradioUsesCapture, true);
+  assert.equal(context.source.__favoradioUsesCapture, true);
   assert.equal(calls.replace, 0);
   assert.equal(calls.pause, 0);
   assert.strictEqual(context.audio, originalAudio);
-  assert.equal(!!audio.__faveradioMediaSourceBound, false);
-  assert.equal(audio.__faveradioQueueItemKey, 'queue-alpha');
+  assert.equal(!!audio.__favoradioMediaSourceBound, false);
+  assert.equal(audio.__favoradioQueueItemKey, 'queue-alpha');
 }
 
 testCaptureTrackSwitchCreatesFreshAudioLifetime();

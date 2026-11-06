@@ -8,7 +8,7 @@ const {
 } = require('../public/js/modules/05-playback/17-cuefield-timeline-executor');
 const { buildBridgeEventPlan } = require('../public/js/modules/05-playback/17a-cuefield-bridge-engine');
 const { createCuefieldSourceLoop } = require('../public/js/modules/05-playback/17b-cuefield-source-loop');
-const { planCuefieldTransitionFromCache } = require('../cuefield/faveradio-bridge');
+const { planCuefieldTransitionFromCache } = require('../cuefield/favoradio-bridge');
 
 function executablePlan() {
   return {

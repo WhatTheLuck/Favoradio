@@ -24,7 +24,7 @@ requests = [
 def run(model):
     env = dict(os.environ)
     label = 'full' if model == full_model else 'variant'
-    env['FAVERADIO_MUQ_EXPANDED_ROOT'] = os.path.join(tempfile.gettempdir(), 'faveradio-muq-compare-v6-' + label)
+    env['FAVORADIO_MUQ_EXPANDED_ROOT'] = os.path.join(tempfile.gettempdir(), 'favoradio-muq-compare-v6-' + label)
     process = subprocess.Popen([sys.executable, worker, model], stdin=subprocess.PIPE,
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=env)
     vectors = []

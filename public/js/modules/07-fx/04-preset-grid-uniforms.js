@@ -2,7 +2,7 @@ var spacePresetMenuOpen = false;
 var activeSpaceSourcePreset = '';
 
 function spaceSourcePresetMenuHtml() {
-  var api = window.FaveradioExternalVisuals;
+  var api = window.FavoradioExternalVisuals;
   var names = api && typeof api.sourcePresetNames === 'function' ? api.sourcePresetNames('space') : [];
   return '<div class="space-preset-submenu' + (spacePresetMenuOpen ? ' open' : '') + '" id="space-preset-submenu" role="group" aria-label="星际磁流体预设">' + names.map(function (name, index) {
     var active = name === activeSpaceSourcePreset;
@@ -11,7 +11,7 @@ function spaceSourcePresetMenuHtml() {
 }
 
 function emomusicModeMenuHtml() {
-  var api = window.FaveradioEmoMusic;
+  var api = window.FavoradioEmoMusic;
   var current = api && typeof api.currentMode === 'function' ? api.currentMode() : 'particles';
   return '<div class="emomusic-mode-submenu" role="group" aria-label="EmoMusic 面部形态">' + [
     { id: 'particles', label: '粒子' },
@@ -32,7 +32,7 @@ function handlePresetCardClick(preset) {
 
 function applySpaceSourcePreset(event, index) {
   if (event) { event.preventDefault(); event.stopPropagation(); }
-  var api = window.FaveradioExternalVisuals;
+  var api = window.FavoradioExternalVisuals;
   if (!api || typeof api.applySourcePreset !== 'function') return;
   if (fx.preset !== 14) setPreset(14);
   activeSpaceSourcePreset = api.applySourcePreset('space', index) || '';
@@ -43,7 +43,7 @@ function applySpaceSourcePreset(event, index) {
 function applyEmomusicMode(event, mode) {
   if (event) { event.preventDefault(); event.stopPropagation(); }
   if (fx.preset !== 15) setPreset(15);
-  if (window.FaveradioEmoMusic && typeof FaveradioEmoMusic.setMode === 'function') FaveradioEmoMusic.setMode(mode);
+  if (window.FavoradioEmoMusic && typeof FavoradioEmoMusic.setMode === 'function') FavoradioEmoMusic.setMode(mode);
   refreshPresetGrid();
 }
 
@@ -87,13 +87,13 @@ function refreshPresetGrid() {
   var menu = document.getElementById('space-preset-submenu');
   if (menu) menu.classList.toggle('open', spacePresetMenuOpen);
   document.querySelectorAll('[data-space-source-preset]').forEach(function (button) {
-    var api = window.FaveradioExternalVisuals;
+    var api = window.FavoradioExternalVisuals;
     var names = api && typeof api.sourcePresetNames === 'function' ? api.sourcePresetNames('space') : [];
     var active = names[Number(button.dataset.spaceSourcePreset)] === activeSpaceSourcePreset;
     button.classList.toggle('active', active);
     button.setAttribute('aria-pressed', active ? 'true' : 'false');
   });
-  var emomusicMode = window.FaveradioEmoMusic && typeof FaveradioEmoMusic.currentMode === 'function' ? FaveradioEmoMusic.currentMode() : 'particles';
+  var emomusicMode = window.FavoradioEmoMusic && typeof FavoradioEmoMusic.currentMode === 'function' ? FavoradioEmoMusic.currentMode() : 'particles';
   document.querySelectorAll('[data-emomusic-mode]').forEach(function (button) {
     var active = button.dataset.emomusicMode === emomusicMode;
     button.classList.toggle('active', active);
@@ -101,12 +101,12 @@ function refreshPresetGrid() {
   });
 }
 
-window.addEventListener('faveradio-external-presets-ready', buildPresetGrid);
-window.addEventListener('faveradio-external-preset-change', function (event) {
+window.addEventListener('favoradio-external-presets-ready', buildPresetGrid);
+window.addEventListener('favoradio-external-preset-change', function (event) {
   if (event.detail && event.detail.kind === 'space') activeSpaceSourcePreset = event.detail.name || '';
   refreshPresetGrid();
 });
-window.addEventListener('faveradio-emomusic-mode-change', refreshPresetGrid);
+window.addEventListener('favoradio-emomusic-mode-change', refreshPresetGrid);
 function triggerPresetParticleTransition(fromPreset, toPreset) {
   presetTransition.active = true;
   presetTransition.start = uniforms.uTime.value;
@@ -152,8 +152,8 @@ function setPreset(p, opts) {
   fx.preset = p;
   if (changed && prev === SKULL_PRESET_INDEX && p !== SKULL_PRESET_INDEX) clearSkullPresetResidue();
   if (p === SKULL_PRESET_INDEX) loadSkullParticleAsset();
-  if (changed && window.FaveradioSonicTopography) FaveradioSonicTopography.onPresetChange(prev, p, { scene: scene, fx: fx });
-  if (changed && window.FaveradioSonicWorkshop) FaveradioSonicWorkshop.onPresetChange(prev, p, { scene: scene, fx: fx });
+  if (changed && window.FavoradioSonicTopography) FavoradioSonicTopography.onPresetChange(prev, p, { scene: scene, fx: fx });
+  if (changed && window.FavoradioSonicWorkshop) FavoradioSonicWorkshop.onPresetChange(prev, p, { scene: scene, fx: fx });
   uniforms.uPreset.value = p;
   refreshPresetGrid();
   if (typeof updateSonicSeriesControlVisibility === 'function') updateSonicSeriesControlVisibility();

@@ -7,10 +7,10 @@
 - License: GNU GPL v3 (`GPL-3.0`)
 - Port refresh date: 2026-08-01
 
-Faveradio integrates the upstream cache-only transition planner, structure and
+Favoradio integrates the upstream cache-only transition planner, structure and
 boundary evidence, recipe routing, preparation de-duplication, bounded bridge
 and source-loop helpers, and advanced B-deck timeline actions. The runtime is
-adapted to Faveradio's modular script loader, provider-aware beat-map cache,
+adapted to Favoradio's modular script loader, provider-aware beat-map cache,
 existing AudioContext ownership transfer, finite source fallback, and the
 already approved album-gapless crossmix path.
 
@@ -29,7 +29,7 @@ or transmitted; ratings remain in the current user's local data directory.
 - License: GNU GPL v3 (`GPL-3.0-only`)
 - Port dates: 2026-07-18 (initial), 2026-07-19 (homepage refresh)
 
-Faveradio's full desktop mode adapts the upstream idea of moving the existing
+Favoradio's full desktop mode adapts the upstream idea of moving the existing
 Electron main-window HWND between the Windows WorkerW desktop layer and an
 interactive top-level window. The native attach/detach code in this project was
 rewritten around the optimized edition's fail-closed WorkerW discovery, DPI
@@ -46,7 +46,7 @@ overlay were not copied.
 The 2026-07-19 refresh additionally adapts the three-song "For You" strip,
 stable cover-image swaps, in-place quick-card updates, daily-review hover
 feedback, and compact-height scrolling/settings behavior. These features remain
-implemented against Faveradio's existing provider, weather-radio, local-library,
+implemented against Favoradio's existing provider, weather-radio, local-library,
 queue, and playback modules rather than the upstream LX/local-only data model.
 
 The combined application remains distributed under the repository's GNU GPL v3
@@ -60,15 +60,15 @@ modified builds.
 - Declared license: `GPL-3.0-only`
 - Port date: 2026-07-30
 
-Faveradio ports only the official Passport Web QR authentication boundary:
+Favoradio ports only the official Passport Web QR authentication boundary:
 an isolated hidden Electron security host, the Qishui web signing bootstrap,
 QR creation and polling, account-session cookie persistence, and the official
 second-verification UI when the service requests it. The upstream whole-project
 installer was not run, and no application files were wholesale replaced.
 
-The QR bridge feeds the authenticated cookie into Faveradio's existing
+The QR bridge feeds the authenticated cookie into Favoradio's existing
 `qishui-api.js` provider. Search, playlists, likes, comments, entitlement checks,
-and audio playback remain Faveradio implementations. Legacy token/manual-cookie
+and audio playback remain Favoradio implementations. Legacy token/manual-cookie
 login controls and local SodaMusic cookie discovery are not exposed by the
 current login UI.
 

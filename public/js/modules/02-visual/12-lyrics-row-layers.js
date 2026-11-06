@@ -739,9 +739,9 @@ function lyricQualityNowMs() {
 function lyricQualityDisposeTexture(texture) {
   if (!texture) return;
   if (typeof disposeOwnedLyricTexture === 'function') disposeOwnedLyricTexture(texture);
-  else if (!texture.userData || !texture.userData.__faveradioDisposed) {
+  else if (!texture.userData || !texture.userData.__favoradioDisposed) {
     texture.userData = texture.userData || {};
-    texture.userData.__faveradioDisposed = true;
+    texture.userData.__favoradioDisposed = true;
     if (texture.dispose) texture.dispose();
   }
   if (texture.image && texture.image.tagName === 'CANVAS') {
@@ -765,7 +765,7 @@ function lyricQualityForgetRow(row) {
 
 function lyricQualityOwnerActive(data, row) {
   return !!(
-    data && data.__faveradioLyricQualityDisposed !== true &&
+    data && data.__favoradioLyricQualityDisposed !== true &&
     Array.isArray(data.rowLayers) && (!row || data.rowLayers.indexOf(row) >= 0)
   );
 }
@@ -815,7 +815,7 @@ function updateLyricQualityStats(tier) {
     var texture = row && (row.qualityPendingTexture || row.qualityTexture);
     if (texture && texture.image) targetWidth = Math.max(targetWidth, Number(texture.image.width) || 0);
   }
-  window.__faveradioLyricQualityStats = {
+  window.__favoradioLyricQualityStats = {
     tier: clampRange(Math.round(Number(tier) || lyricTextureClarityScale()), 1, 4),
     bytes: lyricQualityState.bytes,
     budget: lyricQualityPoolBudgetBytes(tier || lyricTextureClarityScale()),
@@ -1075,7 +1075,7 @@ function pruneLyricQualityQueue(now) {
 
 function disposeLyricQualityOwner(data) {
   if (!data) return;
-  data.__faveradioLyricQualityDisposed = true;
+  data.__favoradioLyricQualityDisposed = true;
   var rows = Array.isArray(data.rowLayers) ? data.rowLayers.slice() : [];
   lyricQualityState.frameCandidates = lyricQualityState.frameCandidates.filter(function (candidate) {
     return candidate && candidate.data !== data && rows.indexOf(candidate.row) < 0;
@@ -1299,7 +1299,7 @@ function resetLyricRenderUploadFrameBudget(deferQualityFinalize) {
   lyricRenderUploadFrameBudget.consumed = 0;
   beginLyricQualitySelectionFrame(deferQualityFinalize);
   if (typeof window !== 'undefined') {
-    window.__faveradioLyricUploadBudgetStats = {
+    window.__favoradioLyricUploadBudgetStats = {
       frame: lyricRenderUploadFrameBudget.frame,
       consumed: 0,
       remaining: 1,
@@ -1314,7 +1314,7 @@ function consumeLyricRenderUploadFrameBudget() {
   lyricRenderUploadFrameBudget.consumed += 1;
   lyricRenderUploadFrameBudget.maxConsumed = Math.max(lyricRenderUploadFrameBudget.maxConsumed, lyricRenderUploadFrameBudget.consumed);
   if (typeof window !== 'undefined') {
-    window.__faveradioLyricUploadBudgetStats = {
+    window.__favoradioLyricUploadBudgetStats = {
       frame: lyricRenderUploadFrameBudget.frame,
       consumed: lyricRenderUploadFrameBudget.consumed,
       remaining: lyricRenderUploadFrameBudget.remaining,

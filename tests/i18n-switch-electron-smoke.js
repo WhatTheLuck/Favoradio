@@ -11,15 +11,15 @@ if (!fs.existsSync(electron)) {
   process.exit(0);
 }
 
-const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-i18n-'));
+const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'favoradio-i18n-'));
 const child = path.join(temp, 'smoke.js');
 fs.writeFileSync(child, `
 const fs = require('fs');
 const http = require('http');
 const path = require('path');
 const { app, BrowserWindow } = require('electron');
-app.setPath('userData', process.env.FAVERADIO_I18N_TEMP);
-const root = process.env.FAVERADIO_I18N_ROOT;
+app.setPath('userData', process.env.FAVORADIO_I18N_TEMP);
+const root = process.env.FAVORADIO_I18N_ROOT;
 const html = '<!doctype html><html lang="zh-CN"><body>' +
   '<button data-language-switch>EN</button><span id="label">播放</span>' +
   '<span id="song" class="search-result-title" title="歌手详情">播放</span>' +
@@ -55,10 +55,10 @@ app.whenReady().then(() => server.listen(0, '127.0.0.1', async () => {
     await win.webContents.executeJavaScript("document.querySelector('[data-language-switch]').click()");
     await win.reload();
     await waitFor(win, "document.getElementById('label').textContent === 'Play'");
-    console.log('FAVERADIO_I18N_QA:OK');
+    console.log('FAVORADIO_I18N_QA:OK');
     server.close(() => app.exit(0));
   } catch (error) {
-    console.error('FAVERADIO_I18N_QA:' + (error && error.stack || error));
+    console.error('FAVORADIO_I18N_QA:' + (error && error.stack || error));
     server.close(() => app.exit(1));
   }
 })).catch(error => { console.error(error); app.exit(1); });
@@ -67,12 +67,12 @@ app.whenReady().then(() => server.listen(0, '127.0.0.1', async () => {
 try {
   const result = spawnSync(electron, [child], {
     cwd: root,
-    env: { ...process.env, FAVERADIO_I18N_ROOT: root, FAVERADIO_I18N_TEMP: temp },
+    env: { ...process.env, FAVORADIO_I18N_ROOT: root, FAVORADIO_I18N_TEMP: temp },
     encoding: 'utf8',
     timeout: 30000,
   });
   assert.strictEqual(result.status, 0, result.stderr || result.stdout || String(result.error));
-  assert.match(result.stdout, /FAVERADIO_I18N_QA:OK/);
+  assert.match(result.stdout, /FAVORADIO_I18N_QA:OK/);
   console.log('[OK] English switching, dynamic UI, metadata isolation and persistence.');
 } finally {
   fs.rmSync(temp, { recursive: true, force: true });

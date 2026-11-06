@@ -15,8 +15,8 @@ assert.match(mainText, /function\s+isTrustedGestureCameraMediaPermission\s*\(web
 assert.match(mainText, /webContents\s*!==\s*mainWindow\.webContents/);
 assert.match(mainText, /mediaType\.includes\('audio'\)/);
 assert.match(mainText, /permission\s*===\s*'media'[\s\S]{0,220}isTrustedGestureCameraMediaPermission\(webContents,\s*origin,\s*details\)/);
-assert.match(mainText, /ipcMain\.handle\('faveradio-gesture-camera-request-permission'/);
-assert.match(preloadText, /requestGestureCameraPermission:\s*\(\)\s*=>\s*ipcRenderer\.invoke\('faveradio-gesture-camera-request-permission'\)/);
+assert.match(mainText, /ipcMain\.handle\('favoradio-gesture-camera-request-permission'/);
+assert.match(preloadText, /requestGestureCameraPermission:\s*\(\)\s*=>\s*ipcRenderer\.invoke\('favoradio-gesture-camera-request-permission'\)/);
 assert.match(gestureText, /requestGestureCameraPermission\(\)/);
 assert.match(gestureText, /cleanupGestureControlRuntime\('error'\);[\s\S]{0,220}GESTURE_CAMERA/i);
 assert.match(gestureText, /persistGestureCameraDisabled\(/);

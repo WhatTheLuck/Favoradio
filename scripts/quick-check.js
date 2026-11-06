@@ -534,7 +534,7 @@ function checkWallpaperEngineImportGuard() {
   if (!/wallpaper-engine-active/.test(fs.readFileSync(path.join(appRoot, 'public', 'js', 'modules', '07-fx', '02-accent-background-controls.js'), 'utf8'))) {
     fail('The preserved original background video must stay paused while the Wallpaper Engine layer is active');
   }
-  if (!/faveradio-wallpaper-engine-list/.test(mainText) || !/faveradio-wallpaper-engine-project-details/.test(mainText) || !/faveradio-wallpaper-engine-open-project-details/.test(mainText) || !/faveradio-wallpaper-engine-start-scene/.test(mainText) || !/faveradio-wallpaper-engine-capture-result/.test(mainText) || !/faveradio-wallpaper-engine-glass-surface/.test(mainText) || !/faveradio-wallpaper-engine-prepare-glass-capture/.test(mainText) || !/installProtocol\(protocol\)/.test(mainText) || !/listWallpaperEngineProjects/.test(preloadText) || !/getWallpaperEngineProjectDetails/.test(preloadText) || !/openWallpaperEngineProjectDetails/.test(preloadText) || !/startWallpaperEngineScene/.test(preloadText) || !/reportWallpaperEngineCaptureResult/.test(preloadText) || !/prepareWallpaperEngineGlassCapture/.test(preloadText) || !/updateWallpaperEngineGlassSurface/.test(preloadText) || !/stopWallpaperEngineScene/.test(preloadText) || !/isTrustedWallpaperEngineIpc/.test(mainText) || !/function isTrustedMainDocumentUrl/.test(mainText) || !/pathname === '\/' \|\| pathname === '\/index\.html'/.test(mainText)) {
+  if (!/favoradio-wallpaper-engine-list/.test(mainText) || !/favoradio-wallpaper-engine-project-details/.test(mainText) || !/favoradio-wallpaper-engine-open-project-details/.test(mainText) || !/favoradio-wallpaper-engine-start-scene/.test(mainText) || !/favoradio-wallpaper-engine-capture-result/.test(mainText) || !/favoradio-wallpaper-engine-glass-surface/.test(mainText) || !/favoradio-wallpaper-engine-prepare-glass-capture/.test(mainText) || !/installProtocol\(protocol\)/.test(mainText) || !/listWallpaperEngineProjects/.test(preloadText) || !/getWallpaperEngineProjectDetails/.test(preloadText) || !/openWallpaperEngineProjectDetails/.test(preloadText) || !/startWallpaperEngineScene/.test(preloadText) || !/reportWallpaperEngineCaptureResult/.test(preloadText) || !/prepareWallpaperEngineGlassCapture/.test(preloadText) || !/updateWallpaperEngineGlassSurface/.test(preloadText) || !/stopWallpaperEngineScene/.test(preloadText) || !/isTrustedWallpaperEngineIpc/.test(mainText) || !/function isTrustedMainDocumentUrl/.test(mainText) || !/pathname === '\/' \|\| pathname === '\/index\.html'/.test(mainText)) {
     fail('Wallpaper Engine scan/import IPC and restricted media protocol are not fully wired');
   }
   if (!/wallpaperEnginePlayWasInterrupted/.test(rendererText) || !/WALLPAPER_ENGINE_SWITCH_FADE_MS/.test(rendererText)) {
@@ -546,7 +546,7 @@ function checkWallpaperEngineImportGuard() {
   if (/spawn\s*\(|shell\.open|wallpaper64/i.test(libraryText)) {
     fail('Wallpaper Engine import must not execute imported applications or modify the Windows wallpaper');
   }
-  if (!/Get-AuthenticodeSignature/.test(runtimeText) || !/Skutta Software/.test(runtimeText) || !/engineProcessProbe/.test(runtimeText) || /onSourceMiss/.test(runtimeText) || !/projectFile/.test(runtimeText) || !/'openWallpaper'/.test(runtimeText) || !/'-playInWindow'/.test(runtimeText) || !/'closeWallpaper'/.test(runtimeText) || !/'-location'/.test(runtimeText) || !/shell:\s*false/.test(runtimeText) || !/desktopCapturer/.test(runtimeText) || !/controlBrokerScript/.test(runtimeText) || !/GetShellWindow/.test(runtimeText) || !/GetIntegrityRid/.test(runtimeText) || !/PROC_THREAD_ATTRIBUTE_PARENT_PROCESS/.test(runtimeText) || !/CreateProcessW/.test(runtimeText) || !/hostElevationProbe/.test(runtimeText) || !/FAVERADIO_WE_CONTROL_TARGET/.test(runtimeText) || !/FAVERADIO_WE_CONTROL_COMMAND_LINE/.test(runtimeText) || !/hostElevationProbe:\s*systemMemory\.probeProcessElevation/.test(mainText) || /WALLPAPER_ENGINE_HOST_ELEVATED/.test(mainText)) {
+  if (!/Get-AuthenticodeSignature/.test(runtimeText) || !/Skutta Software/.test(runtimeText) || !/engineProcessProbe/.test(runtimeText) || /onSourceMiss/.test(runtimeText) || !/projectFile/.test(runtimeText) || !/'openWallpaper'/.test(runtimeText) || !/'-playInWindow'/.test(runtimeText) || !/'closeWallpaper'/.test(runtimeText) || !/'-location'/.test(runtimeText) || !/shell:\s*false/.test(runtimeText) || !/desktopCapturer/.test(runtimeText) || !/controlBrokerScript/.test(runtimeText) || !/GetShellWindow/.test(runtimeText) || !/GetIntegrityRid/.test(runtimeText) || !/PROC_THREAD_ATTRIBUTE_PARENT_PROCESS/.test(runtimeText) || !/CreateProcessW/.test(runtimeText) || !/hostElevationProbe/.test(runtimeText) || !/FAVORADIO_WE_CONTROL_TARGET/.test(runtimeText) || !/FAVORADIO_WE_CONTROL_COMMAND_LINE/.test(runtimeText) || !/hostElevationProbe:\s*systemMemory\.probeProcessElevation/.test(mainText) || /WALLPAPER_ENGINE_HOST_ELEVATED/.test(mainText)) {
     fail('Wallpaper Engine Scene runtime must use the signed official engine, route elevated hosts through the Explorer medium-integrity broker, and retain the captured window source');
   }
   const dwmSurfaceBlock = runtimeText.slice(
@@ -606,7 +606,7 @@ function checkWallpaperEngineImportGuard() {
   if (!/DwmRegisterThumbnail/.test(dwmSurfaceBlock)
     || /DwmQueryThumbnailSourceSize/.test(dwmSurfaceBlock)
     || /GlassRefractionSurface/.test(dwmSurfaceBlock)
-    || /Faveradio WE Glass Refraction/.test(dwmSurfaceBlock)
+    || /Favoradio WE Glass Refraction/.test(dwmSurfaceBlock)
     || /DWM_TNP_RECTSOURCE/.test(dwmSurfaceBlock)
     || /command\.StartsWith\("G\|"/.test(dwmSurfaceBlock)
     || /WS_EX_TRANSPARENT|WS_EX_NOACTIVATE/.test(dwmSurfaceBlock)
@@ -616,11 +616,11 @@ function checkWallpaperEngineImportGuard() {
     || !/single-dwm-svg-sampler/.test(runtimeText)
     || !/updateGlassSurface/.test(runtimeText)
     || !/getDwmGlassCaptureSource/.test(runtimeText)
-    || !/source\.name \|\| ''\) === 'Faveradio WE DWM Surface'/.test(runtimeText)
-    || !/faveradio-wallpaper-engine-glass-surface/.test(mainText)
+    || !/source\.name \|\| ''\) === 'Favoradio WE DWM Surface'/.test(runtimeText)
+    || !/favoradio-wallpaper-engine-glass-surface/.test(mainText)
     || !/kind: 'dwm-glass'/.test(mainText)
     || !/prepareWallpaperEngineRendererGlassCapture/.test(mainText)
-    || !/__faveradioPrepareWallpaperEngineGlassCapture/.test(rendererText)
+    || !/__favoradioPrepareWallpaperEngineGlassCapture/.test(rendererText)
     || !/trustedCursorFreeSurface: true/.test(rendererText)
     || !/wallpaper-engine-glass-sampler/.test(htmlText + cssText)
     || !/wallpaper-engine-glass-sampler-ready/.test(rendererText + cssText)
@@ -632,7 +632,7 @@ function checkWallpaperEngineImportGuard() {
     || !/kind === 'dwm'/.test(rendererText)) {
     fail('Wallpaper Engine DWM mode must feed a cursor-free 1:1 sampler through the existing SVG control-console glass');
   }
-  if (!/scheduleWallpaperEngineHostBoundsRestart/.test(mainText) || !/suspendWallpaperEngineForHiddenHost/.test(mainText) || !/resumeWallpaperEngineForVisibleHost/.test(mainText) || !/win\.on\('move'[\s\S]{0,220}scheduleWallpaperEngineHostBoundsRestart\(win, 'move'\)/.test(mainText) || !/win\.on\('resize'[\s\S]{0,220}scheduleWallpaperEngineHostBoundsRestart\(win, 'resize'\)/.test(mainText) || !/scheduleWallpaperEngineHostBoundsRestart\([\s\S]{0,180}display-metrics-changed/.test(mainText) || !/phase:\s*'prepare'/.test(mainText) || !/phase:\s*'restart'/.test(mainText) || !/faveradio-wallpaper-engine-host-bounds-changed/.test(mainText) || !/onWallpaperEngineHostBoundsChanged/.test(preloadText) || !/handleWallpaperEngineHostBoundsChange/.test(rendererText) || !/wallpaperEngineHostBoundsPreparing/.test(rendererText) || !/restartWallpaperEngineAfterHostBoundsChange/.test(rendererText) || !/status\.captureMode === 'dwm-thumbnail'\) return/.test(mainText) || !/followTimer\.Interval = 60/.test(dwmSurfaceBlock) || !/FollowHost\(\)/.test(dwmSurfaceBlock)) {
+  if (!/scheduleWallpaperEngineHostBoundsRestart/.test(mainText) || !/suspendWallpaperEngineForHiddenHost/.test(mainText) || !/resumeWallpaperEngineForVisibleHost/.test(mainText) || !/win\.on\('move'[\s\S]{0,220}scheduleWallpaperEngineHostBoundsRestart\(win, 'move'\)/.test(mainText) || !/win\.on\('resize'[\s\S]{0,220}scheduleWallpaperEngineHostBoundsRestart\(win, 'resize'\)/.test(mainText) || !/scheduleWallpaperEngineHostBoundsRestart\([\s\S]{0,180}display-metrics-changed/.test(mainText) || !/phase:\s*'prepare'/.test(mainText) || !/phase:\s*'restart'/.test(mainText) || !/favoradio-wallpaper-engine-host-bounds-changed/.test(mainText) || !/onWallpaperEngineHostBoundsChanged/.test(preloadText) || !/handleWallpaperEngineHostBoundsChange/.test(rendererText) || !/wallpaperEngineHostBoundsPreparing/.test(rendererText) || !/restartWallpaperEngineAfterHostBoundsChange/.test(rendererText) || !/status\.captureMode === 'dwm-thumbnail'\) return/.test(mainText) || !/followTimer\.Interval = 60/.test(dwmSurfaceBlock) || !/FollowHost\(\)/.test(dwmSurfaceBlock)) {
     fail('Wallpaper Engine DWM surfaces must follow move/resize in place while the legacy capture fallback remains restart-safe');
   }
   const wallpaperHostRestartBlock = rendererText.slice(
@@ -652,8 +652,8 @@ function checkWallpaperEngineImportGuard() {
     mainText.indexOf('function configureLocalAppPermissions')
   );
   const wallpaperCaptureResultBlock = mainText.slice(
-    mainText.indexOf("ipcMain.handle('faveradio-wallpaper-engine-capture-result'"),
-    mainText.indexOf("ipcMain.handle('faveradio-wallpaper-engine-stop-scene'")
+    mainText.indexOf("ipcMain.handle('favoradio-wallpaper-engine-capture-result'"),
+    mainText.indexOf("ipcMain.handle('favoradio-wallpaper-engine-stop-scene'")
   );
   const boundsTimerIndex = wallpaperBoundsScheduleBlock.indexOf('wallpaperEngineHostBoundsRestartTimer = setTimeout');
   const boundsPrepareIndex = wallpaperBoundsScheduleBlock.indexOf('prepareWallpaperEngineRendererHostBoundsFrame');
@@ -706,10 +706,10 @@ function checkWallpaperEngineImportGuard() {
   if (!/if \(wallpaperEngineSelection\.mediaType === 'video'\)[\s\S]{0,600}if \(document\.hidden\)[\s\S]{0,180}video\.pause\(\)[\s\S]{0,360}requestWallpaperEngineVideoPlayback/.test(rendererText) || !/var animatedImage[\s\S]{0,360}if \(document\.hidden\)[\s\S]{0,180}clearWallpaperEngineLayerMedia\(0\)[\s\S]{0,180}applyWallpaperEngineBackground\(item, true\)/.test(rendererText)) {
     fail('Wallpaper Engine media videos and animated previews must retain their hidden pause/unload and visible resume behavior');
   }
-  if (!/FAVERADIO_NATIVE_TEMP_DIR/.test(systemMemoryText) || !/setNativeTempPath/.test(systemMemoryText) || !/TEMP:\s*ensureNativeTempPath\(\)/.test(systemMemoryText) || !/NATIVE_HELPER_TEMP_PATH/.test(mainText) || !/nativeTempPath:\s*NATIVE_HELPER_TEMP_PATH/.test(mainText) || !/TEMP:\s*this\.nativeTempPath/.test(runtimeText)) {
+  if (!/FAVORADIO_NATIVE_TEMP_DIR/.test(systemMemoryText) || !/setNativeTempPath/.test(systemMemoryText) || !/TEMP:\s*ensureNativeTempPath\(\)/.test(systemMemoryText) || !/NATIVE_HELPER_TEMP_PATH/.test(mainText) || !/nativeTempPath:\s*NATIVE_HELPER_TEMP_PATH/.test(mainText) || !/TEMP:\s*this\.nativeTempPath/.test(runtimeText)) {
     fail('PowerShell Add-Type helpers must use the app-owned stable native temp directory');
   }
-  if (/FAVERADIO_WE_QA_CLEANUP/.test(mainText) || /taskkill\.exe[\s\S]{0,120}wallpaper(?:32|64)/i.test(mainText) || /x:\s*-16000[\s\S]{0,80}y:\s*-16000/.test(mainText) || !/width:\s*Math\.max\(640,[\s\S]{0,220}physicalBounds\.width[\s\S]{0,220}x:\s*physicalBounds\.x,[\s\S]{0,80}y:\s*physicalBounds\.y/.test(mainText)) {
+  if (/FAVORADIO_WE_QA_CLEANUP/.test(mainText) || /taskkill\.exe[\s\S]{0,120}wallpaper(?:32|64)/i.test(mainText) || /x:\s*-16000[\s\S]{0,80}y:\s*-16000/.test(mainText) || !/width:\s*Math\.max\(640,[\s\S]{0,220}physicalBounds\.width[\s\S]{0,220}x:\s*physicalBounds\.x,[\s\S]{0,80}y:\s*physicalBounds\.y/.test(mainText)) {
     fail('Wallpaper Engine release code must launch at the host pixel origin without QA cleanup or fixed offscreen coordinates');
   }
   if (!/capturePrepared:\s*true,\s*captureMode:\s*'dwm-thumbnail'/.test(mainText)
@@ -729,7 +729,7 @@ function checkWallpaperEngineImportGuard() {
     fail('Wallpaper Engine DWM readiness must stay bound to the exact source/session without broad media permission');
   }
   if (!/appQuitCleanupPromise/.test(mainText) || !/event\.preventDefault\(\)/.test(mainText) || !/Promise\.race\(\[runtimeCleanup, timeoutCleanup\]\)/.test(mainText)) {
-    fail('Wallpaper Engine shutdown must wait briefly for the Faveradio-owned source window to close');
+    fail('Wallpaper Engine shutdown must wait briefly for the Favoradio-owned source window to close');
   }
   if (!/if \(stopAll\) \{[\s\S]{0,220}wallpaperEngineCaptureOperation \+= 1;[\s\S]{0,220}clearWallpaperEngineCaptureGrant\(\);[\s\S]{0,220}\}\s*const result = await wallpaperEngineRuntime\.stop/.test(mainText)) {
     fail('Wallpaper Engine global stop must invalidate capture operations before awaiting source shutdown');
@@ -831,7 +831,7 @@ function checkDesktopWallpaperModeGuard() {
   }
   if ((mainText.match(/new WallpaperEngineRuntime/g) || []).length !== 1
     || !/single-dwm-svg-sampler/.test(wallpaperEngineRuntimeText)
-    || /Faveradio WE Glass Refraction/.test(wallpaperEngineRuntimeText)
+    || /Favoradio WE Glass Refraction/.test(wallpaperEngineRuntimeText)
     || !/captureMode:\s*'dwm-thumbnail'/.test(mainText + wallpaperEngineRuntimeText)
     || !/new FullDesktopModeRuntime/.test(mainText)) {
     fail('full desktop mode must use one existing Wallpaper Engine DWM base, or reveal the normal system desktop when no WE scene is active');
@@ -839,17 +839,17 @@ function checkDesktopWallpaperModeGuard() {
   if (!createWallpaperWindowBlock
     || !/enableFullDesktopMode\(mainWindow/.test(createWallpaperWindowBlock)
     || /DesktopWallpaperRuntime|desktopWallpaperRuntime|wallpaper\.html|wallpaper-preload\.js|WALLPAPER_BACKDROP/.test(createWallpaperWindowBlock)) {
-    fail('entering full desktop mode must expose the complete Faveradio HUD without creating or requiring a legacy fallback wallpaper');
+    fail('entering full desktop mode must expose the complete Favoradio HUD without creating or requiring a legacy fallback wallpaper');
   }
-  if (!/faveradio-wallpaper-set-enabled/.test(mainText)
-    || !/faveradio-wallpaper-get-status/.test(mainText)
+  if (!/favoradio-wallpaper-set-enabled/.test(mainText)
+    || !/favoradio-wallpaper-get-status/.test(mainText)
     || !/isTrustedMainWindowIpc/.test(mainText)
     || !/getWallpaperModeStatus/.test(preloadText)
     || !/onWallpaperModeState/.test(preloadText)) {
     fail('full desktop mode must use the trusted, status-reporting main-process lifecycle');
   }
   if (!/new FullDesktopModeRuntime/.test(mainText)
-    || !/faveradio-full-desktop-icon-shields/.test(mainText + preloadText)
+    || !/favoradio-full-desktop-icon-shields/.test(mainText + preloadText)
     || !/attachDesktopWindowForCoexistence/.test(fullDesktopRuntimeText)
     || !/SHELLDLL_DefView/.test(fullDesktopRuntimeText + iconShapeRuntimeText)
     || !/SysListView32/.test(fullDesktopRuntimeText + iconShapeRuntimeText)
@@ -890,7 +890,7 @@ function checkDesktopWallpaperModeGuard() {
     || !/consecutiveFollowFailures >= 8/.test(wallpaperEngineRuntimeText)
     || !/session\.dwmSurfaceDesktopIconLayering = enabled;[\s\S]{0,180}session\.dwmSurfaceReady !== true/.test(wallpaperEngineRuntimeText)
     || /GetCursorPos|SetCursorPos|SendInput|SetWindowsHookEx|WM_MOUSEMOVE|EnableWindow/.test(fullDesktopRuntimeText + iconShapeRuntimeText + nativeIconLayerRuntimeText)) {
-    fail('full desktop coexistence must preserve the visible Faveradio HUD, survive native watcher/DWM retries, and remain below the exactly restored Explorer icon plane');
+    fail('full desktop coexistence must preserve the visible Favoradio HUD, survive native watcher/DWM retries, and remain below the exactly restored Explorer icon plane');
   }
   if (!/id="desktop-mode-control-dock"/.test(htmlText)
     || !/id="desktop-software-lock-toggle"/.test(htmlText)
@@ -901,10 +901,10 @@ function checkDesktopWallpaperModeGuard() {
     || !/setDesktopIconsVisible/.test(preloadText + shellText)
     || !/requestDesktopKeyboardFocus/.test(preloadText + shellText)
     || !/updateDesktopPointerRoute/.test(preloadText + shellText)
-    || !/faveradio-full-desktop-set-software-lock/.test(mainText)
-    || !/faveradio-full-desktop-set-icons-visible/.test(mainText)
-    || !/faveradio-full-desktop-request-keyboard-focus/.test(mainText)
-    || !/faveradio-full-desktop-pointer-route/.test(mainText)
+    || !/favoradio-full-desktop-set-software-lock/.test(mainText)
+    || !/favoradio-full-desktop-set-icons-visible/.test(mainText)
+    || !/favoradio-full-desktop-request-keyboard-focus/.test(mainText)
+    || !/favoradio-full-desktop-pointer-route/.test(mainText)
     || !/applyInteractivePointerRoute[\s\S]{0,900}softwareInteractionLocked === true[\s\S]{0,180}overDesktopControls !== true/.test(fullDesktopRuntimeText)
     || !/setIgnoreMouseEvents', null, true, \{ forward: true \}/.test(fullDesktopRuntimeText)
     || !/setSoftwareInteractionLocked\(/.test(fullDesktopRuntimeText)
@@ -986,7 +986,7 @@ function checkDesktopWallpaperModeGuard() {
     || !/await disposeFullDesktopModeWithGuard\(\);[\s\S]{0,900}await wallpaperEngineRuntime\.dispose\(\)/.test(shutdownBlock)
     || !/WALLPAPER_ENGINE_WINDOW_CLOSE_FAILED/.test(shutdownBlock)
     || /DesktopWallpaper|desktopWallpaper|wallpaper-mode-runtime|wallpaper\.html/.test(shutdownBlock)) {
-    fail('shutdown must detach the complete Faveradio HUD before disposing the single WE DWM chain, with no legacy backdrop cleanup path');
+    fail('shutdown must detach the complete Favoradio HUD before disposing the single WE DWM chain, with no legacy backdrop cleanup path');
   }
 
   const coexistFixtureResult = spawnSync(process.execPath, [
@@ -999,7 +999,7 @@ function checkDesktopWallpaperModeGuard() {
     process.stderr.write(coexistFixtureResult.stderr || '');
     fail('full desktop icon-coexistence fixture failed');
   }
-  console.log('[OK] Legacy canvas backdrop is forbidden; the complete Faveradio HUD, recoverable software lock, desktop-icon switch, click-outside close, Escape exit, native watcher recovery, single WE DWM layering, and ordered cleanup are guarded.');
+  console.log('[OK] Legacy canvas backdrop is forbidden; the complete Favoradio HUD, recoverable software lock, desktop-icon switch, click-outside close, Escape exit, native watcher recovery, single WE DWM layering, and ordered cleanup are guarded.');
 }
 
 function checkDesktopWindowAdaptationGuard() {
@@ -1432,7 +1432,7 @@ function checkLyricScrollPerformanceGuard() {
   if (!/var lyricDisposeQueue = \[\]/.test(starRiverText) || !/function flushLyricDisposeQueue/.test(starRiverText) || !/processed < 12/.test(starRiverText)) {
     fail('lyric mesh disposal must stay split into bounded background chunks');
   }
-  if (!/mesh\.visible = false/.test(rowText) || !/readability\.visible = false/.test(rowText) || !/renderRevealAt/.test(rowText) || !/renderLineUploaded/.test(rowText) || !/renderReadabilityUploaded/.test(rowText) || !/renderGlowUploaded/.test(rowText) || !/var renderRevealCandidates = \[\]/.test(rowText) || !/renderRevealCandidates\.sort/.test(rowText) || !/function resetLyricRenderUploadFrameBudget/.test(rowText) || !/function consumeLyricRenderUploadFrameBudget/.test(rowText) || !/if \(!consumeLyricRenderUploadFrameBudget\(\)\) break/.test(rowText) || !/resetLyricRenderUploadFrameBudget\(true\)/.test(stageText) || !/__faveradioLyricUploadBudgetStats/.test(rowText) || !/row\.mesh\.visible = lineLayerVisible/.test(rowText) || !/row\.glow\.visible = glowLayerVisible/.test(rowText)) {
+  if (!/mesh\.visible = false/.test(rowText) || !/readability\.visible = false/.test(rowText) || !/renderRevealAt/.test(rowText) || !/renderLineUploaded/.test(rowText) || !/renderReadabilityUploaded/.test(rowText) || !/renderGlowUploaded/.test(rowText) || !/var renderRevealCandidates = \[\]/.test(rowText) || !/renderRevealCandidates\.sort/.test(rowText) || !/function resetLyricRenderUploadFrameBudget/.test(rowText) || !/function consumeLyricRenderUploadFrameBudget/.test(rowText) || !/if \(!consumeLyricRenderUploadFrameBudget\(\)\) break/.test(rowText) || !/resetLyricRenderUploadFrameBudget\(true\)/.test(stageText) || !/__favoradioLyricUploadBudgetStats/.test(rowText) || !/row\.mesh\.visible = lineLayerVisible/.test(rowText) || !/row\.glow\.visible = glowLayerVisible/.test(rowText)) {
     fail('all lyric meshes in a rendered frame must share one texture-upload token instead of each receiving a local budget');
   }
   if (!/var persistentTrackTransparentPrewarm =/.test(rowText) || !/data\.trackPersistent/.test(rowText) || !/transparentPrewarm: true/.test(rowText) || !/priority: 300 \+ trackPrewarmOrder/.test(rowText) || !/priority: 400 \+ trackPrewarmOrder/.test(rowText) || !/priority: 500 \+ trackPrewarmOrder/.test(rowText)) {
@@ -1519,13 +1519,13 @@ function checkPersistentCacheStorageGuard() {
   const cssText = fs.readFileSync(path.join(appRoot, 'public', 'css', 'index.css'), 'utf8');
   const setNameAt = mainText.indexOf('app.setName(APP_NAME)');
   const firstUserDataLookupAt = mainText.indexOf("app.getPath('appData')");
-  if (!/const CACHE_SETTINGS_FILE/.test(mainText) || !/const LYRIC_CACHE_MAX_BYTES = 96 \* 1024 \* 1024/.test(mainText) || !/function defaultCacheRootPath\(\)/.test(mainText) || !/path\.join\(dDrive, 'FaveradioCache'\)/.test(mainText) || setNameAt < 0 || firstUserDataLookupAt < 0 || setNameAt > firstUserDataLookupAt || !/const STABLE_USER_DATA_PATH = STARTUP_QA_USER_DATA_PATH \|\| path\.join\(app\.getPath\('appData'\), APP_NAME\)/.test(mainText) || !/app\.setPath\('userData', STABLE_USER_DATA_PATH\)/.test(mainText) || !/app\.setPath\('sessionData', chromiumSessionDataPath\(cacheSettings\)\)/.test(mainText) || !/const currentChromiumPath = app\.getPath\('sessionData'\)/.test(mainText) || !/FAVERADIO_BEAT_CACHE_DIR = cacheSettings\.beatmapsPath/.test(mainText) || !/nativePath:\s*path\.join\(rootPath, 'native-helper-temp'\)/.test(mainText) || !/const NATIVE_HELPER_TEMP_PATH = INITIAL_CACHE_SETTINGS\.nativePath/.test(mainText) || !/activeWallpaperEnginePath/.test(mainText) || !/wallpaperEngineBytes/.test(mainText)) {
+  if (!/const CACHE_SETTINGS_FILE/.test(mainText) || !/const LYRIC_CACHE_MAX_BYTES = 96 \* 1024 \* 1024/.test(mainText) || !/function defaultCacheRootPath\(\)/.test(mainText) || !/path\.join\(dDrive, 'FavoradioCache'\)/.test(mainText) || setNameAt < 0 || firstUserDataLookupAt < 0 || setNameAt > firstUserDataLookupAt || !/const STABLE_USER_DATA_PATH = STARTUP_QA_USER_DATA_PATH \|\| path\.join\(app\.getPath\('appData'\), APP_NAME\)/.test(mainText) || !/app\.setPath\('userData', STABLE_USER_DATA_PATH\)/.test(mainText) || !/app\.setPath\('sessionData', chromiumSessionDataPath\(cacheSettings\)\)/.test(mainText) || !/const currentChromiumPath = app\.getPath\('sessionData'\)/.test(mainText) || !/FAVORADIO_BEAT_CACHE_DIR = cacheSettings\.beatmapsPath/.test(mainText) || !/nativePath:\s*path\.join\(rootPath, 'native-helper-temp'\)/.test(mainText) || !/const NATIVE_HELPER_TEMP_PATH = INITIAL_CACHE_SETTINGS\.nativePath/.test(mainText) || !/activeWallpaperEnginePath/.test(mainText) || !/wallpaperEngineBytes/.test(mainText)) {
     fail('desktop cache settings must keep app-owned userData stable and route Chromium sessionData plus beatmaps to the configurable cache root');
   }
   if (!/function migrateMisplacedAppOwnedFiles\(\)/.test(mainText) || !/APP_OWNED_MIGRATION_FILES/.test(mainText) || !/process\.env\.QISHUI_COOKIE_FILE = path\.join\(STABLE_USER_DATA_PATH, '\.qishui-cookie'\)/.test(mainText) || !/process\.env\.SPOTIFY_TOKEN_FILE = path\.join\(STABLE_USER_DATA_PATH, '\.spotify-token\.json'\)/.test(mainText)) {
     fail('provider credentials must migrate out of the old Chromium cache path and remain under stable userData');
   }
-  if (!/faveradio-cache-get-settings/.test(mainText) || !/faveradio-cache-set-settings/.test(mainText) || !/faveradio-cache-read-lyric/.test(mainText) || !/faveradio-cache-write-lyric/.test(mainText) || !/crypto\.createHash\('sha256'\)/.test(mainText) || !/pruneLyricCache/.test(mainText)) {
+  if (!/favoradio-cache-get-settings/.test(mainText) || !/favoradio-cache-set-settings/.test(mainText) || !/favoradio-cache-read-lyric/.test(mainText) || !/favoradio-cache-write-lyric/.test(mainText) || !/crypto\.createHash\('sha256'\)/.test(mainText) || !/pruneLyricCache/.test(mainText)) {
     fail('desktop cache storage must expose configurable paths and bounded hashed lyric persistence');
   }
   if (!/getCacheSettings:/.test(preloadText) || !/setCacheSettings:/.test(preloadText) || !/readLyricCache:/.test(preloadText) || !/writeLyricCache:/.test(preloadText)) {
@@ -1535,7 +1535,7 @@ function checkPersistentCacheStorageGuard() {
   if (!/function persistentLyricCacheKey/.test(lyricText) || !/await readPersistentLyricCache\(song\)/.test(lyricText) || !/refreshPersistentLyricCache\(song\)/.test(lyricText) || !/writePersistentLyricCache\(song, mergedResponse\)/.test(lyricText) || !/function scheduleQueueLyricPrefetch/.test(lyricText) || !/function runQueueLyricPrefetch/.test(lyricText) || !/scheduleQueueLyricPrefetch\(idx, 2400\)/.test(playbackStartText)) {
     fail('lyrics must read persistent cache before network fetch, refresh it without blocking playback, and prefetch the next queue lyric');
   }
-  if (!/07-fx\/08-cache-storage-settings\.js/.test(loaderText) || !/cache-storage-panel/.test(htmlText) || !/cache-storage-lyrics-size/.test(htmlText) || !/cache-storage-chromium-size/.test(htmlText) || !/cache-storage-beatmaps-size/.test(htmlText) || !/cache-storage-wallpaper-size/.test(htmlText) || !/cache-storage-userdata-size/.test(htmlText) || !/cache-storage-beatmaps-path/.test(cacheUiText) || !/cache-storage-wallpaper-path/.test(cacheUiText) || !/function chooseFaveradioCacheRoot/.test(cacheUiText) || !/function refreshFaveradioCacheSettings/.test(cacheUiText) || !/\.cache-storage-panel/.test(cssText) || /cache-storage-updates-(?:path|size)/.test(htmlText + cacheUiText)) {
+  if (!/07-fx\/08-cache-storage-settings\.js/.test(loaderText) || !/cache-storage-panel/.test(htmlText) || !/cache-storage-lyrics-size/.test(htmlText) || !/cache-storage-chromium-size/.test(htmlText) || !/cache-storage-beatmaps-size/.test(htmlText) || !/cache-storage-wallpaper-size/.test(htmlText) || !/cache-storage-userdata-size/.test(htmlText) || !/cache-storage-beatmaps-path/.test(cacheUiText) || !/cache-storage-wallpaper-path/.test(cacheUiText) || !/function chooseFavoradioCacheRoot/.test(cacheUiText) || !/function refreshFavoradioCacheSettings/.test(cacheUiText) || !/\.cache-storage-panel/.test(cssText) || /cache-storage-updates-(?:path|size)/.test(htmlText + cacheUiText)) {
     fail('advanced settings must show configurable cache paths and their current usage');
   }
   console.log('[OK] Persistent lyric and application cache paths are configurable and report current usage.');
@@ -1559,20 +1559,20 @@ function checkExternalUpdatePageBridgeGuard() {
   const updateUiText = fs.readFileSync(path.join(appRoot, 'public', 'js', 'modules', '08-account', '00-update-preview.js'), 'utf8');
   const bridgeText = mainText + '\n' + preloadText;
   if (
-    !/ipcMain\.handle\('faveradio-open-update-page', async \(event, value\) =>/.test(mainText)
+    !/ipcMain\.handle\('favoradio-open-update-page', async \(event, value\) =>/.test(mainText)
     || !/isTrustedMainWindowIpc\(event\)/.test(mainText)
     || !/target\.length > 2048/.test(mainText)
     || !/parsed\.protocol !== 'https:'/.test(mainText)
     || !/await shell\.openExternal\(parsed\.href\)/.test(mainText)
-    || !/openUpdatePage: \(url\) => ipcRenderer\.invoke\('faveradio-open-update-page'/.test(preloadText)
+    || !/openUpdatePage: \(url\) => ipcRenderer\.invoke\('favoradio-open-update-page'/.test(preloadText)
   ) {
     fail('desktop update bridge must open only bounded HTTPS pages from the trusted main document');
   }
-  if (/faveradio-open-update-installer|openUpdateInstaller|getUpdateDownloadDir|FAVERADIO_UPDATE_DIR/.test(bridgeText)) {
+  if (/favoradio-open-update-installer|openUpdateInstaller|getUpdateDownloadDir|FAVORADIO_UPDATE_DIR/.test(bridgeText)) {
     fail('desktop update bridge must not expose the removed local installer or update-cache path');
   }
   if (
-    !/faveradio-download-page/.test(serverText)
+    !/favoradio-download-page/.test(serverText)
     || !/extractReleaseDownloadPages/.test(serverText)
     || !/downloadPages/.test(serverText)
     || !/error:\s*'UPDATE_EXTERNAL_ONLY'/.test(serverText)
@@ -1668,7 +1668,7 @@ function checkQishuiProviderGuard() {
   if (/vsaa\.cn|QISHUI_VIP_PROXY|music\.qishui\.vip/.test(qishuiText)) {
     fail('Qishui playback must not depend on third-party VIP/proxy endpoints');
   }
-  if (!/search: tokenConfigured \|\| webSession \|\| QISHUI_PUBLIC_ENABLED/.test(qishuiText) || !/loggedIn: webSession/.test(qishuiText) || !/请使用抖音 App 扫描 Faveradio 中的汽水官方二维码/.test(qishuiText)) {
+  if (!/search: tokenConfigured \|\| webSession \|\| QISHUI_PUBLIC_ENABLED/.test(qishuiText) || !/loggedIn: webSession/.test(qishuiText) || !/请使用抖音 App 扫描 Favoradio 中的汽水官方二维码/.test(qishuiText)) {
     fail('Qishui status must keep public catalogue readiness separate from an authenticated Passport Web session');
   }
   const oldQishuiCredentialPrompt = new RegExp('当前版本还没有内置' + '抖音开放平台应用凭证');
@@ -1681,7 +1681,7 @@ function checkQishuiProviderGuard() {
   if (!/require\('\.\/qishui-qr-login'\)/.test(serverText) || !/\/api\/qishui\/login\/qrcode/.test(serverText) || !/\/api\/qishui\/login\/check/.test(serverText) || /pn === '\/api\/qishui\/login\/(?:token|cookie)'/.test(serverText)) {
     fail('Qishui login server must expose only the signed Passport QR create/check boundary');
   }
-  if (!/persist:faveradio-qishui-auth-v6/.test(qishuiPassportText) || !/a_bogus/.test(qishuiPassportText) || !/check_qrconnect/.test(qishuiPassportText) || !/secondVerify/.test(qishuiPassportText) || !/createQishuiQrLoginBridge/.test(qishuiQrBridgeText)) {
+  if (!/persist:favoradio-qishui-auth-v6/.test(qishuiPassportText) || !/a_bogus/.test(qishuiPassportText) || !/check_qrconnect/.test(qishuiPassportText) || !/secondVerify/.test(qishuiPassportText) || !/createQishuiQrLoginBridge/.test(qishuiQrBridgeText)) {
     fail('Qishui Passport QR must retain the isolated signing runtime, a_bogus validation, polling, persistence, and MFA bridge');
   }
   if (!/pollQishuiQr/.test(qishuiLoginText) || !/请使用抖音 App 扫码并确认登录/.test(qishuiLoginText) || /读取本机汽水|本机会话|Token 导入|submitQishuiTokenLogin|openQishuiMusicLogin/.test(qishuiLoginText)) {
@@ -2033,16 +2033,16 @@ function checkPlaybackControlBadgesGuard() {
   const accountPillGlassSurfaceOk =
     /\.top-account-pill::before/.test(cssText) &&
     /\.top-account-pill\s*>\s*\*/.test(cssText) &&
-    /html\.control-glass-svg-ok\s+\.top-account-pill::before\s*\{[\s\S]*?url\(#faveradio-account-pill-glass-filter\)/.test(cssText);
+    /html\.control-glass-svg-ok\s+\.top-account-pill::before\s*\{[\s\S]*?url\(#favoradio-account-pill-glass-filter\)/.test(cssText);
   const accountPillDirectSvgFilter =
-    /html\.control-glass-svg-ok\s+\.top-account-pill\s*\{[\s\S]*?url\(#faveradio-account-pill-glass-filter\)/.test(cssText) ||
+    /html\.control-glass-svg-ok\s+\.top-account-pill\s*\{[\s\S]*?url\(#favoradio-account-pill-glass-filter\)/.test(cssText) ||
     /html\.control-glass-svg-ok\s+\.top-account-pill,/.test(cssText);
   const lastAccountContainerOverride = cssText.lastIndexOf('#user-btn.multi-account,');
   const lastTopRightIconRule = cssText.lastIndexOf('#top-right .icon-btn');
   const accountContainerGlassDisabledOk =
     lastAccountContainerOverride > lastTopRightIconRule &&
     /#user-btn\.multi-account[\s\S]{0,320}background:\s*transparent\s*!important[\s\S]{0,160}box-shadow:\s*none\s*!important[\s\S]{0,160}backdrop-filter:\s*none\s*!important[\s\S]{0,120}-webkit-backdrop-filter:\s*none\s*!important[\s\S]{0,120}transition:\s*none\s*!important/.test(cssText.slice(lastAccountContainerOverride));
-  const accountFilterText = (indexText.match(/<filter id="faveradio-account-pill-glass-filter"[\s\S]*?<\/filter>/) || [''])[0];
+  const accountFilterText = (indexText.match(/<filter id="favoradio-account-pill-glass-filter"[\s\S]*?<\/filter>/) || [''])[0];
   const accountPillSimpleRefractionOk =
     /<feDisplacementMap[\s\S]*?scale="28"[\s\S]*?xChannelSelector="R"[\s\S]*?yChannelSelector="G"/.test(accountFilterText) &&
     !/feOffset|feColorMatrix|feBlend|dispRed|dispGreen|dispBlue/.test(accountFilterText);
@@ -2059,7 +2059,7 @@ function checkPlaybackControlBadgesGuard() {
     /#user-btn\.multi-account\.external-account-pills \.top-account-name[\s\S]{0,120}max-width:\s*118px/.test(cssText) &&
     /e\.clientY\s*<\s*rect\.top\s*\+\s*rect\.height\s*\/\s*2/.test(accountUtilsText) &&
     !/e\.clientX\s*<\s*rect\.left\s*\+\s*rect\.width\s*\/\s*2/.test(accountUtilsText);
-  if (!/faveradio-account-pill-glass-filter/.test(indexText) || !/account-pill-glass-map/.test(indexText) || !/url\(#faveradio-account-pill-glass-filter\)/.test(cssText) || !/overflow:\s*hidden/.test(cssText) || !accountPillGlassSurfaceOk || accountPillDirectSvgFilter || !accountContainerGlassDisabledOk || !accountPillSimpleRefractionOk || !accountPillDedicatedMapOk || !accountPillVerticalStackOk || !/function updateAccountPillGlassDisplacementMap/.test(glassText) || !/accountPillKey/.test(glassText) || !/querySelectorAll\('\.top-account-pill'\)/.test(glassText) || !/requestAnimationFrame\(updateAccountPillGlassDisplacementMap\)/.test(loginStatusText)) {
+  if (!/favoradio-account-pill-glass-filter/.test(indexText) || !/account-pill-glass-map/.test(indexText) || !/url\(#favoradio-account-pill-glass-filter\)/.test(cssText) || !/overflow:\s*hidden/.test(cssText) || !accountPillGlassSurfaceOk || accountPillDirectSvgFilter || !accountContainerGlassDisabledOk || !accountPillSimpleRefractionOk || !accountPillDedicatedMapOk || !accountPillVerticalStackOk || !/function updateAccountPillGlassDisplacementMap/.test(glassText) || !/accountPillKey/.test(glassText) || !/querySelectorAll\('\.top-account-pill'\)/.test(glassText) || !/requestAnimationFrame\(updateAccountPillGlassDisplacementMap\)/.test(loginStatusText)) {
     fail('top account VIP capsules must use a dedicated glass map/filter and refresh it after account rendering');
   }
   console.log('[OK] Bottom player title shows source and VIP badges without stretching the control bar.');
@@ -2081,7 +2081,7 @@ async function checkProviderFallbackTerminalStateGuard() {
   if (!/alternateData[\s\S]{0,220}!alternateData\.url[\s\S]{0,320}playQueue\[idx\] = committedCandidate/.test(fallbackText) || !/fallbackStarted === true[\s\S]{0,180}已自动切换音源/.test(fallbackText) || !/function restoreSourceFallbackQueueItem/.test(fallbackText)) {
     fail('fallback candidates must be URL-probed before provisional commit and only announce success after audible playback');
   }
-  if (!/async function skipFailedQueueItem/.test(fallbackText) || !/skipShuffleOrder:\s*true/.test(fallbackText) || !/return nextStarted === true/.test(fallbackText) || !/function settleSourceFallbackTerminal/.test(fallbackText) || !/audio\.removeAttribute\('src'\)/.test(fallbackText) || !/audio\.__faveradioQueueItemKey = ''/.test(fallbackText)) {
+  if (!/async function skipFailedQueueItem/.test(fallbackText) || !/skipShuffleOrder:\s*true/.test(fallbackText) || !/return nextStarted === true/.test(fallbackText) || !/function settleSourceFallbackTerminal/.test(fallbackText) || !/audio\.removeAttribute\('src'\)/.test(fallbackText) || !/audio\.__favoradioQueueItemKey = ''/.test(fallbackText)) {
     fail('failed fallback must await the next track or settle one terminal state with no stale audio owner');
   }
   if (!/opts\.preResolvedPlaybackData/.test(playbackText) || !/fallbackResult !== null/.test(playbackText) || /if \(isQQPlayback && await retryQQPlaybackWithCompatibleQuality\(song, idx, token, retryPlaybackOpts, data, requestedQuality\)\)/.test(playbackText)) {
@@ -2402,7 +2402,7 @@ function checkSearchGlassEntranceGuard() {
   const glassText = fs.readFileSync(path.join(appRoot, 'public', 'js', 'modules', '05-playback', '15-control-glass-animations.js'), 'utf8');
   const searchText = fs.readFileSync(path.join(appRoot, 'public', 'js', 'modules', '05-playback', '07-search.js'), 'utf8');
   const peekText = fs.readFileSync(path.join(appRoot, 'public', 'js', 'modules', '10-shell', '02-peek-panels-upload.js'), 'utf8');
-  const searchPillDirectSvg = /html\.control-glass-svg-ok\s+\.search-mode-tabs button,[ \t]*\r?\nhtml\.control-glass-svg-ok\s+\.search-history-chip\s*\{[\s\S]{0,260}backdrop-filter:\s*url\(#faveradio-search-pill-glass-filter\)\s+saturate\(1\)\s*!important[\s\S]{0,220}-webkit-backdrop-filter:\s*url\(#faveradio-search-pill-glass-filter\)\s+saturate\(1\)\s*!important/.test(cssText);
+  const searchPillDirectSvg = /html\.control-glass-svg-ok\s+\.search-mode-tabs button,[ \t]*\r?\nhtml\.control-glass-svg-ok\s+\.search-history-chip\s*\{[\s\S]{0,260}backdrop-filter:\s*url\(#favoradio-search-pill-glass-filter\)\s+saturate\(1\)\s*!important[\s\S]{0,220}-webkit-backdrop-filter:\s*url\(#favoradio-search-pill-glass-filter\)\s+saturate\(1\)\s*!important/.test(cssText);
   const searchAreaKeepsGlassComposited =
     /#search-area\s*\{[\s\S]{0,120}top:\s*-76px[\s\S]{0,220}transition:\s*top\s+\.45s[\s\S]{0,120}opacity\s+\.35s/.test(cssText) &&
     /#search-area\.peek\s*\{[\s\S]{0,80}top:\s*24px[\s\S]{0,80}opacity:\s*1[\s\S]{0,80}pointer-events:\s*auto/.test(cssText) &&
@@ -2412,13 +2412,13 @@ function checkSearchGlassEntranceGuard() {
     /#search-box::before\s*\{[\s\S]{0,90}content:\s*none\s*!important/.test(cssText) &&
     /#search-box\s*\{[\s\S]{0,220}background:\s*transparent\s*!important[\s\S]{0,220}box-shadow:\s*none\s*!important[\s\S]{0,220}backdrop-filter:\s*none\s*!important[\s\S]{0,160}-webkit-backdrop-filter:\s*none\s*!important/.test(cssText) &&
     /#search-area\.peek\s+#search-box\s*\{[\s\S]{0,220}background:\s*var\(--saved-panel-glass-bg\)\s*!important[\s\S]{0,220}box-shadow:\s*var\(--saved-panel-glass-shadow\)\s*!important[\s\S]{0,220}backdrop-filter:\s*var\(--saved-panel-glass-filter\)\s*!important/.test(cssText) &&
-    /html\.control-glass-svg-ok\s+#search-area\.peek\s+#search-box\s*\{[\s\S]{0,180}backdrop-filter:\s*url\(#faveradio-search-box-glass-filter\)\s+saturate\(1\)\s*!important[\s\S]{0,180}-webkit-backdrop-filter:\s*url\(#faveradio-search-box-glass-filter\)\s+saturate\(1\)\s*!important/.test(cssText) &&
+    /html\.control-glass-svg-ok\s+#search-area\.peek\s+#search-box\s*\{[\s\S]{0,180}backdrop-filter:\s*url\(#favoradio-search-box-glass-filter\)\s+saturate\(1\)\s*!important[\s\S]{0,180}-webkit-backdrop-filter:\s*url\(#favoradio-search-box-glass-filter\)\s+saturate\(1\)\s*!important/.test(cssText) &&
     /html\.control-glass-svg-ok\s+#search-box::before\s*\{[\s\S]{0,90}content:\s*none\s*!important/.test(cssText) &&
     /#search-box\s+#search-icon,[ \t]*\r?\n#search-box\s+#search-input\s*\{[\s\S]{0,80}position:\s*relative[\s\S]{0,80}z-index:\s*1/.test(cssText) &&
-    !/html\.control-glass-svg-ok\s+#search-box::before\s*\{[\s\S]{0,260}url\(#faveradio-search-box-glass-filter\)/.test(cssText) &&
+    !/html\.control-glass-svg-ok\s+#search-box::before\s*\{[\s\S]{0,260}url\(#favoradio-search-box-glass-filter\)/.test(cssText) &&
     !/#search-area\s+#search-box\s*\{[\s\S]{0,260}background:\s*var\(--glass-bg\)\s*!important/.test(cssText);
   const searchPillUsesSavedRgbGlassSurface =
-    /html\.control-glass-svg-ok\s+\.search-mode-tabs button,[ \t]*\r?\nhtml\.control-glass-svg-ok\s+\.search-history-chip\s*\{[\s\S]{0,180}background:\s*var\(--saved-button-glass-bg\)\s*!important[\s\S]{0,180}border-color:\s*transparent\s*!important[\s\S]{0,180}box-shadow:\s*var\(--saved-button-glass-shadow\)\s*!important[\s\S]{0,220}url\(#faveradio-search-pill-glass-filter\)/.test(cssText);
+    /html\.control-glass-svg-ok\s+\.search-mode-tabs button,[ \t]*\r?\nhtml\.control-glass-svg-ok\s+\.search-history-chip\s*\{[\s\S]{0,180}background:\s*var\(--saved-button-glass-bg\)\s*!important[\s\S]{0,180}border-color:\s*transparent\s*!important[\s\S]{0,180}box-shadow:\s*var\(--saved-button-glass-shadow\)\s*!important[\s\S]{0,220}url\(#favoradio-search-pill-glass-filter\)/.test(cssText);
   const searchTabsRailStaysTransparent =
     /#search-area\s+\.search-mode-tabs,[ \t]*\r?\nhtml\.control-glass-svg-ok\s+#search-area\s+\.search-mode-tabs\s*\{[\s\S]{0,160}background:\s*transparent\s*!important[\s\S]{0,160}border-color:\s*transparent\s*!important[\s\S]{0,160}box-shadow:\s*none\s*!important[\s\S]{0,160}backdrop-filter:\s*none\s*!important[\s\S]{0,160}-webkit-backdrop-filter:\s*none\s*!important/.test(cssText);
   const searchHistoryFrostedSurfaceOk =
@@ -2452,8 +2452,8 @@ function checkSearchGlassEntranceGuard() {
     /function doPodcastSearch\(q\)[\s\S]{0,700}rememberSearchQuery\(q\)/.test(searchText) &&
     /if \(!renderSearchHistory\(\) && searchMode === 'podcast'\) loadPodcastHot\(\)/.test(searchText) &&
     !/data-history-mode/.test(searchText);
-  const searchBoxFilterText = (indexText.match(/<filter id="faveradio-search-box-glass-filter"[\s\S]*?<\/filter>/) || [''])[0];
-  const searchPillFilterText = (indexText.match(/<filter id="faveradio-search-pill-glass-filter"[\s\S]*?<\/filter>/) || [''])[0];
+  const searchBoxFilterText = (indexText.match(/<filter id="favoradio-search-box-glass-filter"[\s\S]*?<\/filter>/) || [''])[0];
+  const searchPillFilterText = (indexText.match(/<filter id="favoradio-search-pill-glass-filter"[\s\S]*?<\/filter>/) || [''])[0];
   const searchBoxSourceMergeCount = (searchBoxFilterText.match(/<feMergeNode in="SourceGraphic"/g) || []).length;
   const searchPillSourceMergeCount = (searchPillFilterText.match(/<feMergeNode in="SourceGraphic"/g) || []).length;
   const searchBoxFilterMatchesSavedRgbGlass =
@@ -2486,7 +2486,7 @@ function checkSearchGlassEntranceGuard() {
   const searchGlassUsesSavedRgbMapOk =
     /function generateAccountPillGlassDisplacementMap\(width,\s*height,\s*radius,\s*minWidth,\s*minHeight\)/.test(glassText) &&
     !/SEARCH_BOX_GLASS_CHROMA|SEARCH_PILL_GLASS_CHROMA/.test(glassText) &&
-    !/faveradio-search-box-glass-filter|faveradio-search-pill-glass-filter/.test(chromaticOffsetFunctionText) &&
+    !/favoradio-search-box-glass-filter|favoradio-search-pill-glass-filter/.test(chromaticOffsetFunctionText) &&
     /function generateSearchBoxGlassDisplacementMap/.test(glassText) &&
     /generateControlGlassDisplacementMap\(width,\s*height,\s*radius\)/.test(glassText) &&
     /function generateSearchPillGlassDisplacementMap/.test(glassText) &&
@@ -2714,7 +2714,7 @@ async function checkProviderAuthCookiePathGuard() {
   if (!/async function loadMainWindowWithRetry\(win\)/.test(mainText) || !/const port = mainServerPort \|\| process\.env\.PORT \|\| 3000/.test(mainText) || !/win\.loadURL\(targetUrl\)/.test(mainText)) {
     fail('Main window navigation must use the configured server port through the bounded retry path');
   }
-  if (!/function reportWindowCreationFailure\(context, error\)/.test(mainText) || !/dialog\.showErrorBox\('Faveradio 启动失败'/.test(mainText)) {
+  if (!/function reportWindowCreationFailure\(context, error\)/.test(mainText) || !/dialog\.showErrorBox\('Favoradio 启动失败'/.test(mainText)) {
     fail('Main window startup failures must be surfaced instead of leaving a headless server process');
   }
   if (!/function resolveStartupErrorCode\(context, error\)/.test(mainText) || !/STARTUP_ERROR_LOG_FILE/.test(mainText) || !/MR-BOOT-SERVER-PORT/.test(mainText) || !/MR-BOOT-WINDOW-LOAD/.test(mainText) || !/startup-error\.log/.test(mainText)) {
@@ -2929,7 +2929,7 @@ function checkPlaybackResumeRecoveryGuard() {
   if (
     !/resumeRecovery: !!opts\.resumeRecovery/.test(playbackText)
     || !/audioEl !== audio/.test(progressText)
-    || !/__faveradioTrackSwitchToken\) !== Number\(trackSwitchToken\)/.test(progressText)
+    || !/__favoradioTrackSwitchToken\) !== Number\(trackSwitchToken\)/.test(progressText)
     || !/playbackMediaMatchesCurrentQueueItem\(audioEl\)/.test(progressText)
     || !/schedulePlaybackStallRecovery\(name,[\s\S]{0,260}ownerQueueItemKey/.test(progressText)
     || !/function playbackStallRecoveryOwnerStillCurrent/.test(controlsText)
@@ -2994,8 +2994,8 @@ function checkCuefieldAutoMixGuard() {
   const coreText = fs.readFileSync(path.join(appRoot, 'public', 'js', 'modules', '05-playback', '16-cuefield-automix-core.js'), 'utf8');
   const timelineText = fs.readFileSync(path.join(appRoot, 'public', 'js', 'modules', '05-playback', '17-cuefield-timeline-executor.js'), 'utf8');
   const integrationText = fs.readFileSync(path.join(appRoot, 'public', 'js', 'modules', '05-playback', '18-cuefield-automix-integration.js'), 'utf8');
-  const adapterText = fs.readFileSync(path.join(appRoot, 'cuefield', 'adapter-faveradio.js'), 'utf8');
-  const bridgeText = fs.readFileSync(path.join(appRoot, 'cuefield', 'faveradio-bridge.js'), 'utf8');
+  const adapterText = fs.readFileSync(path.join(appRoot, 'cuefield', 'adapter-favoradio.js'), 'utf8');
+  const bridgeText = fs.readFileSync(path.join(appRoot, 'cuefield', 'favoradio-bridge.js'), 'utf8');
   const recipeText = fs.readFileSync(path.join(appRoot, 'cuefield', 'recipe-planner.js'), 'utf8');
   const beatPrefetchText = fs.readFileSync(path.join(appRoot, 'public', 'js', 'modules', '03-beat', '00-tempo-worker-cache-prefetch.js'), 'utf8');
   const coreStoreText = fs.readFileSync(path.join(appRoot, 'public', 'js', 'modules', '00-state', '00-core-stores.js'), 'utf8');
@@ -3018,7 +3018,7 @@ function checkCuefieldAutoMixGuard() {
   if (!/function createCuefieldAutoMix/.test(coreText) || !/function buildCuefieldTimelineExecution/.test(timelineText) || !/planCuefieldTransitionFromCache/.test(serverText) || !/pn === '\/api\/cuefield\/transition'/.test(serverText) || !/pn === '\/api\/cuefield\/feedback'/.test(serverText)) {
     fail('Cuefield planner, timeline executor, and local server endpoints are incomplete');
   }
-  if (!/FAVERADIO_BEAT_COMBOS/.test(adapterText) || !/raw\[7\]/.test(adapterText) || !/flags & 1/.test(adapterText) || !/flags & 2/.test(adapterText) || !/flags & 4/.test(adapterText) || /raw\[8\][^\n]{0,80}downbeat|raw\[8\][^\n]{0,80}>=\s*7/.test(adapterText)) {
+  if (!/FAVORADIO_BEAT_COMBOS/.test(adapterText) || !/raw\[7\]/.test(adapterText) || !/flags & 1/.test(adapterText) || !/flags & 2/.test(adapterText) || !/flags & 4/.test(adapterText) || /raw\[8\][^\n]{0,80}downbeat|raw\[8\][^\n]{0,80}>=\s*7/.test(adapterText)) {
     fail('Cuefield must decode packed comboIdx and flags independently so ordinary camera/pulse flags cannot become false downbeats');
   }
   if (!/chooseTransitionWindow/.test(bridgeText) || !/buildStructureMap/.test(bridgeText) || !/normalizeRecentRecipes/.test(bridgeText) || !/resolveListeningFloor/.test(bridgeText) || !/safety-long-blend/.test(recipeText) || !/end-of-track-crossfade/.test(bridgeText)) {
@@ -3051,10 +3051,10 @@ function checkCuefieldAutoMixGuard() {
   if (!/var cuefieldMediaFadeTimer = 0/.test(integrationText) || !/cuefieldMediaFadeTimer = setInterval\(function \(\) \{[\s\S]{0,100}applyStep\(\)/.test(integrationText) || !/context\.outgoingMedia && context\.outgoingMedia\.currentTime/.test(integrationText) || !/if \(cuefieldMediaFadeTimer\) clearInterval\(cuefieldMediaFadeTimer\)/.test(integrationText)) {
     fail('Cuefield gain must follow the outgoing media clock and keep a timer watchdog when visual RAF is throttled');
   }
-  if (!/function recoverCuefieldAutoMixEndedOutgoing/.test(integrationText) || !/__faveradioCuefieldEndedRecoveryToken/.test(playbackText)) {
+  if (!/function recoverCuefieldAutoMixEndedOutgoing/.test(integrationText) || !/__favoradioCuefieldEndedRecoveryToken/.test(playbackText)) {
     fail('Cuefield must resume ordinary queue advance if its outgoing deck ends before a failed handoff settles');
   }
-  if (!/__faveradioPreparedGraphFailed/.test(integrationText) || !/The first element is permanently tied/.test(integrationText)) {
+  if (!/__favoradioPreparedGraphFailed/.test(integrationText) || !/The first element is permanently tied/.test(integrationText)) {
     fail('Cuefield must rebuild a clean fallback media element after a partial WebAudio graph failure');
   }
   if (!/var cuefieldActiveTransitionContext = null/.test(integrationText) || !/shouldRestoreOutgoing[\s\S]{0,520}rampAudioOutputGain\(targetVolume, 120\)/.test(integrationText) || !/async function runCuefieldNormalFallback\(\)/.test(integrationText) || !/audio !== nextMedia && audio !== transitionContext\.outgoingMedia/.test(integrationText)) {
@@ -3072,7 +3072,7 @@ function checkCuefieldAutoMixGuard() {
   if (!/function contextStillCurrent\(\)/.test(integrationText) || !/var analysisToken = beatMapToken/.test(integrationText) || !/descriptor = await cuefieldAutoMixAudioDescriptor\(song\);[\s\S]{0,220}analysisToken !== beatMapToken[\s\S]{0,120}cuefieldAutoMixVisualTransitionBusy\(\)/.test(integrationText) || !/analyzeAudioBeats\(descriptor\.proxyUrl, null, analysisToken/.test(integrationText)) {
     fail('Cuefield beat analysis must revalidate track ownership and visual-idle state after resolving the next audio URL');
   }
-  if (!/audioSourceMedia = null/.test(coreStoreText) || !/function cuefieldCreatePreparedAudioGraph/.test(integrationText) || !/createMediaElementSource\(media\)/.test(integrationText) || !/__faveradioPreparedAudioGraph/.test(audioGraphText) || !/preparedGraph\.adopted = true/.test(audioGraphText) || !/audioSourceMedia = audio/.test(audioGraphText)) {
+  if (!/audioSourceMedia = null/.test(coreStoreText) || !/function cuefieldCreatePreparedAudioGraph/.test(integrationText) || !/createMediaElementSource\(media\)/.test(integrationText) || !/__favoradioPreparedAudioGraph/.test(audioGraphText) || !/preparedGraph\.adopted = true/.test(audioGraphText) || !/audioSourceMedia = audio/.test(audioGraphText)) {
     fail('Cuefield must prepare B in the same AudioContext and adopt its existing source/analyser/gain graph without rebinding mid-playback');
   }
   if (!/function resetAudioVisualState\(options\)/.test(beatCameraText) || !/preserveEnvelope/.test(beatCameraText) || !/function resetBeatCameraSync\(t, options\)/.test(beatCameraText) || !/preserveMomentum/.test(beatCameraText) || !/resetAudioVisualState\(\{ preserveEnvelope: albumGaplessMixed \}\)/.test(playbackText) || !/preserveMomentum: albumGaplessMixed/.test(playbackText) || !/syncBeatMapPlaybackCursor\(audio \? audio\.currentTime : 0, albumGaplessMixed\)/.test(playbackText)) {
@@ -3160,10 +3160,10 @@ function checkInternalBetaPackagingGuard() {
   if (!fs.existsSync(betaConfigPath)) fail('electron-builder.internal-beta.json is required for isolated gray-test packaging');
   const beta = JSON.parse(fs.readFileSync(betaConfigPath, 'utf8'));
   const meta = beta.extraMetadata || {};
-  const faveradio = meta.faveradio || {};
-  const update = faveradio.update || {};
-  if (meta.version !== '1.1.2' || beta.productName !== 'Faveradio_Beat' || meta.productName !== 'Faveradio_Beat') {
-    fail('internal beta package metadata must identify v1.1.2 Faveradio_Beat');
+  const favoradio = meta.favoradio || {};
+  const update = favoradio.update || {};
+  if (meta.version !== '1.1.2' || beta.productName !== 'Favoradio_Beat' || meta.productName !== 'Favoradio_Beat') {
+    fail('internal beta package metadata must identify v1.1.2 Favoradio_Beat');
   }
   if (!/dist-internal-beta/.test(beta.directories && beta.directories.output || '') || beta.publish !== null) {
     fail('internal beta output must stay in dist-internal-beta and not configure GitHub publishing');
@@ -3171,10 +3171,10 @@ function checkInternalBetaPackagingGuard() {
   if (beta.asar !== true) {
     fail('internal beta package must use asar so source files are not installed as plain resources');
   }
-  if ((beta.appId || '') !== 'com.faveradio.beat.internal' || (faveradio.appUserModelId || '') !== 'com.faveradio.beat.internal') {
+  if ((beta.appId || '') !== 'com.favoradio.beat.internal' || (favoradio.appUserModelId || '') !== 'com.favoradio.beat.internal') {
     fail('internal beta must use an isolated app id/AppUserModelID');
   }
-  if (faveradio.runtimeName !== 'Faveradio_Beat' || update.disabled !== true || update.provider !== 'none') {
+  if (favoradio.runtimeName !== 'Favoradio_Beat' || update.disabled !== true || update.provider !== 'none') {
     fail('internal beta runtime name and update-disable metadata must stay isolated');
   }
   const requiredRuntimeFiles = ['qishui-audio-decryptor/**/*'];
@@ -3185,22 +3185,22 @@ function checkInternalBetaPackagingGuard() {
       fail(`electron-builder files must include runtime dependency ${entry}`);
     }
   });
-  if (!beta.nsis || beta.nsis.include !== 'build/installer-internal-beta.nsh' || !/Faveradio_Beat-v\$\{version\}-灰度内测版/.test(beta.nsis.artifactName || '')) {
+  if (!beta.nsis || beta.nsis.include !== 'build/installer-internal-beta.nsh' || !/Favoradio_Beat-v\$\{version\}-灰度内测版/.test(beta.nsis.artifactName || '')) {
     fail('internal beta NSIS config must use the beta wrapper and beta artifact name');
   }
   const wrapperText = fs.readFileSync(path.join(appRoot, 'build', 'installer-internal-beta.nsh'), 'utf8');
-  if (!/FAVERADIO_INSTALL_DIR_NAME "Faveradio_Beat"/.test(wrapperText) || !/禁止传播/.test(wrapperText) || !/installer\.nsh/.test(wrapperText)) {
-    fail('internal beta NSIS wrapper must define Faveradio_Beat and the no-redistribution notice');
+  if (!/FAVORADIO_INSTALL_DIR_NAME "Favoradio_Beat"/.test(wrapperText) || !/禁止传播/.test(wrapperText) || !/installer\.nsh/.test(wrapperText)) {
+    fail('internal beta NSIS wrapper must define Favoradio_Beat and the no-redistribution notice');
   }
   const installerText = fs.readFileSync(path.join(appRoot, 'build', 'installer.nsh'), 'utf8');
-  if (!/FAVERADIO_INSTALL_DIR_NAME/.test(installerText) || !/FAVERADIO_INSTALL_NOTICE/.test(installerText)) {
+  if (!/FAVORADIO_INSTALL_DIR_NAME/.test(installerText) || !/FAVORADIO_INSTALL_NOTICE/.test(installerText)) {
     fail('shared installer must keep configurable install-folder and notice hooks');
   }
-  const defaultDir = installerText.match(/Function FaveradioUseFirstAvailableInstallDir([\s\S]*?)FunctionEnd/);
-  const validateDir = installerText.match(/Function FaveradioValidateInstallDir([\s\S]*?)FunctionEnd/);
-  if (!defaultDir || !/FaveradioSelectDrive "C"/.test(defaultDir[1])
-    || defaultDir[1].indexOf('FaveradioSelectDrive "C"') > defaultDir[1].indexOf('FaveradioSelectDrive "D"')
-    || !validateDir || /FaveradioHasPreferredInstallDrive|不安装到 C 盘/.test(validateDir[1])
+  const defaultDir = installerText.match(/Function FavoradioUseFirstAvailableInstallDir([\s\S]*?)FunctionEnd/);
+  const validateDir = installerText.match(/Function FavoradioValidateInstallDir([\s\S]*?)FunctionEnd/);
+  if (!defaultDir || !/FavoradioSelectDrive "C"/.test(defaultDir[1])
+    || defaultDir[1].indexOf('FavoradioSelectDrive "C"') > defaultDir[1].indexOf('FavoradioSelectDrive "D"')
+    || !validateDir || /FavoradioHasPreferredInstallDrive|不安装到 C 盘/.test(validateDir[1])
     || !/默认安装到 C:\\/.test(installerText) || !/默认推荐：C:\\/.test(installerText)) {
     fail('installer must default to C and allow a supported C drive');
   }
@@ -3240,7 +3240,7 @@ function checkSonicTopographyPresetGuard() {
   const mainLoopText = fs.readFileSync(path.join(appRoot, 'public', 'js', 'modules', '11-main-loop.js'), 'utf8');
   const sonicText = fs.readFileSync(path.join(appRoot, 'public', 'sonic-topography-preset.js'), 'utf8');
   const sonicWorkshopText = fs.readFileSync(path.join(appRoot, 'public', 'sonic-workshop-preset.js'), 'utf8');
-  const sonicWorkshopBridgeText = fs.readFileSync(path.join(appRoot, 'public', 'vendor', 'sonic-workshop', 'faveradio-bridge.html'), 'utf8');
+  const sonicWorkshopBridgeText = fs.readFileSync(path.join(appRoot, 'public', 'vendor', 'sonic-workshop', 'favoradio-bridge.html'), 'utf8');
   const paletteText = fs.readFileSync(path.join(appRoot, 'public', 'js', 'modules', '02-visual', '07-lyrics-palette-text-utils.js'), 'utf8');
   const accentControlText = fs.readFileSync(path.join(appRoot, 'public', 'js', 'modules', '07-fx', '02-accent-background-controls.js'), 'utf8');
   const colorLabText = fs.readFileSync(path.join(appRoot, 'public', 'js', 'modules', '02-visual', '06-custom-background-colorlab.js'), 'utf8');
@@ -3319,7 +3319,7 @@ function checkSonicTopographyPresetGuard() {
     'visualRotationY'
   ];
   if (!/sonic-topography-preset\.js/.test(loaderText) || !/var INDEX = 7/.test(sonicText) || !/function deriveTerrainGridSettings/.test(sonicText) || !/TERRAIN_BASE_SIZE = 168/.test(sonicText) || !/TERRAIN_MAX_GRID_SIZE = 224/.test(sonicText)) {
-    fail('Sonic Topography preset must load as a bounded Faveradio-native port of the latest GitHub visual layer');
+    fail('Sonic Topography preset must load as a bounded Favoradio-native port of the latest GitHub visual layer');
   }
   if (/gl_FragCoord\.y\s*>\s*uScreenClipPx/.test(sonicText) || /uScreenClipPx/.test(sonicText) || /screenHeight[\s\S]{0,120}\*\s*0\.50/.test(sonicText)) {
     fail('Sonic Topography terrain must not use a hard half-screen fragment clip');
@@ -3349,7 +3349,7 @@ function checkSonicTopographyPresetGuard() {
     fail('Sonic Topography cells and floating blocks must use the latest density-derived GitHub geometry');
   }
   if (!/function deriveGroundLayoutSettings/.test(sonicText) || !/sonicGroundRange/.test(sonicText) || !/state\.root\.rotation\.x\s*=\s*state\.boundRotX/.test(sonicText) || !/state\.root\.position\.set\(0,\s*layout\.y,\s*layout\.z\)/.test(sonicText) || !/state\.root\.scale\.setScalar\(layout\.scale\)/.test(sonicText)) {
-    fail('Sonic Topography must expose a wide, lyric-safe horizontal platter layout inside Faveradio camera space');
+    fail('Sonic Topography must expose a wide, lyric-safe horizontal platter layout inside Favoradio camera space');
   }
   if (!/MAX_VISUAL_PRESET_INDEX = 15/.test(coreText) || !/SONIC_PRESET_INDEX = 7/.test(coreText) || !/SONIC_WORKSHOP_PRESET_INDEX = 8/.test(coreText) || !/MAX_VISUAL_PRESET_INDEX/.test(runtimeText + persistenceText)) {
     fail('Sonic preset 7 and Workshop derivative preset 8 must survive autosave and startup restore clamps');
@@ -3374,17 +3374,17 @@ function checkSonicTopographyPresetGuard() {
   ].forEach((vendorFile) => {
     if (!fs.existsSync(vendorFile)) fail('Sonic Workshop derivative preset is missing packaged Wallpaper Engine asset: ' + path.relative(appRoot, vendorFile));
   });
-  if (!/sonic-workshop-preset\.js/.test(loaderText) || !/BRIDGE_SRC = 'vendor\/sonic-workshop\/faveradio-bridge\.html'/.test(sonicWorkshopText) || !/FaveradioSonicWorkshop\.update/.test(mainLoopText) || !/visual\.sonic-workshop/.test(mainLoopText) || !/FaveradioSonicWorkshop\.onPresetChange/.test(presetGridText) || !/workshopPresetActive/.test(mainLoopText)) {
+  if (!/sonic-workshop-preset\.js/.test(loaderText) || !/BRIDGE_SRC = 'vendor\/sonic-workshop\/favoradio-bridge\.html'/.test(sonicWorkshopText) || !/FavoradioSonicWorkshop\.update/.test(mainLoopText) || !/visual\.sonic-workshop/.test(mainLoopText) || !/FavoradioSonicWorkshop\.onPresetChange/.test(presetGridText) || !/workshopPresetActive/.test(mainLoopText)) {
     fail('Sonic Workshop derivative preset must load, fade as preset 8, hide base particles, and update from the main loop');
   }
   if (!/canvasAnchor\.parentNode\.insertBefore\(layer,\s*canvasAnchor\)/.test(sonicWorkshopText) || !/layer\.setAttribute\('inert'/.test(sonicWorkshopText) || !/iframe\.setAttribute\('inert'/.test(sonicWorkshopText) || !/iframe\.style\.pointerEvents\s*=\s*'none'/.test(sonicWorkshopText) || !/#sonic-workshop-layer,\s*#sonic-workshop-layer \*[\s\S]{0,120}pointer-events:\s*none !important/.test(fs.readFileSync(path.join(appRoot, 'public', 'css', 'index.css'), 'utf8'))) {
     fail('Sonic Workshop iframe layer must remain fully pointer-transparent so player buttons and window controls stay clickable');
   }
-  if (!/wallpaperRegisterAudioListener/.test(sonicWorkshopBridgeText) || !/__faveradioApplyAudio/.test(sonicWorkshopBridgeText) || !/__faveradioApplyMedia/.test(sonicWorkshopBridgeText) || !/theme:\s*'coral-mirage'/.test(sonicWorkshopBridgeText) || !/themeCycleInterval:\s*50/.test(sonicWorkshopBridgeText) || !/gridSize:\s*320/.test(sonicWorkshopBridgeText) || !/audioIntensity:\s*1\.15/.test(sonicWorkshopBridgeText) || !/responseRange:\s*1\.3/.test(sonicWorkshopBridgeText) || !/peakColorIntensity:\s*0\.62/.test(sonicWorkshopBridgeText) || !/pulseSensitivity:\s*0\.05/.test(sonicWorkshopBridgeText) || !/pulseCooldown:\s*0/.test(sonicWorkshopBridgeText) || !/meteorSensitivity:\s*0\.3/.test(sonicWorkshopBridgeText) || !/cameraDistance:\s*80/.test(sonicWorkshopBridgeText) || !/autoRotateEnabled:\s*true/.test(sonicWorkshopBridgeText) || !/autoRotateSpeed:\s*7/.test(sonicWorkshopBridgeText) || !/cameraAngleX:\s*150/.test(sonicWorkshopBridgeText) || !/cameraAngleY:\s*30/.test(sonicWorkshopBridgeText) || !/showPlayerController:\s*false/.test(sonicWorkshopBridgeText)) {
-    fail('Sonic Workshop bridge must preserve the requested Wallpaper Engine default parameters and receive Faveradio audio/media');
+  if (!/wallpaperRegisterAudioListener/.test(sonicWorkshopBridgeText) || !/__favoradioApplyAudio/.test(sonicWorkshopBridgeText) || !/__favoradioApplyMedia/.test(sonicWorkshopBridgeText) || !/theme:\s*'coral-mirage'/.test(sonicWorkshopBridgeText) || !/themeCycleInterval:\s*50/.test(sonicWorkshopBridgeText) || !/gridSize:\s*320/.test(sonicWorkshopBridgeText) || !/audioIntensity:\s*1\.15/.test(sonicWorkshopBridgeText) || !/responseRange:\s*1\.3/.test(sonicWorkshopBridgeText) || !/peakColorIntensity:\s*0\.62/.test(sonicWorkshopBridgeText) || !/pulseSensitivity:\s*0\.05/.test(sonicWorkshopBridgeText) || !/pulseCooldown:\s*0/.test(sonicWorkshopBridgeText) || !/meteorSensitivity:\s*0\.3/.test(sonicWorkshopBridgeText) || !/cameraDistance:\s*80/.test(sonicWorkshopBridgeText) || !/autoRotateEnabled:\s*true/.test(sonicWorkshopBridgeText) || !/autoRotateSpeed:\s*7/.test(sonicWorkshopBridgeText) || !/cameraAngleX:\s*150/.test(sonicWorkshopBridgeText) || !/cameraAngleY:\s*30/.test(sonicWorkshopBridgeText) || !/showPlayerController:\s*false/.test(sonicWorkshopBridgeText)) {
+    fail('Sonic Workshop bridge must preserve the requested Wallpaper Engine default parameters and receive Favoradio audio/media');
   }
   const sonicWorkshopVendorText = fs.readFileSync(path.join(appRoot, 'public', 'vendor', 'sonic-workshop', 'assets', 'index-Z-j1MQ-r.js'), 'utf8');
-  if (!/faveradioCustomTheme/.test(sonicWorkshopBridgeText) || !/faveradioCustomTheme/.test(sonicWorkshopText) || !/function workshopCustomThemeForColor/.test(sonicWorkshopText) || !/function workshopPaletteHexesFromCover/.test(sonicWorkshopText) || !/function workshopCustomThemeForPalette/.test(sonicWorkshopText) || !/function workshopCustomThemeForRegions/.test(sonicWorkshopText) || !/function workshopRegionsFromFx/.test(sonicWorkshopText) || !/function applyWorkshopThemeTransition/.test(sonicWorkshopText) || !/WORKSHOP_THEME_TRANSITION_MS\s*=\s*1280/.test(sonicWorkshopText) || !/function applyThemeTransition/.test(sonicWorkshopBridgeText) || !/THEME_TRANSITION_STEP_MS\s*=\s*33/.test(sonicWorkshopBridgeText) || /scheduleWorkshopThemeTransition\(\);/.test(sonicWorkshopText) || !/__faveradioPaletteHexes/.test(sonicWorkshopText) || !/rawWarm/.test(paletteText + sonicWorkshopText) || !/rawCool/.test(paletteText + sonicWorkshopText) || !/rawAreaPrimary/.test(paletteText + sonicWorkshopText + accentControlText) || !/sonicWorkshopColors/.test(paletteText + sonicWorkshopText) || !/coverSourceKey/.test(paletteText + accentControlText) || !/function ensureSonicWorkshopCoverPaletteForUi/.test(accentControlText) || !/function sonicWorkshopCurrentCoverDomSource/.test(accentControlText) || !/function buildSonicWorkshopUiPaletteFromCanvas/.test(accentControlText) || !/function sonicWorkshopUiPaletteForKey/.test(accentControlText) || !/sonicWorkshopCoverUiSample\.palette/.test(accentControlText) || !/coverPickerCanvas/.test(accentControlText) || !/coverProxySrc/.test(accentControlText) || !/coverColors/.test(paletteText + sonicWorkshopText) || !/sonic-workshop-cool-picker/.test(indexText + fxBindText) || !/sonic-workshop-peak-picker/.test(indexText + fxBindText) || !/setSonicWorkshopRegionColorFromPicker/.test(fxBindText + sonicWorkshopText + accentControlText) || !/function sonicRawPaletteHex/.test(accentControlText) || /function sonicWorkshopCoverHex[\s\S]{0,700}sonicPaletteHex/.test(accentControlText) || !/uCoolCore:\s*cool/.test(sonicWorkshopText) || !/uRippleColor:\s*ripple/.test(sonicWorkshopText) || !/MRt\(We\.faveradioCustomTheme\.value\)/.test(sonicWorkshopVendorText) || !/Be\(function\(Mr\)\{return Mr===0\?1e-6:0\}\)/.test(sonicWorkshopVendorText)) {
+  if (!/favoradioCustomTheme/.test(sonicWorkshopBridgeText) || !/favoradioCustomTheme/.test(sonicWorkshopText) || !/function workshopCustomThemeForColor/.test(sonicWorkshopText) || !/function workshopPaletteHexesFromCover/.test(sonicWorkshopText) || !/function workshopCustomThemeForPalette/.test(sonicWorkshopText) || !/function workshopCustomThemeForRegions/.test(sonicWorkshopText) || !/function workshopRegionsFromFx/.test(sonicWorkshopText) || !/function applyWorkshopThemeTransition/.test(sonicWorkshopText) || !/WORKSHOP_THEME_TRANSITION_MS\s*=\s*1280/.test(sonicWorkshopText) || !/function applyThemeTransition/.test(sonicWorkshopBridgeText) || !/THEME_TRANSITION_STEP_MS\s*=\s*33/.test(sonicWorkshopBridgeText) || /scheduleWorkshopThemeTransition\(\);/.test(sonicWorkshopText) || !/__favoradioPaletteHexes/.test(sonicWorkshopText) || !/rawWarm/.test(paletteText + sonicWorkshopText) || !/rawCool/.test(paletteText + sonicWorkshopText) || !/rawAreaPrimary/.test(paletteText + sonicWorkshopText + accentControlText) || !/sonicWorkshopColors/.test(paletteText + sonicWorkshopText) || !/coverSourceKey/.test(paletteText + accentControlText) || !/function ensureSonicWorkshopCoverPaletteForUi/.test(accentControlText) || !/function sonicWorkshopCurrentCoverDomSource/.test(accentControlText) || !/function buildSonicWorkshopUiPaletteFromCanvas/.test(accentControlText) || !/function sonicWorkshopUiPaletteForKey/.test(accentControlText) || !/sonicWorkshopCoverUiSample\.palette/.test(accentControlText) || !/coverPickerCanvas/.test(accentControlText) || !/coverProxySrc/.test(accentControlText) || !/coverColors/.test(paletteText + sonicWorkshopText) || !/sonic-workshop-cool-picker/.test(indexText + fxBindText) || !/sonic-workshop-peak-picker/.test(indexText + fxBindText) || !/setSonicWorkshopRegionColorFromPicker/.test(fxBindText + sonicWorkshopText + accentControlText) || !/function sonicRawPaletteHex/.test(accentControlText) || /function sonicWorkshopCoverHex[\s\S]{0,700}sonicPaletteHex/.test(accentControlText) || !/uCoolCore:\s*cool/.test(sonicWorkshopText) || !/uRippleColor:\s*ripple/.test(sonicWorkshopText) || !/MRt\(We\.favoradioCustomTheme\.value\)/.test(sonicWorkshopVendorText) || !/Be\(function\(Mr\)\{return Mr===0\?1e-6:0\}\)/.test(sonicWorkshopVendorText)) {
     fail('Sonic Workshop cover/custom colors must feed the real vendor terrain theme instead of only recoloring the UI controls');
   }
   if (!/colorLabState\.picker\)\s*colorLabState\.picker\.value\s*=\s*hex/.test(colorLabText) || !/id === 'sonic-workshop-cover-picker'[\s\S]{0,180}\^sonic-workshop-/.test(colorLabText) || !/pointerdown[\s\S]{0,180}updateColorLabFromSv\(e\)/.test(fxBindText) || !/function sonicWorkshopRegionControl\(id\)\s*\{[\s\S]{0,120}typeof id === 'object' && id\.id/.test(accentControlText) || !/function pushSonicWorkshopColorChange/.test(accentControlText) || !/function setSonicWorkshopThemeFromPicker[\s\S]{0,520}SONIC_WORKSHOP_COLOR_CONTROLS\.forEach/.test(accentControlText) || !/pushSonicWorkshopColorChange\(item\.colorKey\)/.test(accentControlText)) {
@@ -3393,14 +3393,14 @@ function checkSonicTopographyPresetGuard() {
   if (!/function isPlaybackSpaceKey/.test(keyboardCameraText) || !/if \(isPlaybackSpaceKey\(e\)\) return;/.test(keyboardCameraText)) {
     fail('Space playback hotkey must not mark render interaction before resume playback');
   }
-  if (!/global\.frequencyData/.test(sonicWorkshopText) || /sonicAudioMonitorState/.test(sonicWorkshopText) || /FaveradioSonicWorkshop\.update\([\s\S]{0,260}audio:\s*sonicAudioFrame/.test(mainLoopText)) {
+  if (!/global\.frequencyData/.test(sonicWorkshopText) || /sonicAudioMonitorState/.test(sonicWorkshopText) || /FavoradioSonicWorkshop\.update\([\s\S]{0,260}audio:\s*sonicAudioFrame/.test(mainLoopText)) {
     fail('Sonic Workshop derivative must use the local player analyser bridge instead of the original Sonic realtime spectrum frame');
   }
   if (!/WORKSHOP_AUDIO_TARGET_MAX_SAMPLE\s*=\s*0\.52/.test(sonicWorkshopText) || !/WORKSHOP_AUDIO_GAMMA\s*=\s*1\.55/.test(sonicWorkshopText) || !/WORKSHOP_AUDIO_MIN_FLOOR\s*=\s*0\.035/.test(sonicWorkshopText) || !/function workshopAudioFrameStats/.test(sonicWorkshopText) || !/function shapeWorkshopAudioValue/.test(sonicWorkshopText) || !/sonicWorkshopInputGain/.test(sonicWorkshopText) || /Math\.pow\(clamp01\(value\),\s*0\.68\)/.test(sonicWorkshopText) || /1\.05\s*\+\s*energy\s*\*\s*0\.34/.test(sonicWorkshopText)) {
     fail('Sonic Workshop bridge must keep Wallpaper-like dark-field audio shaping instead of overdriving the terrain');
   }
   if (/getUserMedia|getDisplayMedia|desktopCapturer|MediaStream|D:\\\\Steam|workshop\\content/.test(sonicWorkshopText + sonicWorkshopBridgeText)) {
-    fail('Sonic Workshop derivative must use packaged assets and Faveradio analyser data instead of runtime capture or the Steam workshop path');
+    fail('Sonic Workshop derivative must use packaged assets and Favoradio analyser data instead of runtime capture or the Steam workshop path');
   }
   if (!/fx-sonicamp/.test(indexText) || !/fx-sonicrange/.test(indexText) || !/fx-sonicair/.test(indexText) || !/sonic-ground-base-picker/.test(indexText) || !/fx-sonicfloatcount/.test(indexText) || !/t-sonicGroundFloatingEnabled/.test(indexText) || !/音域地形/.test(indexText) || !/\^fx-sonic/.test(fxPanelText)) {
     fail('visual console must expose layout, color, ground EQ, and floating block controls for 音域回响');
@@ -3418,7 +3418,7 @@ function checkSonicTopographyPresetGuard() {
     fail('Sonic realtime spectrum must expose the full 512-bin control window across runtime, UI, save, and archive paths');
   }
   if (/getUserMedia|getDisplayMedia|desktopCapturer|MediaStream/.test(sonicAudioText + mainLoopText)) {
-    fail('Sonic realtime audio must reuse Faveradio analyser data instead of requesting system or microphone capture');
+    fail('Sonic realtime audio must reuse Favoradio analyser data instead of requesting system or microphone capture');
   }
   if (!/stepSonicAudioMonitor\(frequencyData,\s*audioStepDt/.test(mainLoopText) || !/audio:\s*sonicAudioFrame\s*\|\|/.test(mainLoopText) || !/raw\.sonicDetailed/.test(sonicText)) {
     fail('Sonic Topography must receive detailed realtime audio frames while keeping the legacy bass/mid/treble fallback');
@@ -3437,7 +3437,7 @@ function checkSonicTopographyPresetGuard() {
   if (!/captureCameraArchiveState/.test(archiveText) || !/applyCameraArchiveState\(data\)/.test(archiveText) || !/applyVisualRotationArchiveState\(data\)/.test(archiveText) || !/isCameraArchiveKey\(key\)/.test(archiveText) || !/cameraViewSaved/.test(archiveText) || !/visualRotationSaved/.test(archiveText) || !/USER_FX_SHARE_KEYS[\s\S]*cameraFreeFov[\s\S]*visualRotationY/.test(archiveText)) {
     fail('user visual archives must save and restore camera plus shared visual rotation state without breaking old MR2 payloads');
   }
-  if (!/FaveradioSonicTopography\.update/.test(mainLoopText) || !/visual\.sonic-topography/.test(mainLoopText) || !/FaveradioSonicTopography\.onPresetChange/.test(presetGridText) || !/FaveradioSonicTopography\.pointerRipple/.test(pointerText)) {
+  if (!/FavoradioSonicTopography\.update/.test(mainLoopText) || !/visual\.sonic-topography/.test(mainLoopText) || !/FavoradioSonicTopography\.onPresetChange/.test(presetGridText) || !/FavoradioSonicTopography\.pointerRipple/.test(pointerText)) {
     fail('Sonic Topography must update from the main loop, release meshes on preset changes, and support pointer ripples');
   }
   console.log('[OK] 音域回响 preset is selectable, bounded, saved, and driven by existing rhythm envelopes.');
@@ -3523,7 +3523,7 @@ function checkPlaylistPanelTriggerGuard() {
   if (!/resetSecondaryPlaylistEdgeGuard\(\)/.test(panelShellText)) {
     fail('playlist panel soft close must clear pending secondary-edge dwell timers');
   }
-  if (!/--playlist-panel-open-ms:\s*var\(--faveradio-playlist-panel-open-ms,\s*280ms\)/.test(cssText) || !/--playlist-panel-close-ms:\s*var\(--faveradio-playlist-panel-close-ms,\s*180ms\)/.test(cssText) || !/setPlaylistPanelCssVar\('--faveradio-playlist-panel-open-ms'/.test(fxRuntimeText) || !/setPlaylistPanelCssVar\('--faveradio-playlist-panel-close-ms'/.test(fxRuntimeText)) {
+  if (!/--playlist-panel-open-ms:\s*var\(--favoradio-playlist-panel-open-ms,\s*280ms\)/.test(cssText) || !/--playlist-panel-close-ms:\s*var\(--favoradio-playlist-panel-close-ms,\s*180ms\)/.test(cssText) || !/setPlaylistPanelCssVar\('--favoradio-playlist-panel-open-ms'/.test(fxRuntimeText) || !/setPlaylistPanelCssVar\('--favoradio-playlist-panel-close-ms'/.test(fxRuntimeText)) {
     fail('playlist panel animation durations must be driven by runtime CSS variables, not only static panel defaults');
   }
   if (!/playlistPanelOpenDuration:\s*0\.72/.test(fxDefaultsText) || !/playlistPanelCloseDuration:\s*0\.48/.test(fxDefaultsText)) {
@@ -3572,13 +3572,13 @@ function runtimeQaScript() {
 const path = require('path');
 const { app, BrowserWindow } = require('electron');
 
-const appRoot = process.env.FAVERADIO_QA_APP_ROOT;
-const qaPreload = process.env.FAVERADIO_QA_PRELOAD;
+const appRoot = process.env.FAVORADIO_QA_APP_ROOT;
+const qaPreload = process.env.FAVORADIO_QA_PRELOAD;
 const pagePath = path.join(appRoot, 'public', 'index.html');
 const logs = [];
 
 function finish(code, payload) {
-  console.log('FAVERADIO_QA_RESULT:' + JSON.stringify(payload));
+  console.log('FAVORADIO_QA_RESULT:' + JSON.stringify(payload));
   setTimeout(() => app.exit(code), 80);
 }
 
@@ -3678,9 +3678,9 @@ app.whenReady().then(async () => {
       }
       const fixedFpsCadenceQa = inspectFixedForegroundFpsCadence();
       if (!fixedFpsCadenceQa.ok) failures.push('fixed foreground FPS cadence or VSync wake behavior failed: ' + JSON.stringify(fixedFpsCadenceQa));
-      const runtime = typeof window.__faveradioPerfSnapshot === 'function' ? window.__faveradioPerfSnapshot() : null;
-      const perf = window.__faveradioPerf && typeof window.__faveradioPerf.snapshot === 'function'
-        ? window.__faveradioPerf.snapshot()
+      const runtime = typeof window.__favoradioPerfSnapshot === 'function' ? window.__favoradioPerfSnapshot() : null;
+      const perf = window.__favoradioPerf && typeof window.__favoradioPerf.snapshot === 'function'
+        ? window.__favoradioPerf.snapshot()
         : null;
       if (!runtime || !runtime.viewport) failures.push('runtime viewport snapshot missing');
       if (runtime && runtime.viewport && typeof runtime.viewport.displayHz !== 'number') failures.push('viewport displayHz missing');
@@ -3710,7 +3710,7 @@ app.whenReady().then(async () => {
               width: Number(built && built.width) || 0,
               height: Number(built && built.height) || 0,
               bytes: Number(built && built.bytes) || 0,
-              markedQuality: !!(built && built.texture && built.texture.userData && built.texture.userData.__faveradioLyricQuality)
+              markedQuality: !!(built && built.texture && built.texture.userData && built.texture.userData.__favoradioLyricQuality)
             });
           });
           const widths = rows.map(row => row.width);
@@ -3817,7 +3817,7 @@ app.whenReady().then(async () => {
           lyricQualityState.transitionBudgetUntil = expiredFallbackAt;
           lyricQualityState.residents.forEach(row => { if (row) row.qualityFallbackUntil = expiredFallbackAt; });
           const startedOverNewBudget = firstBytes > lyricQualityPoolBudgetBytes(3);
-          const immediateSame = lyricQualityCurrentMap(anchor) === oldTexture && !oldTexture.userData.__faveradioDisposed;
+          const immediateSame = lyricQualityCurrentMap(anchor) === oldTexture && !oldTexture.userData.__favoradioDisposed;
           let sawBase = false;
           for (let handoff = 0; handoff < 130; handoff++) {
             step();
@@ -3829,9 +3829,9 @@ app.whenReady().then(async () => {
           const stable = JSON.stringify(firstIds) === JSON.stringify(stableIds);
           const withinBounds = firstRows > 0 && firstRows <= maxRows && firstBytes <= lyricQualityPoolBudgetBytes(4) && firstQueue === 0;
           const allTierThree = lyricQualityState.residents.length > 0 && !lyricQualityState.residents.some(row => row.qualityTier !== 3 || row.qualityPendingTexture);
-          const handoffOk = startedOverNewBudget && immediateSame && !sawBase && anchor.qualityTier === 3 && allTierThree && oldTexture.userData.__faveradioDisposed && lyricQualityCurrentMap(anchor) === anchor.qualityTexture;
+          const handoffOk = startedOverNewBudget && immediateSame && !sawBase && anchor.qualityTier === 3 && allTierThree && oldTexture.userData.__favoradioDisposed && lyricQualityCurrentMap(anchor) === anchor.qualityTexture;
           const newTier = anchor.qualityTier;
-          const uploadOk = !window.__faveradioLyricUploadBudgetStats || Number(window.__faveradioLyricUploadBudgetStats.maxConsumed) <= 1;
+          const uploadOk = !window.__favoradioLyricUploadBudgetStats || Number(window.__favoradioLyricUploadBudgetStats.maxConsumed) <= 1;
           resetLyricRenderUploadFrameBudget(true);
           updateLyricRowLayers(data, updateOptions);
           const hadDisposeFrameCandidates = lyricQualityState.frameCandidates.some(candidate => candidate && candidate.data === data);
@@ -3840,7 +3840,7 @@ app.whenReady().then(async () => {
           finalizeLyricQualitySelectionFrame();
           await new Promise(resolve => setTimeout(resolve, 240));
           const disposedRows = Array.isArray(data.rowLayers) ? data.rowLayers : [];
-          const noDisposeResurrection = data.__faveradioLyricQualityDisposed === true &&
+          const noDisposeResurrection = data.__favoradioLyricQualityDisposed === true &&
             !lyricQualityState.frameCandidates.some(candidate => candidate && candidate.data === data) &&
             !lyricQualityState.frameCommits.some(candidate => candidate && candidate.data === data) &&
             !lyricQualityState.queue.some(job => job && job.data === data) &&
@@ -4180,7 +4180,7 @@ app.whenReady().then(async () => {
               const trackSettled = !!(data && Math.abs((Number(data.trackScrollOffset) || 0) - targetVirtual) <= 0.045);
               const activeCentered = !!(active && active.mesh && Math.abs(Number(active.mesh.position.y) || 0) <= Math.max(0.012, (Number(data && data.lineWorldStep) || 0.38) * 0.12));
               activeReady = !!(active && active.renderLineUploaded && stageLyricPersistentTargetRowsReady(root, target));
-              const uploadStats = window.__faveradioLyricUploadBudgetStats || {};
+              const uploadStats = window.__favoradioLyricUploadBudgetStats || {};
               maxUploadConsumed = Math.max(maxUploadConsumed, Number(uploadStats.consumed) || 0, Number(uploadStats.maxConsumed) || 0);
               if (activeReady && !data.trackPendingPayload && trackSettled && activeCentered) break;
             }
@@ -4265,7 +4265,7 @@ app.whenReady().then(async () => {
               data && data.trackTextRunwayComplete &&
               Number(data.trackResidentPrimaryCount) === window.lyricsLines.length
             );
-            const uploadStats = window.__faveradioLyricUploadBudgetStats || {};
+            const uploadStats = window.__favoradioLyricUploadBudgetStats || {};
             maxUploadConsumed = Math.max(maxUploadConsumed, Number(uploadStats.consumed) || 0, Number(uploadStats.maxConsumed) || 0);
             if (wholeSongResident) break;
           }
@@ -4512,7 +4512,7 @@ app.whenReady().then(async () => {
               const normalizedTargetLine = Math.max(0, Math.min(lastLineIndex, Math.round(Number(targetLineIndex) || 0)));
               const neighborLineIndex = normalizedTargetLine < lastLineIndex ? normalizedTargetLine + 1 : Math.max(0, normalizedTargetLine - 1);
               const primarySlotStep = Math.max(0.001, Math.abs(lyricPrimaryVirtualIndex(neighborLineIndex) - lyricPrimaryVirtualIndex(normalizedTargetLine)) || 1);
-              const renderFrame = Number(window.__faveradioLyricUploadBudgetStats && window.__faveradioLyricUploadBudgetStats.frame) || 0;
+              const renderFrame = Number(window.__favoradioLyricUploadBudgetStats && window.__favoradioLyricUploadBudgetStats.frame) || 0;
               const renderFrameSpan = Math.max(1, renderFrame - Number(previousContinuousSample.renderFrame || 0));
               maxTrackRowsPerFrame = Math.max(maxTrackRowsPerFrame, Math.abs(delta) / primarySlotStep / renderFrameSpan);
               if (Math.abs(gap) > 0.025) {
@@ -4553,7 +4553,7 @@ app.whenReady().then(async () => {
               scrollOffset,
               visualOffset,
               targetVirtualIndex,
-              renderFrame: Number(window.__faveradioLyricUploadBudgetStats && window.__faveradioLyricUploadBudgetStats.frame) || 0
+              renderFrame: Number(window.__favoradioLyricUploadBudgetStats && window.__favoradioLyricUploadBudgetStats.frame) || 0
             };
             previousVisualOffsetsByKey = visualOffsetsByKey;
             continuousSamples += 1;
@@ -4665,7 +4665,7 @@ app.whenReady().then(async () => {
             if (preview == null && !textReady) previewDroppedBeforeReady = true;
             if (preview != null && textReady) sampleDragMotion();
             sampleContinuousMotion();
-            const uploadStats = window.__faveradioLyricUploadBudgetStats || {};
+            const uploadStats = window.__favoradioLyricUploadBudgetStats || {};
             maxUploadConsumed = Math.max(maxUploadConsumed, Number(uploadStats.consumed) || 0, Number(uploadStats.maxConsumed) || 0);
             sampleResident();
             if (textReady) {
@@ -4721,7 +4721,7 @@ app.whenReady().then(async () => {
             await qaLyricFrame();
             sampleContinuousMotion();
             if (stageLyricProgressPreviewActive()) sampleDragMotion();
-            const uploadStats = window.__faveradioLyricUploadBudgetStats || {};
+            const uploadStats = window.__favoradioLyricUploadBudgetStats || {};
             maxUploadConsumed = Math.max(maxUploadConsumed, Number(uploadStats.consumed) || 0, Number(uploadStats.maxConsumed) || 0);
             sampleResident();
           }
@@ -4857,8 +4857,8 @@ app.whenReady().then(async () => {
           const pillGlassStyle = pill ? getComputedStyle(pill, '::before') : null;
           const boxMap = document.getElementById('search-box-glass-map');
           const pillMap = document.getElementById('search-pill-glass-map');
-          const boxFilter = document.getElementById('faveradio-search-box-glass-filter');
-          const pillFilter = document.getElementById('faveradio-search-pill-glass-filter');
+          const boxFilter = document.getElementById('favoradio-search-box-glass-filter');
+          const pillFilter = document.getElementById('favoradio-search-pill-glass-filter');
           const readHref = img => {
             if (!img) return '';
             let href = img.getAttribute('href') || '';
@@ -4912,8 +4912,8 @@ app.whenReady().then(async () => {
             pillBlueDx: readOffsetDx(pillFilter, 'dispBlueShifted')
           };
         };
-        const searchBoxFilterLooksLikeSavedRgbGlass = value => String(value || '').includes('faveradio-search-box-glass-filter') && String(value || '').includes('saturate(1)');
-        const searchPillFilterLooksLikeSavedRgbGlass = value => String(value || '').includes('faveradio-search-pill-glass-filter') && String(value || '').includes('saturate(1)');
+        const searchBoxFilterLooksLikeSavedRgbGlass = value => String(value || '').includes('favoradio-search-box-glass-filter') && String(value || '').includes('saturate(1)');
+        const searchPillFilterLooksLikeSavedRgbGlass = value => String(value || '').includes('favoradio-search-pill-glass-filter') && String(value || '').includes('saturate(1)');
         const searchBoxDirectFilterLooksCleared = value => String(value || '') === 'none';
         const searchBoxMapLooksLikeSavedRgbGlass = value =>
           !!(value && value.boxMapIsRgb) &&
@@ -5186,21 +5186,21 @@ function runElectronRuntimeCheck() {
   const electron = electronExecutable();
   if (!electron) fail('Electron executable not found. Run npm install first.');
 
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-quick-check-'));
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'favoradio-quick-check-'));
   const qaScript = path.join(tempDir, 'qa-renderer-check.js');
   const qaPreload = path.join(tempDir, 'qa-preload.js');
   fs.writeFileSync(qaScript, runtimeQaScript(), 'utf8');
   fs.writeFileSync(qaPreload, `
 try {
-  window.localStorage.setItem('faveradio-startup-fast-skip-v1', 'true');
-  window.localStorage.removeItem('faveradio-cuefield-automix-v1');
+  window.localStorage.setItem('favoradio-startup-fast-skip-v1', 'true');
+  window.localStorage.removeItem('favoradio-cuefield-automix-v1');
 } catch (error) {}
 `, 'utf8');
 
   try {
     const result = spawnSync(electron, [qaScript], {
       cwd: appRoot,
-      env: { ...process.env, FAVERADIO_QA_APP_ROOT: appRoot, FAVERADIO_QA_PRELOAD: qaPreload },
+      env: { ...process.env, FAVORADIO_QA_APP_ROOT: appRoot, FAVORADIO_QA_PRELOAD: qaPreload },
       encoding: 'utf8',
       timeout: 45000
     });
@@ -5209,7 +5209,7 @@ try {
       process.stderr.write(result.stderr || '');
       fail(String(result.error.message || result.error));
     }
-    const match = String(result.stdout || '').match(/FAVERADIO_QA_RESULT:(\{.*\})/);
+    const match = String(result.stdout || '').match(/FAVORADIO_QA_RESULT:(\{.*\})/);
     const payload = match ? JSON.parse(match[1]) : null;
     if (result.status !== 0 || !payload || payload.ok !== true) {
       process.stdout.write(result.stdout || '');
@@ -5258,26 +5258,26 @@ function runMainStartupRecoveryCheck() {
   if (!electron) fail('Electron executable not found. Run npm install first.');
   const appData = process.env.APPDATA;
   if (!appData) fail('APPDATA is required for the real main-entry startup recovery check');
-  const runtimeName = `FaveradioStartupQA-${process.pid}-${Date.now()}`;
-  const qaUserDataParent = path.join(process.env.TEMP || appData, 'faveradio-startup-qa');
+  const runtimeName = `FavoradioStartupQA-${process.pid}-${Date.now()}`;
+  const qaUserDataParent = path.join(process.env.TEMP || appData, 'favoradio-startup-qa');
   fs.mkdirSync(qaUserDataParent, { recursive: true });
   const qaUserData = path.join(qaUserDataParent, runtimeName);
   const stateFile = path.join(qaUserData, 'startup-state.json');
-  const qaSessionData = path.join('D:\\FaveradioCache\\chromium', runtimeName);
+  const qaSessionData = path.join('D:\\FavoradioCache\\chromium', runtimeName);
   try {
     const result = spawnSync(electron, [appRoot], {
       cwd: appRoot,
       env: {
         ...process.env,
-        FAVERADIO_RUNTIME_NAME: runtimeName,
-        FAVERADIO_APP_USER_MODEL_ID: 'com.faveradio.startup.qa',
-        FAVERADIO_NO_DESKTOP_SHORTCUT: '1',
-        FAVERADIO_STARTUP_QA_USER_DATA: qaUserData,
-        FAVERADIO_STARTUP_TEST_SERVER_DELAY_MS: '4500',
-        FAVERADIO_STARTUP_TEST_FAIL_FIRST_NAV: '1',
-        FAVERADIO_STARTUP_TEST_STALL_LOAD_PROMISE: '1',
-        FAVERADIO_STARTUP_QA_HIDDEN: '1',
-        FAVERADIO_STARTUP_QA_EXIT_MS: '700',
+        FAVORADIO_RUNTIME_NAME: runtimeName,
+        FAVORADIO_APP_USER_MODEL_ID: 'com.favoradio.startup.qa',
+        FAVORADIO_NO_DESKTOP_SHORTCUT: '1',
+        FAVORADIO_STARTUP_QA_USER_DATA: qaUserData,
+        FAVORADIO_STARTUP_TEST_SERVER_DELAY_MS: '4500',
+        FAVORADIO_STARTUP_TEST_FAIL_FIRST_NAV: '1',
+        FAVORADIO_STARTUP_TEST_STALL_LOAD_PROMISE: '1',
+        FAVORADIO_STARTUP_QA_HIDDEN: '1',
+        FAVORADIO_STARTUP_QA_EXIT_MS: '700',
       },
       encoding: 'utf8',
       timeout: 40000,
@@ -5405,7 +5405,7 @@ async function checkLargePlaylistVirtualizationGuard() {
     PLAYLIST_DETAIL_INITIAL_RENDER: 96,
     window: { innerHeight: 900 },
     songCoverSrc: () => '',
-    normalizePlaylistProvider: provider => provider === 'faveradio' ? 'faveradio' : (['qq', 'kugou', 'qishui', 'spotify'].includes(provider) ? provider : 'netease'),
+    normalizePlaylistProvider: provider => provider === 'favoradio' ? 'favoradio' : (['qq', 'kugou', 'qishui', 'spotify'].includes(provider) ? provider : 'netease'),
     escHtml: value => String(value == null ? '' : value),
     Math,
     Number,
@@ -5569,7 +5569,7 @@ function checkFxConsoleWorkspaceGuard() {
   if (!/id="lyric-texture-quality-seg"/.test(html) || !clarityButtonsReady || !clarityLabelsReady || /data-lyric-texture-clarity="1\.(?:25|5)"/.test(html) || !/lyricTextureClarity:\s*1/.test(defaults) || !packagedDefaultsUseRuntimeDefaults || !defaultArchive.snapshot || defaultArchive.snapshot.lyricTextureClarity !== 1 || !/normalizeLyricTextureClarity/.test(persistence + archive + panel) || !/invalidateLyricQualityTextures\('texture-clarity-change'/.test(panel) || /scheduleStageLyricFullTrackWarmup\('texture-clarity-change'/.test(panel) || !/function lyricQualityPoolBudgetBytes/.test(maskTexture) || !/function makeLyricQualityTexture/.test(maskTexture) || !/function queueLyricRowQuality/.test(rowLayers) || !/qualityHotUntil/.test(rowLayers) || !/backgroundStarRiver'\s*,\s*'lyricTextureClarity'\s*,\s*\/\/ Append-only:[\s\S]{0,120}'lyricLiveViewportFit'/.test(archive)) fail('1x-4x visible-row lyric quality, persistence, cache budget, or append-only MR2 archive wiring is incomplete');
   if (!/function finalizeLyricQualitySelectionFrame/.test(rowLayers) || !/frameCandidates/.test(rowLayers) || !/function lyricQualityEffectiveBudgetBytes/.test(rowLayers) || !/qualityFallbackUntil/.test(rowLayers) || !/function pruneLyricQualityQueue/.test(rowLayers) || !/row\.qualityWanted !== true/.test(rowLayers) || !/lyricQualityEnsureCapacity\(job\.bytes[\s\S]{0,900}makeLyricQualityTexture/.test(rowLayers) || !/qualityRootPriority:\s*isCurrent \? 0 : 1000/.test(stageLyrics) || /qualityRetryAfter/.test(rowLayers) || !/fallbackHotUntil/.test(rowLayers) || !/release:\s*next <= 1/.test(panel)) fail('lyric quality global byte-aware selection, stale-job pruning, pre-render capacity check, or no-flash tier handoff is incomplete');
   const qualityCommitBody = rowLayers.slice(rowLayers.indexOf('function commitLyricRowQuality'), rowLayers.indexOf('function beginLyricQualitySelectionFrame'));
-  if (!/frameCommits:\s*\[\]/.test(rowLayers) || !/function commitDeferredLyricQualityRows/.test(rowLayers) || !/lyricQualityState\.deferFinalize \|\| row\.qualityWanted !== true/.test(qualityCommitBody) || /discardLyricRowPendingQuality/.test(qualityCommitBody) || !/commitDeferredLyricQualityRows\(\)/.test(rowLayers) || !/function disposeLyricQualityOwner/.test(rowLayers) || !/__faveradioLyricQualityDisposed/.test(rowLayers) || !/disposeLyricQualityOwner\(lyricData\)/.test(starRiver) || !/qualityProjectedPoolBytes/.test(rowLayers) || !/function lyricQualityHasPendingTexture/.test(rowLayers)) fail('lyric quality deferred commit, disposed-owner cancellation, or bounded atomic tier replacement guard is incomplete');
+  if (!/frameCommits:\s*\[\]/.test(rowLayers) || !/function commitDeferredLyricQualityRows/.test(rowLayers) || !/lyricQualityState\.deferFinalize \|\| row\.qualityWanted !== true/.test(qualityCommitBody) || /discardLyricRowPendingQuality/.test(qualityCommitBody) || !/commitDeferredLyricQualityRows\(\)/.test(rowLayers) || !/function disposeLyricQualityOwner/.test(rowLayers) || !/__favoradioLyricQualityDisposed/.test(rowLayers) || !/disposeLyricQualityOwner\(lyricData\)/.test(starRiver) || !/qualityProjectedPoolBytes/.test(rowLayers) || !/function lyricQualityHasPendingTexture/.test(rowLayers)) fail('lyric quality deferred commit, disposed-owner cancellation, or bounded atomic tier replacement guard is incomplete');
   const fpsModesReady = ['vsync', '45', '60', '75', '90', '120'].every(value => html.includes(`data-foreground-fps="${value}"`));
   if (!fpsModesReady || !/function setForegroundFpsMode/.test(panel) || !/foregroundFpsMode/.test(persistence) || !/foreground-fps-seg/.test(workspace + css) || !/foregroundFpsMode:\s*'vsync'/.test(defaults) || !packagedDefaultsUseRuntimeDefaults) fail('default VSync and optional foreground FPS controls are incomplete');
   console.log('[OK] Six task tabs, explicit grouping, scoped history, safe DOM cleanup, search, and responsive styles are wired.');
@@ -5622,7 +5622,7 @@ function checkFirstLaunchDefaultsAndSplashGuard() {
     || /elapsed\s*\*\s*3\.32/.test(splashText)
     || !/setTimeout\(markSplashReadyToEnter,\s*650\)/.test(splashText)
     || !/setTimeout\(markSplashReadyToEnter,\s*1500\)/.test(splashText)
-    || !/\.splash-word-fave\s*\{[\s\S]{0,160}animation:\s*splash-fave-in 5200ms/.test(css)
+    || !/\.splash-word-favo\s*\{[\s\S]{0,160}animation:\s*splash-favo-in 5200ms/.test(css)
     || !/\.splash-word-radio\s*\{[\s\S]{0,420}animation:\s*splash-radio-in 5200ms/.test(css)
     || !/\.splash-word-i::after\s*\{[\s\S]{0,480}animation:\s*splash-i-dot-pop 4200ms/.test(css)
     || !/\.splash-signal-line\s*\{[\s\S]{0,500}animation:\s*splash-signal-line 4200ms/.test(css)

@@ -13,7 +13,7 @@ const {
 const { normalizeLoginEasterEggCharacters } = require('../public/js/modules/08-account/00-login-easter-egg');
 
 async function run() {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'faveradio-login-gate-'));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'favoradio-login-gate-'));
   try {
     const migrationRoot = path.join(root, 'chromium-session');
     fs.mkdirSync(migrationRoot, { recursive: true });
@@ -100,13 +100,13 @@ async function run() {
       assert(main.slice(start, start + 260).includes('loginEasterEggGate.isUnlocked()'), `${provider} login IPC is not gated`);
     });
     assert(!main.includes("ipcMain.handle('qishui-music-open-login'"), 'Qishui must use the embedded signed QR route, not the legacy login-window IPC');
-    assert(main.includes("ipcMain.handle('faveradio-login-easter-egg-reset'"));
+    assert(main.includes("ipcMain.handle('favoradio-login-easter-egg-reset'"));
     assert(main.includes("loginEasterEggGate.resetForReplay(() => clearAllProviderLoginState('renderer-replay-reset'))"));
     assert(main.includes('credentialRoots: () => ['));
     assert(main.includes("clearAllProviderLoginState('startup-gate')"));
 
     const preload = fs.readFileSync(path.join(__dirname, '..', 'desktop', 'preload.js'), 'utf8');
-    assert(preload.includes("resetLoginEasterEgg: () => ipcRenderer.invoke('faveradio-login-easter-egg-reset')"));
+    assert(preload.includes("resetLoginEasterEgg: () => ipcRenderer.invoke('favoradio-login-easter-egg-reset')"));
 
     const server = fs.readFileSync(path.join(__dirname, '..', 'server.js'), 'utf8');
     ['/api/login/cookie', '/api/login/qr/key', '/api/qq/login/cookie', '/api/kugou/login/cookie', '/api/qishui/login/qrcode', '/api/qishui/login/check']
@@ -212,7 +212,7 @@ async function run() {
     assert(splashRenderer.includes('[220.00, 261.63, 329.63, 392.00]'));
 
     const desktopMain = fs.readFileSync(path.join(__dirname, '..', 'desktop', 'main.js'), 'utf8');
-    assert(desktopMain.includes("ipcMain.handle('faveradio-full-desktop-request-keyboard-focus'"));
+    assert(desktopMain.includes("ipcMain.handle('favoradio-full-desktop-request-keyboard-focus'"));
     assert(desktopMain.includes("fullDesktopModeRuntime.getStatus('renderer-keyboard-focus-fallback')"));
     assert(desktopMain.includes('if (desktopStatus && desktopStatus.enabled) {'));
     assert(desktopMain.includes('ordinaryWindowImeFocusRepairs.get(webContents)'));

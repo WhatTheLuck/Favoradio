@@ -2,8 +2,8 @@ function markAppPerf(name) {
   try {
     var value = performance.now();
     appPerfMarks.push({ name: name, value: Math.round(value) });
-    if (performance && performance.mark) performance.mark('faveradio:' + name);
-    if (appPerfMarks.length <= 16) console.debug('[FaveradioPerf]', name, Math.round(value) + 'ms');
+    if (performance && performance.mark) performance.mark('favoradio:' + name);
+    if (appPerfMarks.length <= 16) console.debug('[FavoradioPerf]', name, Math.round(value) + 'ms');
   } catch (e) { }
 }
 markAppPerf('script-start');
@@ -13,7 +13,7 @@ function installStartupLongTaskObserver() {
     var observer = new PerformanceObserver(function (list) {
       list.getEntries().forEach(function (entry) {
         if (entry.startTime > 15000) return;
-        console.debug('[FaveradioPerf] longtask', Math.round(entry.startTime) + 'ms', Math.round(entry.duration) + 'ms');
+        console.debug('[FavoradioPerf] longtask', Math.round(entry.startTime) + 'ms', Math.round(entry.duration) + 'ms');
       });
     });
     observer.observe({ entryTypes: ['longtask'] });

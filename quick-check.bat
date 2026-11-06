@@ -1,7 +1,7 @@
 @echo off
 setlocal
 chcp 65001 >nul
-title Faveradio Quick Check
+title Favoradio Quick Check
 
 set "APP_DIR=%~dp0"
 cd /d "%APP_DIR%" || goto :fail
@@ -19,11 +19,11 @@ if /I "%~1"=="electron" set "CHECK_ARGS=--electron"
 if /I "%~1"=="--electron" set "CHECK_ARGS=--electron"
 
 echo.
-echo Faveradio quick check
+echo Favoradio quick check
 echo App: %APP_DIR%
 echo Default mode is fast/static and does not load the player UI.
 echo Use quick-check.bat full for the hidden Electron runtime smoke check.
-echo Use start-faveradio.bat to launch the player.
+echo Use start-favoradio.bat to launch the player.
 echo.
 node "%APP_DIR%scripts\quick-check.js" %CHECK_ARGS%
 set "CHECK_EXIT=%ERRORLEVEL%"
@@ -35,9 +35,9 @@ if "%CHECK_EXIT%"=="0" (
   echo [FAIL] Quick check failed. Exit code: %CHECK_EXIT%
 )
 
-if not "%FAVERADIO_QUICK_CHECK_NO_PAUSE%"=="1" pause
+if not "%FAVORADIO_QUICK_CHECK_NO_PAUSE%"=="1" pause
 exit /b %CHECK_EXIT%
 
 :fail
-if not "%FAVERADIO_QUICK_CHECK_NO_PAUSE%"=="1" pause
+if not "%FAVORADIO_QUICK_CHECK_NO_PAUSE%"=="1" pause
 exit /b 1

@@ -146,8 +146,8 @@ var lyricDisposeQueue = [];
 var lyricDisposeTimer = 0;
 
 function disposeOwnedLyricTexture(texture) {
-  if (!texture || !texture.userData || !texture.userData.__faveradioLyricOwned || texture.userData.__faveradioDisposed) return;
-  texture.userData.__faveradioDisposed = true;
+  if (!texture || !texture.userData || !texture.userData.__favoradioLyricOwned || texture.userData.__favoradioDisposed) return;
+  texture.userData.__favoradioDisposed = true;
   texture.dispose();
 }
 
@@ -182,7 +182,7 @@ function flushLyricDisposeQueue() {
     if (processed > 0 && now - startedAt >= 4.5) break;
   }
   if (typeof window !== 'undefined') {
-    window.__faveradioLyricDisposeStats = {
+    window.__favoradioLyricDisposeStats = {
       pendingMeshes: lyricDisposeQueue.length,
       lastChunkObjects: processed,
       lastChunkMs: Math.max(0, (typeof performance !== 'undefined' && performance.now ? performance.now() : Date.now()) - startedAt)
@@ -192,9 +192,9 @@ function flushLyricDisposeQueue() {
 }
 
 function disposeLyricMesh(mesh) {
-  if (!mesh || mesh.userData && mesh.userData.__faveradioDisposeQueued) return;
+  if (!mesh || mesh.userData && mesh.userData.__favoradioDisposeQueued) return;
   mesh.userData = mesh.userData || {};
-  mesh.userData.__faveradioDisposeQueued = true;
+  mesh.userData.__favoradioDisposeQueued = true;
   var lyricData = mesh.userData.lyric;
   if (lyricData && typeof disposeLyricQualityOwner === 'function') {
     disposeLyricQualityOwner(lyricData);

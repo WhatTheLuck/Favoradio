@@ -49,7 +49,7 @@ def expand_weights(source, target):
 
 def prepare_model(asset_model_dir):
     asset_root = asset_model_dir.parent
-    expanded_root = Path(os.environ.get('FAVERADIO_MUQ_EXPANDED_ROOT') or (asset_root / 'expanded')).resolve()
+    expanded_root = Path(os.environ.get('FAVORADIO_MUQ_EXPANDED_ROOT') or (asset_root / 'expanded')).resolve()
     expanded_model = expanded_root / 'model'
     expanded_cache = expanded_root / 'hf-cache'
     expanded_model.mkdir(parents=True, exist_ok=True)

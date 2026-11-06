@@ -8,12 +8,12 @@ function bind(channel, callback) {
 }
 
 contextBridge.exposeInMainWorld('desktopOverlay', {
-  onLyricsState: (callback) => bind('faveradio-desktop-lyrics-state', callback),
-  onWallpaperState: (callback) => bind('faveradio-wallpaper-state', callback),
-  setLyricsDrag: (dragging) => ipcRenderer.invoke('faveradio-desktop-lyrics-set-dragging', !!dragging),
-  setLyricsPointerCapture: (active) => ipcRenderer.invoke('faveradio-desktop-lyrics-set-pointer-capture', !!active),
-  setLyricsHotBounds: (bounds) => ipcRenderer.invoke('faveradio-desktop-lyrics-set-hot-bounds', bounds || {}),
-  setLyricsLockState: (locked) => ipcRenderer.invoke('faveradio-desktop-lyrics-set-lock-state', !!locked),
-  moveLyricsBy: (dx, dy) => ipcRenderer.invoke('faveradio-desktop-lyrics-move-by', Number(dx) || 0, Number(dy) || 0),
-  closeLyrics: () => ipcRenderer.invoke('faveradio-desktop-lyrics-set-enabled', false, {}),
+  onLyricsState: (callback) => bind('favoradio-desktop-lyrics-state', callback),
+  onWallpaperState: (callback) => bind('favoradio-wallpaper-state', callback),
+  setLyricsDrag: (dragging) => ipcRenderer.invoke('favoradio-desktop-lyrics-set-dragging', !!dragging),
+  setLyricsPointerCapture: (active) => ipcRenderer.invoke('favoradio-desktop-lyrics-set-pointer-capture', !!active),
+  setLyricsHotBounds: (bounds) => ipcRenderer.invoke('favoradio-desktop-lyrics-set-hot-bounds', bounds || {}),
+  setLyricsLockState: (locked) => ipcRenderer.invoke('favoradio-desktop-lyrics-set-lock-state', !!locked),
+  moveLyricsBy: (dx, dy) => ipcRenderer.invoke('favoradio-desktop-lyrics-move-by', Number(dx) || 0, Number(dy) || 0),
+  closeLyrics: () => ipcRenderer.invoke('favoradio-desktop-lyrics-set-enabled', false, {}),
 });

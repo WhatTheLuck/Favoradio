@@ -28,8 +28,8 @@ window.desktopWindow={addBuiltInPlaylistTracks:async function(id,tracks){window.
 window.confirm=function(){return true;};
 `;
 const init = `
-userPlaylists=[{id:'demo',provider:'faveradio',name:'深夜慢听',creator:'Faveradio',trackCount:120},{id:'target',provider:'faveradio',name:'我的收藏',trackCount:0}];
-playlistPanelDetailState={key:'faveradio:demo',playlist:userPlaylists[0],tracks:Array.from({length:120},function(_,i){return {id:i+1,provider:'netease',name:i===0?'悲伤的夜晚':'夜曲 '+(i+1),artist:'测试歌手',album:'夜行',vector:[i===0?.92:i===1?.81:.3,0]};}),total:120,nextOffset:120,hasMore:false};
+userPlaylists=[{id:'demo',provider:'favoradio',name:'深夜慢听',creator:'Favoradio',trackCount:120},{id:'target',provider:'favoradio',name:'我的收藏',trackCount:0}];
+playlistPanelDetailState={key:'favoradio:demo',playlist:userPlaylists[0],tracks:Array.from({length:120},function(_,i){return {id:i+1,provider:'netease',name:i===0?'悲伤的夜晚':'夜曲 '+(i+1),artist:'测试歌手',album:'夜行',vector:[i===0?.92:i===1?.81:.3,0]};}),total:120,nextOffset:120,hasMore:false};
 renderUserPlaylistsList();
 `;
 const html = '<!doctype html><html><head><meta charset="utf-8"><style>' +
@@ -69,7 +69,7 @@ app.whenReady().then(async()=>{
    assert.equal(overflow,0,'toolbar overflow at '+width);
    fs.writeFileSync(path.join(${JSON.stringify(output)},'semantic-'+width+'.png'),(await win.webContents.capturePage()).toPNG());
   }
-  await run("document.getElementById('pl-search-target').value='faveradio:target';document.getElementById('pl-search-target').dispatchEvent(new Event('change',{bubbles:true}));document.querySelector('[data-pl-search-action=collect]').click();");
+  await run("document.getElementById('pl-search-target').value='favoradio:target';document.getElementById('pl-search-target').dispatchEvent(new Event('change',{bubbles:true}));document.querySelector('[data-pl-search-action=collect]').click();");
   for(let i=0;i<50 && await run('playlistSearchState().actionBusy');i++)await new Promise(r=>setTimeout(r,20));
   assert.deepEqual(await run('savedTracks.map(t=>t.id)'),[1]);
   await run("document.getElementById('pl-search-all').click();document.querySelector('[data-pl-search-action=delete]').click();");

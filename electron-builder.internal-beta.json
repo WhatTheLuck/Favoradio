@@ -1,6 +1,6 @@
 {
-  "appId": "com.faveradio.beat.internal",
-  "productName": "Faveradio_Beat",
+  "appId": "com.favoradio.beat.internal",
+  "productName": "Favoradio_Beat",
   "directories": {
     "output": "dist-internal-beta",
     "buildResources": "build"
@@ -11,13 +11,13 @@
     "winCodeSign": "1.1.0"
   },
   "extraMetadata": {
-    "name": "faveradio-beat-internal",
-    "productName": "Faveradio_Beat",
+    "name": "favoradio-beat-internal",
+    "productName": "Favoradio_Beat",
     "version": "1.1.2",
-    "faveradio": {
+    "favoradio": {
       "internalBeta": true,
-      "runtimeName": "Faveradio_Beat",
-      "appUserModelId": "com.faveradio.beat.internal",
+      "runtimeName": "Favoradio_Beat",
+      "appUserModelId": "com.favoradio.beat.internal",
       "update": {
         "disabled": true,
         "provider": "none",
@@ -57,7 +57,7 @@
   ],
   "asar": true,
   "win": {
-    "executableName": "Faveradio_Beat",
+    "executableName": "Favoradio_Beat",
     "icon": "build/icon.ico",
     "signAndEditExecutable": false,
     "target": [
@@ -75,14 +75,14 @@
     "allowToChangeInstallationDirectory": false,
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
-    "shortcutName": "Faveradio_Beat",
+    "shortcutName": "Favoradio_Beat",
     "installerIcon": "build/icon.ico",
     "uninstallerIcon": "build/icon.ico",
     "installerSidebar": "build/installerSidebar.bmp",
     "uninstallerSidebar": "build/installerSidebar.bmp",
     "installerHeader": "build/installerHeader.bmp",
     "include": "build/installer-internal-beta.nsh",
-    "artifactName": "Faveradio_Beat-v${version}-灰度内测版-Setup.${ext}"
+    "artifactName": "Favoradio_Beat-v${version}-灰度内测版-Setup.${ext}"
   },
   "publish": null
 }

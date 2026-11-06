@@ -675,7 +675,7 @@ function renderAudioOutputDeviceUi() {
     '<div class="audio-route-graph' + (bridgeEnabled ? ' bridge-on' : '') + '">' +
       '<svg id="audio-route-workflow-svg" class="workflow-link-layer audio-link-layer" aria-hidden="true"></svg>' +
       '<div class="audio-flow-source workflow-node" data-audio-node="player">' +
-        '<span class="route-node-kicker">SOURCE</span><span class="route-node-icon">MR</span><span class="route-node-text"><b>Faveradio Player</b><small>' + escHtml(summaryText) + '</small></span><span class="audio-source-meter" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="flow-port out" data-audio-route-source="player" title="Faveradio 输出"></span>' +
+        '<span class="route-node-kicker">SOURCE</span><span class="route-node-icon">MR</span><span class="route-node-text"><b>Favoradio Player</b><small>' + escHtml(summaryText) + '</small></span><span class="audio-source-meter" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="flow-port out" data-audio-route-source="player" title="Favoradio 输出"></span>' +
       '</div>' +
       '<div class="audio-route-status"><span class="route-energy-dot"></span><b>Patch Bay</b><small>' + escHtml(audioOutputDeviceId ? '主监听已指定' : '主监听跟随系统默认') + '</small></div>' +
       '<div class="audio-route-board">' +
@@ -752,8 +752,8 @@ async function refreshAudioOutputDevices(showNotice) {
   }
 }
 function bindAudioOutputMirrorEvents(media) {
-  if (!media || media._faveradioAudioMirrorBound) return;
-  media._faveradioAudioMirrorBound = true;
+  if (!media || media._favoradioAudioMirrorBound) return;
+  media._favoradioAudioMirrorBound = true;
   ['play', 'playing', 'pause', 'ended', 'seeking', 'seeked', 'ratechange', 'volumechange', 'emptied'].forEach(function (name) {
     media.addEventListener(name, function () { syncAudioOutputMirrors(name); });
   });
@@ -824,13 +824,13 @@ function syncAudioOutputMirrors(reason) {
       mirror.playbackRate = audio.playbackRate || 1;
       audioOutputMirrorElements[id] = mirror;
     }
-    if (mirror._faveradioSinkId !== id || !mirror._faveradioSinkReady) {
-      mirror._faveradioSinkId = id;
-      if (!mirror._faveradioSinkBusy) {
-        mirror._faveradioSinkBusy = true;
+    if (mirror._favoradioSinkId !== id || !mirror._favoradioSinkReady) {
+      mirror._favoradioSinkId = id;
+      if (!mirror._favoradioSinkBusy) {
+        mirror._favoradioSinkBusy = true;
         Promise.resolve(applyAudioOutputMirrorSink(mirror, id)).then(function (ok) {
-          mirror._faveradioSinkBusy = false;
-          mirror._faveradioSinkReady = !!ok;
+          mirror._favoradioSinkBusy = false;
+          mirror._favoradioSinkReady = !!ok;
           if (ok) syncAudioOutputMirrors('mirror-sink-ready');
         });
       }
@@ -844,7 +844,7 @@ function syncAudioOutputMirrors(reason) {
         mirror.currentTime = audio.currentTime;
       }
     } catch (e) { }
-    if (!mirror._faveradioSinkReady) return;
+    if (!mirror._favoradioSinkReady) return;
     if (audio.paused || audio.ended) {
       try { mirror.pause(); } catch (e) { }
       markAudioOutputMirrorRuntime(id, 'paused', '随主播放器暂停');

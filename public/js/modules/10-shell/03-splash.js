@@ -50,7 +50,7 @@ function releaseStartupFastSkipPreload() {
   return true;
 }
 
-function initFaveradioSplashWebgl(canvas) {
+function initFavoradioSplashWebgl(canvas) {
   var gl = null;
   try {
     gl = canvas.getContext('webgl', {
@@ -222,7 +222,7 @@ function initFaveradioSplashWebgl(canvas) {
   return true;
 }
 
-function drawFaveradioSplashWebgl(elapsed) {
+function drawFavoradioSplashWebgl(elapsed) {
   var gl = splashGl;
   if (!gl || !splashGlProgram || !splashGlUniforms) return;
   gl.viewport(0, 0, splashCanvas.width, splashCanvas.height);
@@ -235,10 +235,10 @@ function drawFaveradioSplashWebgl(elapsed) {
   gl.drawArrays(gl.TRIANGLES, 0, 3);
 }
 
-(function initFaveradioSplashCanvas() {
+(function initFavoradioSplashCanvas() {
   splashCanvas = document.getElementById('splash-canvas');
   if (!splashCanvas) return;
-  if (!reduceSplashMotion && initFaveradioSplashWebgl(splashCanvas)) {
+  if (!reduceSplashMotion && initFavoradioSplashWebgl(splashCanvas)) {
     splashCtx = null;
   } else {
     splashCtx = splashCanvas.getContext('2d');
@@ -303,15 +303,15 @@ function drawFaveradioSplashWebgl(elapsed) {
   }
   resize();
   window.addEventListener('resize', resize);
-  drawFaveradioSplash();
+  drawFavoradioSplash();
 })();
 
-function drawFaveradioSplash() {
+function drawFavoradioSplash() {
   if (!splashAnimating || (!splashCtx && !splashGl)) return;
-  requestAnimationFrame(drawFaveradioSplash);
+  requestAnimationFrame(drawFavoradioSplash);
   var elapsed = splashTimelineElapsed((performance.now() - splashStartedAt) / 1000);
   if (splashGl && splashGlProgram) {
-    drawFaveradioSplashWebgl(elapsed);
+    drawFavoradioSplashWebgl(elapsed);
     return;
   }
   splashCtx.clearRect(0, 0, splashW, splashH);
@@ -467,7 +467,7 @@ function drawFaveradioSplash() {
   splashCtx.restore();
 }
 
-function playFaveradioIntroSound() {
+function playFavoradioIntroSound() {
   if (splashSoundPlayed) return;
   try {
     var AudioContextCtor = window.AudioContext || window.webkitAudioContext;
@@ -476,7 +476,7 @@ function playFaveradioIntroSound() {
     splashAudioCtx = ctx;
     if (ctx.state === 'suspended' && ctx.resume) {
       ctx.resume().then(function () {
-        if (!splashSoundPlayed) playFaveradioIntroSound();
+        if (!splashSoundPlayed) playFavoradioIntroSound();
       }).catch(function () { });
       if (ctx.state === 'suspended') return;
     }
@@ -563,7 +563,7 @@ function armSplashSoundFallback() {
   if (splashSoundFallbackArmed) return;
   splashSoundFallbackArmed = true;
   function unlock() {
-    if (!splashSoundPlayed) playFaveradioIntroSound();
+    if (!splashSoundPlayed) playFavoradioIntroSound();
     document.removeEventListener('pointerdown', unlock, true);
     document.removeEventListener('keydown', unlock, true);
   }
@@ -652,7 +652,7 @@ function markSplashReadyToEnter() {
   s.classList.add('ready');
   s.setAttribute('role', 'button');
   s.setAttribute('tabindex', '0');
-  s.setAttribute('aria-label', '点击进入 Faveradio');
+  s.setAttribute('aria-label', '点击进入 Favoradio');
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -666,7 +666,7 @@ document.addEventListener('DOMContentLoaded', function () {
   armSplashSoundFallback();
   prewarmHomeWallpaperPreview();
   function requestSplashEnter() {
-    playFaveradioIntroSound();
+    playFavoradioIntroSound();
     if (splashReadyToEnter) dismissSplash();
   }
   s.addEventListener('click', requestSplashEnter);
@@ -682,6 +682,6 @@ document.addEventListener('DOMContentLoaded', function () {
     splashTimer = setTimeout(markSplashReadyToEnter, 650);
     return;
   }
-  playFaveradioIntroSound();
+  playFavoradioIntroSound();
   splashTimer = setTimeout(markSplashReadyToEnter, 1500);
 });

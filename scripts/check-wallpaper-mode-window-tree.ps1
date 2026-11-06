@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-  [string]$Title = 'Faveradio Desktop Wallpaper'
+  [string]$Title = 'Favoradio Desktop Wallpaper'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-public static class FaveradioWallpaperModeWindowTree {
+public static class FavoradioWallpaperModeWindowTree {
   [StructLayout(LayoutKind.Sequential)]
   private struct RECT {
     public int Left;
@@ -98,5 +98,5 @@ public static class FaveradioWallpaperModeWindowTree {
 }
 '@
 
-$rows = @([FaveradioWallpaperModeWindowTree]::Run($Title))
+$rows = @([FavoradioWallpaperModeWindowTree]::Run($Title))
 ConvertTo-Json -InputObject $rows -Depth 5
