@@ -25,7 +25,7 @@ function fixture(tracks = []) {
     builtInPlaylistErrorMessage: () => '收藏失败',
     loadMorePlaylistPanelDetailTracks: async () => {},
     escHtml: value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;'),
-    playlistProviderLabel: () => 'MR'
+    playlistProviderLabel: () => 'FR'
   };
   vm.createContext(context);
   vm.runInContext(fs.readFileSync(path.join(__dirname, '../public/js/modules/06-lyrics/02a-playlist-search.js'), 'utf8'), context);

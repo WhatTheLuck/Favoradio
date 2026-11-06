@@ -99,7 +99,7 @@ function smartPlaylistIsLiked(playlist) {
 }
 
 function smartPlaylistProviderLabel(provider) {
-  return provider === 'qq' ? 'QQ' : (provider === 'spotify' ? 'SP' : (provider === 'kugou' ? 'KG' : (provider === 'qishui' ? 'QS' : (provider === 'favoradio' ? 'MR' : 'NE'))));
+  return provider === 'qq' ? 'QQ' : (provider === 'spotify' ? 'SP' : (provider === 'kugou' ? 'KG' : (provider === 'qishui' ? 'QS' : (provider === 'favoradio' ? 'FR' : 'NE'))));
 }
 
 function smartPlaylistCatalog() {

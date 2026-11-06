@@ -121,7 +121,7 @@ function normalizePlaylistProvider(provider) {
 }
 function playlistProviderLabel(provider) {
   provider = normalizePlaylistProvider(provider);
-  if (provider === 'favoradio') return 'MR';
+  if (provider === 'favoradio') return 'FR';
   return provider === 'qq' ? 'QQ' : (provider === 'kugou' ? 'KG' : (provider === 'qishui' ? 'QS' : (provider === 'spotify' ? 'SP' : 'NE')));
 }
 function playlistProviderName(provider) {
@@ -672,7 +672,7 @@ function renderUserPlaylistsList(opts) {
     var provider = normalizePlaylistProvider(pl.provider);
     var providerLabel = playlistProviderLabel(provider);
     var thumb = pl.cover ? (provider === 'netease' ? (pl.cover + '?param=88y88') : pl.cover) : '';
-    var imgTag = thumb ? '<img src="' + thumb + '" alt="" loading="lazy" decoding="async" onerror="this.style.opacity=0.2">' : (provider === 'favoradio' ? '<div class="pl-built-in-placeholder">MR</div>' : '<div style="width:44px;height:44px;border-radius:8px;background:rgba(255,255,255,.06);flex-shrink:0"></div>');
+    var imgTag = thumb ? '<img src="' + thumb + '" alt="" loading="lazy" decoding="async" onerror="this.style.opacity=0.2">' : (provider === 'favoradio' ? '<div class="pl-built-in-placeholder">FR</div>' : '<div style="width:44px;height:44px;border-radius:8px;background:rgba(255,255,255,.06);flex-shrink:0"></div>');
     var key = playlistPanelKey(provider, pl.id);
     var isExpanded = playlistPanelDetailState.key === key;
     var expanded = isExpanded ? ' expanded' : '';

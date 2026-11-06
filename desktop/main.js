@@ -2191,15 +2191,15 @@ function startupErrorText(error) {
 
 function resolveStartupErrorCode(context, error) {
   const text = `${context || ''}\n${startupErrorText(error)}`;
-  if (/EADDRINUSE|address already in use|listen EADDRINUSE|端口/i.test(text)) return 'MR-BOOT-SERVER-PORT';
-  if (/waitForServer|server|ECONNREFUSED|ERR_CONNECTION_REFUSED/i.test(text)) return 'MR-BOOT-SERVER-START';
-  if (/loadURL|ERR_FAILED|ERR_ABORTED|navigation|did-fail-load/i.test(text)) return 'MR-BOOT-WINDOW-LOAD';
-  if (/ReferenceError|TypeError|is not defined|Cannot read/i.test(text)) return 'MR-BOOT-MAIN-RUNTIME';
-  if (/EPERM|EACCES|access is denied|permission/i.test(text)) return 'MR-BOOT-PERMISSION';
-  if (/gpu|angle|d3d|webgl/i.test(text)) return 'MR-BOOT-GPU';
-  if (/second/i.test(context || '')) return 'MR-BOOT-SECOND-INSTANCE';
-  if (/activate/i.test(context || '')) return 'MR-BOOT-ACTIVATE';
-  return 'MR-BOOT-MAIN';
+  if (/EADDRINUSE|address already in use|listen EADDRINUSE|端口/i.test(text)) return 'FR-BOOT-SERVER-PORT';
+  if (/waitForServer|server|ECONNREFUSED|ERR_CONNECTION_REFUSED/i.test(text)) return 'FR-BOOT-SERVER-START';
+  if (/loadURL|ERR_FAILED|ERR_ABORTED|navigation|did-fail-load/i.test(text)) return 'FR-BOOT-WINDOW-LOAD';
+  if (/ReferenceError|TypeError|is not defined|Cannot read/i.test(text)) return 'FR-BOOT-MAIN-RUNTIME';
+  if (/EPERM|EACCES|access is denied|permission/i.test(text)) return 'FR-BOOT-PERMISSION';
+  if (/gpu|angle|d3d|webgl/i.test(text)) return 'FR-BOOT-GPU';
+  if (/second/i.test(context || '')) return 'FR-BOOT-SECOND-INSTANCE';
+  if (/activate/i.test(context || '')) return 'FR-BOOT-ACTIVATE';
+  return 'FR-BOOT-MAIN';
 }
 
 function startupErrorLogPath() {
@@ -5579,7 +5579,7 @@ function recoverMainWindowAfterRendererGone(win, details = {}, cleanupPromise = 
   const attempt = reserveMainWindowRendererRecoveryAttempt();
   if (!attempt) {
     const error = new Error('renderer recovery limit reached');
-    const log = writeStartupErrorLog('Runtime renderer recovery', 'MR-RUNTIME-RENDERER-LOOP', error);
+    const log = writeStartupErrorLog('Runtime renderer recovery', 'FR-RUNTIME-RENDERER-LOOP', error);
     dialog.showErrorBox('Favoradio 显示恢复失败', `前台界面连续异常退出，已停止自动重载。\n日志：${log.file}`);
     return Promise.resolve(false);
   }
@@ -5609,7 +5609,7 @@ function recoverMainWindowAfterRendererGone(win, details = {}, cleanupPromise = 
     });
     return true;
   })().catch((error) => {
-    const log = writeStartupErrorLog('Runtime renderer recovery', 'MR-RUNTIME-RENDERER-LOAD', error);
+    const log = writeStartupErrorLog('Runtime renderer recovery', 'FR-RUNTIME-RENDERER-LOAD', error);
     console.error('[WindowRecovery] renderer reload failed:', error && error.message || error);
     if (!appQuitting && !win.isDestroyed()) {
       if (!keepIntentionallyHidden) {
@@ -5772,7 +5772,7 @@ async function createWindowOnce() {
     console.error('[StartupWindow]', error.message);
     writeStartupErrorLog(
       startupCompleted ? 'Runtime renderer process gone' : 'Renderer process gone',
-      startupCompleted ? 'MR-RUNTIME-RENDERER-GONE' : 'MR-BOOT-GPU',
+      startupCompleted ? 'FR-RUNTIME-RENDERER-GONE' : 'FR-BOOT-GPU',
       error
     );
     if (startupCompleted && String(details && details.reason || '') !== 'clean-exit') {

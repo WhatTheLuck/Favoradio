@@ -2717,8 +2717,8 @@ async function checkProviderAuthCookiePathGuard() {
   if (!/function reportWindowCreationFailure\(context, error\)/.test(mainText) || !/dialog\.showErrorBox\('Favoradio 启动失败'/.test(mainText)) {
     fail('Main window startup failures must be surfaced instead of leaving a headless server process');
   }
-  if (!/function resolveStartupErrorCode\(context, error\)/.test(mainText) || !/STARTUP_ERROR_LOG_FILE/.test(mainText) || !/MR-BOOT-SERVER-PORT/.test(mainText) || !/MR-BOOT-WINDOW-LOAD/.test(mainText) || !/startup-error\.log/.test(mainText)) {
-    fail('Startup failure dialog must include stable MR-BOOT error codes and write startup-error.log');
+  if (!/function resolveStartupErrorCode\(context, error\)/.test(mainText) || !/STARTUP_ERROR_LOG_FILE/.test(mainText) || !/FR-BOOT-SERVER-PORT/.test(mainText) || !/FR-BOOT-WINDOW-LOAD/.test(mainText) || !/startup-error\.log/.test(mainText)) {
+    fail('Startup failure dialog must include stable FR-BOOT error codes and write startup-error.log');
   }
   if (!/process\.on\('uncaughtException'/.test(mainText) || !/process\.on\('unhandledRejection'/.test(mainText) || !/startupCompleted = true/.test(mainText)) {
     fail('Startup error code window must also cover uncaught startup failures before the main window finishes loading');

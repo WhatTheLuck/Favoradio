@@ -202,7 +202,7 @@ function applyLocalBeatMap(song, mode, map, fromCache) {
   }
   hideBeatChip();
   notifyDesktopLyricsBeatMapReady();
-  if (fromCache) showToast((mode === 'dj' ? 'DJ' : 'MR') + ' 本地节奏缓存已载入');
+  if (fromCache) showToast((mode === 'dj' ? 'DJ' : 'FR') + ' 本地节奏缓存已载入');
   return true;
 }
 function prepareLocalBeatAnalysis(song, audioUrl) {
@@ -267,7 +267,7 @@ function updateLocalBeatModal() {
   if (title) title.textContent = song.name || '本地歌曲';
   if (sub) {
     var cachedBits = [];
-    if (song.localKey && getLocalBeatEntry(song.localKey, 'mr')) cachedBits.push('MR 已缓存');
+    if (song.localKey && getLocalBeatEntry(song.localKey, 'mr')) cachedBits.push('FR 已缓存');
     if (song.localKey && getLocalBeatEntry(song.localKey, 'dj')) cachedBits.push('DJ 已缓存');
     sub.textContent = cachedBits.length ? cachedBits.join(' / ') : '选择一种电影视角分析方式';
   }
@@ -324,7 +324,7 @@ async function startLocalBeatAnalysis(mode) {
   localBeatAnalysis.token++;
   var localToken = localBeatAnalysis.token;
   updateLocalBeatModal();
-  setLocalBeatStatus((mode === 'dj' ? 'DJ' : 'MR') + ' 分析准备中...', 'warn');
+  setLocalBeatStatus((mode === 'dj' ? 'DJ' : 'FR') + ' 分析准备中...', 'warn');
   try {
     var map = null;
     if (mode === 'dj') {
@@ -346,14 +346,14 @@ async function startLocalBeatAnalysis(mode) {
       var mrToken = beatMapToken;
       map = await analyzeAudioBeats(audioUrl, audio && isFinite(audio.duration) ? audio.duration : 0, mrToken, { background: false, song: song });
       if (localToken !== localBeatAnalysis.token || mrToken !== beatMapToken) return;
-      if (!map) throw new Error('MR analysis returned empty map');
+      if (!map) throw new Error('FR analysis returned empty map');
     }
     storeLocalBeatEntry(song.localKey, mode, map, song);
     applyLocalBeatMap(song, mode, map, false);
     localBeatAnalysis.active = false;
-    setLocalBeatStatus((mode === 'dj' ? 'DJ' : 'MR') + ' 分析完成: ' + localBeatVisualCount(map) + ' 个主拍');
+    setLocalBeatStatus((mode === 'dj' ? 'DJ' : 'FR') + ' 分析完成: ' + localBeatVisualCount(map) + ' 个主拍');
     updateLocalBeatModal();
-    showToast((mode === 'dj' ? 'DJ' : 'MR') + ' 本地节奏分析完成');
+    showToast((mode === 'dj' ? 'DJ' : 'FR') + ' 本地节奏分析完成');
     setTimeout(function () {
       if (!localBeatAnalysis.active) closeGsapModal(document.getElementById('local-beat-modal'));
     }, 900);
@@ -363,7 +363,7 @@ async function startLocalBeatAnalysis(mode) {
     localBeatAnalysis.active = false;
     hideBeatChip();
     if (mode === 'dj') setDjModeActive(false, song);
-    setLocalBeatStatus('MR 节奏分析失败，可稍后重试', 'fail');
+    setLocalBeatStatus('FR 节奏分析失败，可稍后重试', 'fail');
     updateLocalBeatModal();
     showToast('本地节奏分析失败');
   }
