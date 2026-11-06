@@ -36,6 +36,7 @@ function playlistSearchTargets() {
   var s = playlistSearchState();
   var tracks = Array.from(s.selected).map(function (i) { return playlistPanelDetailState.tracks[i]; }).filter(Boolean);
   return (userPlaylists || []).filter(function (pl) {
+    if (playlistPanelKey(pl.provider, pl.id) === playlistPanelDetailState.key) return false;
     if (pl.provider === 'favoradio') return true;
     var provider = playlistAccountProvider(pl), adapter = songAccountAdapter(provider);
     return tracks.length && !pl.subscribed && !pl.virtual && adapter && adapter.collect && adapter.playlistAddUrl && isSongAccountLoggedIn(provider) &&
@@ -47,7 +48,8 @@ function playlistSearchToolbarHtml() {
   var s = playlistSearchState(), rows = playlistSearchRows(), reason = playlistSearchDeleteReason();
   var disabled = s.actionBusy ? ' disabled' : '';
   var targets = playlistSearchTargets();
-  var options = '<option value="">收藏到歌单…</option>' + targets.map(function (pl) {
+  var canTransfer = s.selected.size && targets.some(function (pl) { return playlistPanelKey(pl.provider, pl.id) === s.target; }) && !s.busy && !s.actionBusy;
+  var options = '<option value="">选择目标歌单…</option>' + targets.map(function (pl) {
     var key = playlistPanelKey(pl.provider, pl.id);
     return '<option value="' + escHtml(key) + '"' + (key === s.target ? ' selected' : '') + '>' + escHtml(pl.name + ' · ' + playlistProviderLabel(pl.provider)) + '</option>';
   }).join('');
@@ -59,7 +61,9 @@ function playlistSearchToolbarHtml() {
     '<button type="button" data-pl-search-action="clear"' + disabled + '>' + (s.busy ? '停止' : '重置') + '</button></div>' +
     '<div class="pl-search-selection"><label><input id="pl-search-all" type="checkbox"' + (rows.length && s.selected.size === rows.length ? ' checked' : '') + (s.busy || s.actionBusy || !rows.length ? ' disabled' : '') + '>全选结果</label><span>已选 ' + s.selected.size + ' / ' + rows.length + '</span>' +
     '<button type="button" data-pl-search-action="delete" title="' + escHtml(reason || '从当前歌单删除所选歌曲') + '"' + (reason || !s.selected.size || s.busy || s.actionBusy ? ' disabled' : '') + '>删除</button></div>' +
-    '<div class="pl-search-collect"><select id="pl-search-target" aria-label="收藏到歌单"' + disabled + '>' + options + '</select><button type="button" data-pl-search-action="collect"' + (!s.selected.size || !s.target || s.busy || s.actionBusy ? ' disabled' : '') + '>收藏到</button></div>' +
+    '<div class="pl-search-collect"><select id="pl-search-target" aria-label="目标歌单"' + disabled + '>' + options + '</select>' +
+    '<button type="button" data-pl-search-action="move" aria-label="移动到歌单" title="' + escHtml(reason || '写入目标歌单后，从当前歌单移除') + '"' + (!canTransfer || reason ? ' disabled' : '') + '>移动到</button>' +
+    '<button type="button" data-pl-search-action="copy" aria-label="复制到歌单" title="复制到目标歌单，保留当前歌单中的歌曲"' + (!canTransfer ? ' disabled' : '') + '>复制到</button></div>' +
     '<div class="pl-search-status" role="status" title="' + escHtml(s.status || reason) + '">' + escHtml(s.status || reason || (s.mode === 'semantic' ? '余弦相似度 × 100%，负值显示为 0%' : '支持筛选后批量操作')) + '</div></div>';
 }
 
@@ -133,49 +137,72 @@ async function runPlaylistSearch() {
   }
 }
 
+async function playlistSearchRemoveSelected(st, s, indices, tracks) {
+  var provider = st.key.split(':')[0], id = st.key.slice(provider.length + 1);
+  var result = provider === 'favoradio'
+    ? await window.desktopWindow.removeBuiltInPlaylistTracks(id, tracks)
+    : await apiJson('/api/playlist/remove-songs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pid: id, ids: tracks.map(function (track) { return songAccountId(track, provider); }) }) });
+  if (!result || result.error || result.ok === false || result.success === false) throw new Error('移除失败，请检查歌单权限后重试');
+  var removed = new Set(indices), scores = {}, nextIndex = 0;
+  st.tracks.forEach(function (_, index) { if (!removed.has(index)) scores[nextIndex++] = s.scores[index]; });
+  indices.forEach(function (index) { st.tracks.splice(index, 1); });
+  st.total = Math.max(st.tracks.length, st.total - tracks.length);
+  st.nextOffset = Math.max(0, st.nextOffset - tracks.length);
+  s.scores = scores; s.selected.clear();
+  if (provider === 'favoradio') applyBuiltInPlaylistSnapshot(result, { preserveScroll: true });
+  else refreshUserPlaylists(true);
+}
+
 async function playlistSearchBatch(action) {
+  if (action !== 'delete' && action !== 'move' && action !== 'copy') return;
   var st = playlistPanelDetailState, s = playlistSearchState();
   playlistSearchPruneSelection();
   if (s.busy || s.actionBusy || !s.selected.size) return;
   var indices = Array.from(s.selected).sort(function (a, b) { return b - a; });
   var tracks = indices.map(function (i) { return st.tracks[i]; });
-  var provider = st.key.split(':')[0], id = st.key.slice(provider.length + 1);
   var target = playlistSearchTargets().find(function (pl) { return playlistPanelKey(pl.provider, pl.id) === s.target; });
   if (action === 'delete') {
     if (playlistSearchDeleteReason()) return;
     if (!window.confirm('从“' + (st.playlist.name || '当前歌单') + '”删除选中的 ' + tracks.length + ' 首歌曲？不会删除本地音频文件。')) return;
   } else if (!target) return;
-  s.actionBusy = true; s.status = action === 'delete' ? '正在删除…' : '正在收藏…'; playlistSearchRefresh();
-  var done = 0, result;
+  if (action === 'move' && playlistSearchDeleteReason()) return;
+  s.actionBusy = true; s.status = action === 'delete' ? '正在删除…' : (action === 'move' ? '正在移动…' : '正在复制…'); playlistSearchRefresh();
+  var done = 0, result, removalStarted = false;
   try {
     if (st.pageRequest) await st.pageRequest;
     if (action === 'delete') {
-      if (provider === 'favoradio') result = await window.desktopWindow.removeBuiltInPlaylistTracks(id, tracks);
-      else result = await apiJson('/api/playlist/remove-songs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pid: id, ids: tracks.map(function (track) { return songAccountId(track, provider); }) }) });
-      if (!result || result.error || result.ok === false || result.success === false) throw new Error('删除失败，请检查歌单权限后重试');
-      var removed = new Set(indices), scores = {}, nextIndex = 0;
-      st.tracks.forEach(function (_, index) { if (!removed.has(index)) scores[nextIndex++] = s.scores[index]; });
-      indices.forEach(function (index) { st.tracks.splice(index, 1); });
-      st.total = Math.max(st.tracks.length, st.total - tracks.length);
-      st.nextOffset = Math.max(0, st.nextOffset - tracks.length);
-      s.scores = scores; s.selected.clear(); done = tracks.length;
-      if (provider === 'favoradio') applyBuiltInPlaylistSnapshot(result, { preserveScroll: true });
-      else refreshUserPlaylists(true);
+      await playlistSearchRemoveSelected(st, s, indices, tracks); done = tracks.length;
     } else if (target.provider === 'favoradio') {
       result = await window.desktopWindow.addBuiltInPlaylistTracks(target.id, tracks);
-      if (!result || !result.ok) throw new Error(builtInPlaylistErrorMessage(result, '收藏失败'));
-      done = tracks.length; s.selected.clear(); applyBuiltInPlaylistSnapshot(result, { preserveScroll: true });
+      if (!result || !result.ok) throw new Error(builtInPlaylistErrorMessage(result, '复制失败'));
+      done = tracks.length;
+      if (action === 'copy') s.selected.clear();
+      applyBuiltInPlaylistSnapshot(result, { preserveScroll: true });
     } else {
       var adapter = songAccountAdapter(target.provider);
       for (var i = 0; i < tracks.length; i++) {
         result = await apiJson(adapter.playlistAddUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pid: target.id, id: songAccountId(tracks[i], target.provider), song: tracks[i] }) });
-        if (!result || result.error || result.success === false) throw new Error(collectResultMessage(result));
-        done++; s.selected.delete(indices[i]);
+        var failed = !result || result.error || result.success === false;
+        var duplicate = failed && /exist|重复|已存在|already/i.test(String(result && (result.error || result.message || result.msg) || ''));
+        if (failed && !duplicate) throw new Error('目标歌单写入失败，请重试');
+        // A move needs read-back confirmation before any source songs are removed.
+        if ((action === 'move' || duplicate) && !await verifySongInPlaylist(target.id, tracks[i])) throw new Error('尚未确认歌曲写入目标歌单，请稍后重试');
+        done++;
+        if (action === 'copy') s.selected.delete(indices[i]);
       }
       refreshUserPlaylists(true);
     }
-    s.status = (action === 'delete' ? '已删除 ' : '已收藏 ') + done + ' 首';
-  } catch (error) { s.status = '已完成 ' + done + ' / ' + tracks.length + ' 首 · ' + (error.message || '操作失败，可重试'); }
+    if (action === 'move') {
+      removalStarted = true;
+      s.status = '目标歌单已写入，正在从原歌单移除…'; playlistSearchRefresh();
+      await playlistSearchRemoveSelected(st, s, indices, tracks);
+    }
+    s.status = (action === 'delete' ? '已删除 ' : (action === 'move' ? '已移动 ' : '已复制 ')) + done + ' 首';
+  } catch (error) {
+    s.status = action === 'move'
+      ? (removalStarted ? '目标歌单已写入，原歌单移除未确认，请刷新后重试' : '已写入目标歌单 ' + done + ' / ' + tracks.length + ' 首，未从原歌单移除') + ' · ' + (error.message || '请重试')
+      : '已完成 ' + done + ' / ' + tracks.length + ' 首 · ' + (error.message || '操作失败，可重试');
+  }
   finally { s.actionBusy = false; if (playlistPanelDetailState === st) playlistSearchRefresh(); showToast(s.status); }
 }
 
@@ -206,5 +233,5 @@ playlistSearchRoot.addEventListener('click', function (event) {
   if (!button) return;
   var action = button.getAttribute('data-pl-search-action');
   if (action === 'clear' && !playlistSearchState().actionBusy) playlistSearchReset(true);
-  if (action === 'delete' || action === 'collect') playlistSearchBatch(action);
+  if (action === 'delete' || action === 'move' || action === 'copy') playlistSearchBatch(action);
 });

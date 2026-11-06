@@ -90,13 +90,79 @@ test('select all includes offscreen matches and batch deletion sends source song
   assert.equal(s.query, '悲伤'); assert.equal(s.scores[0], 100); assert.equal(s.selected.size, 0);
 });
 
-test('failed batch keeps selection for retry; successful collection uses all selected songs', async () => {
+test('failed copy keeps selection for retry; successful copy preserves the source', async () => {
   const c = fixture([{ id: 1 }, { id: 2 }]), s = c.playlistSearchState();
   s.selected = new Set([0, 1]); s.target = 'favoradio:dest';
   c.window.desktopWindow.addBuiltInPlaylistTracks = async () => ({ ok: false });
-  await c.playlistSearchBatch('collect'); assert.equal(s.selected.size, 2); assert.equal(s.actionBusy, false);
+  await c.playlistSearchBatch('copy'); assert.equal(s.selected.size, 2); assert.equal(s.actionBusy, false);
   c.window.desktopWindow.addBuiltInPlaylistTracks = async (_, tracks) => { assert.equal(tracks.length, 2); return { ok: true }; };
-  await c.playlistSearchBatch('collect'); assert.equal(s.selected.size, 0);
+  await c.playlistSearchBatch('copy'); assert.equal(s.selected.size, 0);
+  assert.equal(c.playlistPanelDetailState.tracks.length, 2);
+  assert.match(s.status, /已复制 2 首/);
+});
+
+test('move writes all selected songs before removing originals and retains filtered scores', async () => {
+  const c = fixture([{ id: 1 }, { id: 2 }, { id: 3 }]), s = c.playlistSearchState(), calls = [];
+  s.selected = new Set([0, 2]); s.target = 'favoradio:dest'; s.scores = { 0: 90, 1: 70, 2: 80 };
+  c.window.desktopWindow.addBuiltInPlaylistTracks = async (id, tracks) => { calls.push(['copy', id, ...tracks.map(t => t.id)]); return { ok: true }; };
+  c.window.desktopWindow.removeBuiltInPlaylistTracks = async (id, tracks) => { calls.push(['remove', id, ...tracks.map(t => t.id)]); return { ok: true }; };
+  await c.playlistSearchBatch('move');
+  assert.deepEqual(calls, [['copy', 'dest', 3, 1], ['remove', 'source', 3, 1]]);
+  assert.deepEqual(c.playlistPanelDetailState.tracks.map(t => t.id), [2]);
+  assert.equal(s.scores[0], 70); assert.equal(s.selected.size, 0); assert.match(s.status, /已移动 2 首/);
+});
+
+test('move failure never removes sources prematurely; removal failure retains selection for retry', async () => {
+  const c = fixture([{ id: 1 }, { id: 2 }]), s = c.playlistSearchState();
+  s.selected = new Set([0, 1]); s.target = 'favoradio:dest';
+  let removals = 0;
+  c.window.desktopWindow.addBuiltInPlaylistTracks = async () => ({ ok: false });
+  c.window.desktopWindow.removeBuiltInPlaylistTracks = async () => { removals++; return { ok: false }; };
+  await c.playlistSearchBatch('move');
+  assert.equal(removals, 0); assert.equal(s.selected.size, 2); assert.match(s.status, /未从原歌单移除/);
+  c.window.desktopWindow.addBuiltInPlaylistTracks = async () => ({ ok: true });
+  await c.playlistSearchBatch('move');
+  assert.equal(removals, 1); assert.equal(c.playlistPanelDetailState.tracks.length, 2);
+  assert.equal(s.selected.size, 2); assert.match(s.status, /原歌单移除未确认/);
+  c.window.desktopWindow.removeBuiltInPlaylistTracks = async () => ({ ok: true });
+  await c.playlistSearchBatch('move');
+  assert.equal(c.playlistPanelDetailState.tracks.length, 0);
+});
+
+test('same-playlist destinations are excluded and read-only sources can copy but not move', async () => {
+  const c = fixture([{ id: 1 }]), s = c.playlistSearchState();
+  c.userPlaylists.push({ id: 'source', provider: 'favoradio' });
+  s.selected = new Set([0]); s.target = 'favoradio:source';
+  let copies = 0;
+  c.window.desktopWindow.addBuiltInPlaylistTracks = async () => { copies++; return { ok: true }; };
+  await c.playlistSearchBatch('move'); await c.playlistSearchBatch('copy'); assert.equal(copies, 0);
+  c.playlistPanelDetailState.key = 'qq:readonly'; s.target = 'favoradio:dest';
+  await c.playlistSearchBatch('move'); assert.equal(copies, 0);
+  await c.playlistSearchBatch('copy'); assert.equal(copies, 1); assert.equal(c.playlistPanelDetailState.tracks.length, 1);
+});
+
+test('remote move verifies writes and keeps all originals on partial failure or unconfirmed result', async () => {
+  const c = fixture([{ id: 1 }, { id: 2 }]), s = c.playlistSearchState();
+  c.userPlaylists = [{ id: 'remote', provider: 'netease' }];
+  c.playlistAccountProvider = pl => pl.provider;
+  c.songAccountAdapter = () => ({ collect: true, playlistAddUrl: '/add' });
+  c.songAccountProvider = () => 'netease'; c.songAccountId = song => song.id;
+  c.refreshUserPlaylists = () => {};
+  let calls = [], verified = true, failSecond = true;
+  c.apiJson = async (_, request) => { const id = JSON.parse(request.body).id; calls.push('add:' + id); return id === 1 && failSecond ? { error: 'failed' } : { success: true }; };
+  c.verifySongInPlaylist = async (_, song) => { calls.push('verify:' + song.id); return verified; };
+  c.window.desktopWindow.removeBuiltInPlaylistTracks = async () => { calls.push('remove'); return { ok: true }; };
+  s.selected = new Set([0, 1]); s.target = 'netease:remote';
+  await c.playlistSearchBatch('move');
+  assert.deepEqual(calls, ['add:2', 'verify:2', 'add:1']);
+  assert.equal(s.selected.size, 2); assert.equal(c.playlistPanelDetailState.tracks.length, 2);
+  failSecond = false; verified = false; calls = [];
+  await c.playlistSearchBatch('move');
+  assert.deepEqual(calls, ['add:2', 'verify:2']); assert.equal(s.selected.size, 2);
+  verified = true; calls = [];
+  await c.playlistSearchBatch('move');
+  assert.deepEqual(calls, ['add:2', 'verify:2', 'add:1', 'verify:1', 'remove']);
+  assert.equal(c.playlistPanelDetailState.tracks.length, 0);
 });
 
 test('library batch writes are atomic, deduplicate, and delete by identity after reorder', async t => {
@@ -113,6 +179,28 @@ test('library batch writes are atomic, deduplicate, and delete by identity after
   await lib.removeTracks(id, [tracks[0], tracks[2]]);
   assert.deepEqual(lib.page(id).tracks.map(t => String(t.id)), ['2']);
   assert.equal(new BuiltInPlaylistLibrary({ userDataPath: dir }).page(id).total, 1);
+});
+
+test('copy then move persists both playlists without duplicating an existing destination song', async t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'playlist-transfer-test-'));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const library = new BuiltInPlaylistLibrary({ userDataPath: dir });
+  const source = (await library.create('原歌单')).playlist.id;
+  const target = (await library.create('目标歌单')).playlist.id;
+  await library.addTracks(source, [1, 2].map(id => ({ id, provider: 'netease', name: '曲' + id })));
+  const c = fixture(library.page(source).tracks), s = c.playlistSearchState();
+  c.playlistPanelDetailState.key = 'favoradio:' + source;
+  c.userPlaylists = library.listSync().playlists;
+  c.window.desktopWindow.addBuiltInPlaylistTracks = (id, tracks) => library.addTracks(id, tracks);
+  c.window.desktopWindow.removeBuiltInPlaylistTracks = (id, tracks) => library.removeTracks(id, tracks);
+  s.selected = new Set([0]); s.target = 'favoradio:' + target;
+  await c.playlistSearchBatch('copy');
+  assert.equal(library.page(source).total, 2); assert.equal(library.page(target).total, 1);
+  s.selected = new Set([0, 1]);
+  await c.playlistSearchBatch('move');
+  const restored = new BuiltInPlaylistLibrary({ userDataPath: dir });
+  assert.equal(restored.page(source).total, 0);
+  assert.deepEqual(restored.page(target).tracks.map(track => String(track.id)).sort(), ['1', '2']);
 });
 
 test('playlist paging coalesces overlapping requests and discards responses after navigation', async () => {

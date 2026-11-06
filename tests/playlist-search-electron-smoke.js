@@ -42,6 +42,7 @@ fs.writeFileSync(path.join(temp, 'index.html'), html);
 fs.writeFileSync(path.join(temp, 'smoke.cjs'), `
 const {app,BrowserWindow}=require('electron');
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+app.disableHardwareAcceleration();
 app.setPath('userData',path.join(${JSON.stringify(temp)},'profile'));
 app.whenReady().then(async()=>{
  const win=new BrowserWindow({show:false,width:640,height:850,webPreferences:{contextIsolation:true,nodeIntegration:false}});
@@ -69,10 +70,13 @@ app.whenReady().then(async()=>{
    assert.equal(overflow,0,'toolbar overflow at '+width);
    fs.writeFileSync(path.join(${JSON.stringify(output)},'semantic-'+width+'.png'),(await win.webContents.capturePage()).toPNG());
   }
-  await run("document.getElementById('pl-search-target').value='favoradio:target';document.getElementById('pl-search-target').dispatchEvent(new Event('change',{bubbles:true}));document.querySelector('[data-pl-search-action=collect]').click();");
+  assert.equal(await run("!!document.querySelector('[data-pl-search-action=collect]')"),false);
+  assert.equal(await run("Array.from(document.getElementById('pl-search-target').options).some(o=>o.value==='favoradio:demo')"),false);
+  await run("document.getElementById('pl-search-target').value='favoradio:target';document.getElementById('pl-search-target').dispatchEvent(new Event('change',{bubbles:true}));document.querySelector('[data-pl-search-action=copy]').click();");
   for(let i=0;i<50 && await run('playlistSearchState().actionBusy');i++)await new Promise(r=>setTimeout(r,20));
   assert.deepEqual(await run('savedTracks.map(t=>t.id)'),[1]);
-  await run("document.getElementById('pl-search-all').click();document.querySelector('[data-pl-search-action=delete]').click();");
+  assert.equal(await run('playlistPanelDetailState.tracks.length'),120);
+  await run("document.getElementById('pl-search-all').click();document.querySelector('[data-pl-search-action=move]').click();");
   for(let i=0;i<50 && await run('playlistSearchState().actionBusy');i++)await new Promise(r=>setTimeout(r,20));
   assert.deepEqual(await run('removedTracks.map(t=>t.id)'),[1]);
   assert.equal(await run('playlistPanelDetailState.tracks.length'),119);
